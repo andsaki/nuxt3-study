@@ -92,6 +92,12 @@
           >
             💾 useFetch キャッシュ
           </NuxtLink>
+          <NuxtLink
+            to="/examples/usefetch-comparison"
+            class="block p-3 bg-indigo-50 hover:bg-indigo-100 rounded transition"
+          >
+            ⚖️ Nuxt vs VueUse useFetch比較
+          </NuxtLink>
         </nav>
       </div>
 
