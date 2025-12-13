@@ -39,20 +39,77 @@
         </div>
       </div>
 
+      <!-- レンダリングモード -->
       <div class="bg-white shadow-md rounded-lg p-6">
-        <h3 class="text-xl font-semibold mb-4">実装例</h3>
+        <h3 class="text-xl font-semibold mb-4">🎨 レンダリングモード</h3>
+        <nav class="space-y-2">
+          <NuxtLink
+            to="/ssr-demo"
+            class="block p-3 bg-yellow-50 hover:bg-yellow-100 rounded transition"
+          >
+            🖥️ SSR デモ
+          </NuxtLink>
+          <NuxtLink
+            to="/ssg-demo"
+            class="block p-3 bg-orange-50 hover:bg-orange-100 rounded transition"
+          >
+            🏗️ SSG デモ
+          </NuxtLink>
+          <NuxtLink
+            to="/isr-demo"
+            class="block p-3 bg-blue-50 hover:bg-blue-100 rounded transition"
+          >
+            ⚡ ISR デモ
+          </NuxtLink>
+          <NuxtLink
+            to="/verify-ssr"
+            class="block p-3 bg-purple-50 hover:bg-purple-100 rounded transition"
+          >
+            🔍 SSR 検証ページ
+          </NuxtLink>
+          <NuxtLink
+            to="/examples/rendering-modes"
+            class="block p-3 bg-pink-50 hover:bg-pink-100 rounded transition"
+          >
+            📚 レンダリングモード解説
+          </NuxtLink>
+        </nav>
+      </div>
+
+      <!-- データ取得 -->
+      <div class="bg-white shadow-md rounded-lg p-6">
+        <h3 class="text-xl font-semibold mb-4">🔄 データ取得</h3>
         <nav class="space-y-2">
           <NuxtLink
             to="/examples/query-comparison"
             class="block p-3 bg-blue-50 hover:bg-blue-100 rounded transition"
           >
-            🔄 TanStack Query vs VueUse 比較
+            🔄 TanStack Query vs VueUse
           </NuxtLink>
+          <NuxtLink
+            to="/examples/usefetch-cache"
+            class="block p-3 bg-cyan-50 hover:bg-cyan-100 rounded transition"
+          >
+            💾 useFetch キャッシュ
+          </NuxtLink>
+        </nav>
+      </div>
+
+      <!-- フォーム -->
+      <div class="bg-white shadow-md rounded-lg p-6">
+        <h3 class="text-xl font-semibold mb-4">📝 フォーム</h3>
+        <nav class="space-y-2">
           <NuxtLink
             to="/examples/form-validation"
             class="block p-3 bg-green-50 hover:bg-green-100 rounded transition"
           >
             📝 フォームバリデーション (VeeValidate + Zod)
+          </NuxtLink>
+          <NuxtLink
+            to="/examples/zod-async-validation"
+            class="block p-3 bg-teal-50 hover:bg-teal-100 rounded transition"
+          >
+            ⏳ Zod 同期・非同期バリデーション
           </NuxtLink>
         </nav>
       </div>

@@ -12,5 +12,9 @@ export default defineNuxtConfig({
   typescript: {
     strict: true,
     typeCheck: true
+  },
+  routeRules: {
+    '/ssg-demo': { prerender: true }, // SSG
+    '/isr-demo': { swr: 60 }, // ISR: 60秒キャッシュ
   }
 })
