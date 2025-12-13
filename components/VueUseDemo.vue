@@ -13,7 +13,7 @@
         <div>isFetching: {{ isFetching }}</div>
       </div>
       <button
-        @click="execute"
+        @click="() => execute()"
         :disabled="isFetching"
         class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 disabled:bg-gray-400 transition"
       >
@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { useFetch } from '@vueuse/core'
+import { useFetch, type BeforeFetchContext, type AfterFetchContext } from '@vueuse/core'
 import { ref, computed } from 'vue'
 
 const counter = ref(0)
@@ -39,8 +39,14 @@ const fetchData = async () => {
 
 const { data, error, isFetching, isFinished, execute } = useFetch(url, {
   immediate: true,
-  async beforeFetch() {
-    return { data: await fetchData() }
+  beforeFetch({ options }: BeforeFetchContext) {
+    // ここでヘッダーなどを設定可能
+    return { options }
+  },
+  afterFetch(ctx: AfterFetchContext) {
+    // データを加工
+    ctx.data = fetchData()
+    return ctx
   },
 }).get().json()
 

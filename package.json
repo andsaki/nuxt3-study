@@ -38,6 +38,7 @@
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^6.12.0",
     "@playwright/test": "^1.45.0",
+    "@types/node": "^25.0.1",
     "@vue/test-utils": "^2.4.6",
     "drizzle-kit": "^0.24.0",
     "eslint": "^9",
@@ -45,7 +46,8 @@
     "playwright": "^1.45.0",
     "prisma": "^6.0.0",
     "tsx": "^4.16.0",
-    "typescript": "^5.5.0",
-    "vitest": "^2.0.0"
+    "typescript": "^5.9.3",
+    "vitest": "^2.0.0",
+    "vue-tsc": "^3.1.8"
   }
 }
