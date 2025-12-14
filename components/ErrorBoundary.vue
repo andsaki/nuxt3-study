@@ -33,10 +33,12 @@ onErrorCaptured((err, instance, info) => {
     props.onError(err, instance)
   }
 
-  // ログに記録
-  console.error('ErrorBoundary caught:', err)
-  console.error('Component:', errorInfo.value.componentName)
-  console.error('Info:', info)
+  // 開発環境のみログ出力
+  if (process.dev) {
+    console.error('ErrorBoundary caught:', err)
+    console.error('Component:', errorInfo.value.componentName)
+    console.error('Info:', info)
+  }
 
   // エラーの伝播を停止
   return false

@@ -85,6 +85,12 @@
           >
             🛡️ Error Boundary デモ
           </NuxtLink>
+          <NuxtLink
+            to="/examples/typescript-comparison"
+            class="block p-3 bg-blue-50 hover:bg-blue-100 rounded transition"
+          >
+            📘 TypeScript: React vs Vue
+          </NuxtLink>
         </nav>
       </div>
 
