@@ -73,6 +73,12 @@
           >
             📚 レンダリングモード解説
           </NuxtLink>
+          <NuxtLink
+            to="/examples/client-only-test"
+            class="block p-3 bg-gray-50 hover:bg-gray-100 rounded transition"
+          >
+            🧪 ClientOnly 動作確認
+          </NuxtLink>
         </nav>
       </div>
 
