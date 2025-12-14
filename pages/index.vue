@@ -79,6 +79,12 @@
           >
             🧪 ClientOnly 動作確認
           </NuxtLink>
+          <NuxtLink
+            to="/examples/error-boundary-demo"
+            class="block p-3 bg-red-50 hover:bg-red-100 rounded transition"
+          >
+            🛡️ Error Boundary デモ
+          </NuxtLink>
         </nav>
       </div>
 
