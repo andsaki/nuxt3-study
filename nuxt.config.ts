@@ -8,6 +8,11 @@ export default defineNuxtConfig({
     '@vueuse/nuxt'
   ],
   css: ['~/assets/css/main.css'],
+  postcss: {
+    plugins: {
+      '@pandacss/dev/postcss': {},
+    },
+  },
   typescript: {
     strict: true,
     typeCheck: true

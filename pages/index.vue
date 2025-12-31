@@ -1,146 +1,150 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-50">
-    <div class="max-w-md w-full space-y-8 p-8">
-      <div class="text-center">
-        <h1 class="text-4xl font-bold text-gray-900 mb-2">Nuxt 3 Study</h1>
-        <p class="text-gray-600">Next.js Study の Nuxt 3 版</p>
+  <div :class="css({ minH: 'screen', display: 'flex', alignItems: 'center', justifyContent: 'center', bg: 'gray.50' })">
+    <div :class="css({ maxW: 'md', w: 'full', spaceY: '8', p: '8' })">
+      <!-- タイトル -->
+      <div :class="css({ textAlign: 'center' })">
+        <h1 :class="css({ fontSize: '4xl', fontWeight: 'bold', color: 'gray.900', mb: '2' })">
+          Nuxt 3 Study
+        </h1>
+        <p :class="css({ color: 'gray.600' })">Next.js Study の Nuxt 3 版</p>
       </div>
 
-      <div class="bg-white shadow-md rounded-lg p-6 space-y-4">
-        <h2 class="text-2xl font-semibold text-center">カウンター (Pinia)</h2>
-
-        <div class="text-6xl font-bold text-center text-blue-600">
+      <!-- カウンター -->
+      <DesignSystemCard title="カウンター (Pinia)" icon="🔢" color-scheme="blue">
+        <div :class="css({ fontSize: '6xl', fontWeight: 'bold', textAlign: 'center', color: 'blue.600' })">
           {{ counterStore.count }}
         </div>
 
-        <div class="flex gap-2 justify-center">
-          <button
+        <div :class="css({ display: 'flex', gap: '2', justifyContent: 'center', mt: '4' })">
+          <DesignSystemButton
+            variant="danger"
+            size="md"
             @click="counterStore.decrement"
-            class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
           >
             -1
-          </button>
-          <button
+          </DesignSystemButton>
+          <DesignSystemButton
+            variant="secondary"
+            size="md"
             @click="counterStore.reset"
-            class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
           >
             リセット
-          </button>
-          <button
+          </DesignSystemButton>
+          <DesignSystemButton
+            variant="primary"
+            size="md"
             @click="counterStore.increment"
-            class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
           >
             +1
-          </button>
+          </DesignSystemButton>
         </div>
 
-        <div class="text-sm text-gray-500 text-center mt-4">
+        <div :class="css({ fontSize: 'sm', color: 'gray.500', textAlign: 'center', mt: '4' })">
           ※ LocalStorageに永続化されます
         </div>
-      </div>
+      </DesignSystemCard>
 
       <!-- レンダリングモード -->
-      <div class="bg-white shadow-md rounded-lg p-6">
-        <h3 class="text-xl font-semibold mb-4">🎨 レンダリングモード</h3>
-        <nav class="space-y-2">
+      <DesignSystemCard title="レンダリングモード" icon="🎨">
+        <nav :class="css({ spaceY: '2' })">
           <NuxtLink
             to="/ssr-demo"
-            class="block p-3 bg-yellow-50 hover:bg-yellow-100 rounded transition"
+            :class="css({ display: 'block', p: '3', bg: 'yellow.50', rounded: 'md', transition: 'all 0.2s', _hover: { bg: 'yellow.100' } })"
           >
             🖥️ SSR デモ
           </NuxtLink>
           <NuxtLink
             to="/ssg-demo"
-            class="block p-3 bg-orange-50 hover:bg-orange-100 rounded transition"
+            :class="css({ display: 'block', p: '3', bg: 'yellow.50', rounded: 'md', transition: 'all 0.2s', _hover: { bg: 'yellow.100' } })"
           >
             🏗️ SSG デモ
           </NuxtLink>
           <NuxtLink
             to="/isr-demo"
-            class="block p-3 bg-blue-50 hover:bg-blue-100 rounded transition"
+            :class="css({ display: 'block', p: '3', bg: 'blue.50', rounded: 'md', transition: 'all 0.2s', _hover: { bg: 'blue.100' } })"
           >
             ⚡ ISR デモ
           </NuxtLink>
           <NuxtLink
             to="/verify-ssr"
-            class="block p-3 bg-purple-50 hover:bg-purple-100 rounded transition"
+            :class="css({ display: 'block', p: '3', bg: 'blue.50', rounded: 'md', transition: 'all 0.2s', _hover: { bg: 'blue.100' } })"
           >
             🔍 SSR 検証ページ
           </NuxtLink>
           <NuxtLink
             to="/examples/rendering-modes"
-            class="block p-3 bg-pink-50 hover:bg-pink-100 rounded transition"
+            :class="css({ display: 'block', p: '3', bg: 'blue.50', rounded: 'md', transition: 'all 0.2s', _hover: { bg: 'blue.100' } })"
           >
             📚 レンダリングモード解説
           </NuxtLink>
           <NuxtLink
             to="/examples/client-only-test"
-            class="block p-3 bg-gray-50 hover:bg-gray-100 rounded transition"
+            :class="css({ display: 'block', p: '3', bg: 'gray.50', rounded: 'md', transition: 'all 0.2s', _hover: { bg: 'gray.100' } })"
           >
             🧪 ClientOnly 動作確認
           </NuxtLink>
           <NuxtLink
             to="/examples/error-boundary-demo"
-            class="block p-3 bg-red-50 hover:bg-red-100 rounded transition"
+            :class="css({ display: 'block', p: '3', bg: 'red.50', rounded: 'md', transition: 'all 0.2s', _hover: { bg: 'red.100' } })"
           >
             🛡️ Error Boundary デモ
           </NuxtLink>
           <NuxtLink
             to="/examples/typescript-comparison"
-            class="block p-3 bg-blue-50 hover:bg-blue-100 rounded transition"
+            :class="css({ display: 'block', p: '3', bg: 'blue.50', rounded: 'md', transition: 'all 0.2s', _hover: { bg: 'blue.100' } })"
           >
             📘 TypeScript: React vs Vue
           </NuxtLink>
         </nav>
-      </div>
+      </DesignSystemCard>
 
       <!-- データ取得 -->
-      <div class="bg-white shadow-md rounded-lg p-6">
-        <h3 class="text-xl font-semibold mb-4">🔄 データ取得</h3>
-        <nav class="space-y-2">
+      <DesignSystemCard title="データ取得" icon="🔄" color-scheme="green">
+        <nav :class="css({ spaceY: '2' })">
           <NuxtLink
             to="/examples/query-comparison"
-            class="block p-3 bg-blue-50 hover:bg-blue-100 rounded transition"
+            :class="css({ display: 'block', p: '3', bg: 'green.50', rounded: 'md', transition: 'all 0.2s', _hover: { bg: 'green.100' } })"
           >
             🔄 TanStack Query vs VueUse
           </NuxtLink>
           <NuxtLink
             to="/examples/usefetch-cache"
-            class="block p-3 bg-cyan-50 hover:bg-cyan-100 rounded transition"
+            :class="css({ display: 'block', p: '3', bg: 'green.50', rounded: 'md', transition: 'all 0.2s', _hover: { bg: 'green.100' } })"
           >
             💾 useFetch キャッシュ
           </NuxtLink>
           <NuxtLink
             to="/examples/usefetch-comparison"
-            class="block p-3 bg-indigo-50 hover:bg-indigo-100 rounded transition"
+            :class="css({ display: 'block', p: '3', bg: 'green.50', rounded: 'md', transition: 'all 0.2s', _hover: { bg: 'green.100' } })"
           >
             ⚖️ Nuxt vs VueUse useFetch比較
           </NuxtLink>
         </nav>
-      </div>
+      </DesignSystemCard>
 
       <!-- フォーム -->
-      <div class="bg-white shadow-md rounded-lg p-6">
-        <h3 class="text-xl font-semibold mb-4">📝 フォーム</h3>
-        <nav class="space-y-2">
+      <DesignSystemCard title="フォーム" icon="📝" color-scheme="yellow">
+        <nav :class="css({ spaceY: '2' })">
           <NuxtLink
             to="/examples/form-validation"
-            class="block p-3 bg-green-50 hover:bg-green-100 rounded transition"
+            :class="css({ display: 'block', p: '3', bg: 'yellow.50', rounded: 'md', transition: 'all 0.2s', _hover: { bg: 'yellow.100' } })"
           >
             📝 フォームバリデーション (VeeValidate + Zod)
           </NuxtLink>
           <NuxtLink
             to="/examples/zod-async-validation"
-            class="block p-3 bg-teal-50 hover:bg-teal-100 rounded transition"
+            :class="css({ display: 'block', p: '3', bg: 'yellow.50', rounded: 'md', transition: 'all 0.2s', _hover: { bg: 'yellow.100' } })"
           >
             ⏳ Zod 同期・非同期バリデーション
           </NuxtLink>
         </nav>
-      </div>
+      </DesignSystemCard>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { css } from '~/styled-system/css'
+
 const counterStore = useCounterStore()
 </script>

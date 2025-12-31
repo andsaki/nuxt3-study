@@ -1,5 +1,6 @@
 import { defineConfig } from "@pandacss/dev";
 import { button } from "./panda-config/recipes/button";
+import { cardRecipe } from "./panda-config/recipes/card";
 
 export default defineConfig({
   // Whether to use css reset
@@ -26,6 +27,9 @@ export default defineConfig({
     extend: {
       recipes: {
         button,
+      },
+      slotRecipes: {
+        card: cardRecipe,
       },
       tokens: {
         colors: {
@@ -66,7 +70,28 @@ export default defineConfig({
             900: { value: "#7f1d1d" },
           },
           yellow: {
+            50: { value: "#fefce8" },
+            100: { value: "#fef9c3" },
+            200: { value: "#fef08a" },
+            300: { value: "#fde047" },
             400: { value: "#facc15" },
+            500: { value: "#eab308" },
+            600: { value: "#ca8a04" },
+            700: { value: "#a16207" },
+            800: { value: "#854d0e" },
+            900: { value: "#713f12" },
+          },
+          green: {
+            50: { value: "#f0fdf4" },
+            100: { value: "#dcfce7" },
+            200: { value: "#bbf7d0" },
+            300: { value: "#86efac" },
+            400: { value: "#4ade80" },
+            500: { value: "#22c55e" },
+            600: { value: "#16a34a" },
+            700: { value: "#15803d" },
+            800: { value: "#166534" },
+            900: { value: "#14532d" },
           },
         },
         fontSizes: {

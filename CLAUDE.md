@@ -238,6 +238,158 @@ Playwright MCPは、ブラウザを操作してUIの確認・テスト・スク�
 
 ---
 
+## マークアップ・デザインシステムルール
+
+### 基本方針
+マークアップ（HTML/CSS）実装時は、既存のデザインシステムを最大限活用し、一貫性のあるUIを構築します。
+
+### 参照元デザインシステム
+
+このプロジェクトでは、以下のデザインシステムを参照できます：
+
+**accessibility-learning プロジェクト**
+- パス: `../accessibility-learning/` (同じweb-developディレクトリ内)
+- 利用可能なコンポーネント:
+  - Button, Card (未移植の場合はInfoBox), Input, TextArea, Select, Checkbox, Radio
+  - Modal, Tooltip, Dropdown, Accordion, Breadcrumbs, Table
+  - Loading, Toast, ColorPicker, Form, Text
+- レシピ: `panda-config/recipes/` 配下に各コンポーネントのスタイル定義
+
+### マークアップ実装フロー
+
+1. **デザインシステムの確認**
+```markdown
+例: ページにカード形式のコンテンツを表示したい
+→ accessibility-learningプロジェクトのCardコンポーネントを確認
+→ レシピ（panda-config/recipes/card.ts）を確認
+→ 必要に応じてVue 3に移植
+```
+
+2. **コンポーネントの移植**
+```markdown
+例: accessibility-learningからButtonを移植する場合
+1. src/design-system/components/Button.tsx を確認（React実装）
+2. panda-config/recipes/button.ts のレシピを確認
+3. components/design-system/Button.vue として Vue 3 に移植
+4. レシピは panda-config/recipes/button.ts にコピー
+5. panda.config.ts に追加
+6. npx panda codegen でスタイル生成
+```
+
+3. **Panda CSSの使用**
+```vue
+<!-- インラインスタイル -->
+<template>
+  <div :class="css({ p: 4, bg: 'gray.50', rounded: 'md' })">
+    <!-- コンテンツ -->
+  </div>
+</template>
+
+<script setup lang="ts">
+import { css } from '~/styled-system/css'
+</script>
+```
+
+```vue
+<!-- レシピの使用 -->
+<template>
+  <button :class="buttonClass">
+    クリック
+  </button>
+</template>
+
+<script setup lang="ts">
+import { button } from '~/styled-system/recipes'
+
+const buttonClass = computed(() => button({
+  variant: 'primary',
+  size: 'md',
+}))
+</script>
+```
+
+4. **PlaywrightでUI確認**
+```markdown
+1. npm run dev で開発サーバー起動
+2. mcp__playwright__playwright_navigate でページにアクセス
+3. mcp__playwright__playwright_screenshot でスクリーンショット取得
+4. デザインを確認し、必要に応じて調整
+```
+
+### コンポーネント命名規則
+
+Nuxt 3の自動インポートでは、ディレクトリ構造に基づいた命名になります：
+
+```
+components/design-system/Button.vue
+→ <DesignSystemButton>
+
+components/design-system/Card.vue
+→ <DesignSystemCard>
+
+components/AppHeader.vue
+→ <AppHeader>
+```
+
+### 既存コンポーネントの活用例
+
+```vue
+<template>
+  <!-- Cardコンポーネントの使用 -->
+  <DesignSystemCard
+    title="カウンター"
+    icon="🔢"
+    color-scheme="blue"
+  >
+    <p>カード内のコンテンツ</p>
+  </DesignSystemCard>
+
+  <!-- Buttonコンポーネントの使用 -->
+  <DesignSystemButton
+    variant="primary"
+    size="md"
+    @click="handleClick"
+  >
+    送信
+  </DesignSystemButton>
+</template>
+```
+
+### スタイルトークンの活用
+
+Panda CSSのトークンを使用して一貫性を保ちます：
+
+```vue
+<!-- 色トークン -->
+:class="css({
+  bg: 'blue.50',      // 背景: 青50
+  color: 'gray.900',  // テキスト: グレー900
+  borderColor: 'blue.200' // 枠線: 青200
+})"
+
+<!-- スペーシング -->
+:class="css({
+  p: 4,     // padding: 1rem
+  mt: 2,    // margin-top: 0.5rem
+  gap: 2    // gap: 0.5rem
+})"
+
+<!-- 角丸 -->
+:class="css({
+  rounded: 'md',  // border-radius: 0.375rem
+  rounded: 'lg'   // border-radius: 0.5rem
+})"
+```
+
+### 期待される効果
+- ✅ デザインの一貫性を保てる
+- ✅ 既存コンポーネントを再利用できる
+- ✅ アクセシビリティ対応済みのコンポーネントを活用できる
+- ✅ 開発速度が向上する
+- ✅ メンテナンス性が向上する
+
+---
+
 ## 実装ワークフロー例
 
 ### ケース1: 関数名を変更する
@@ -265,12 +417,14 @@ Playwright MCPは、ブラウザを操作してUIの確認・テスト・スク�
 
 ### ケース4: コンポーネントのマークアップを実装
 ```
-1. 開発サーバーを起動（npm run dev等）
-2. mcp__playwright__playwright_navigate でページにアクセス
-3. mcp__playwright__playwright_screenshot でスクリーンショット取得
-4. デザインと比較して、CSSを調整
-5. 必要に応じて mcp__playwright__playwright_resize で各デバイス表示を確認
-6. 再度スクリーンショットを取得して完成を確認
+1. accessibility-learningプロジェクトでデザインシステムを確認
+2. 必要なコンポーネント・レシピを移植
+3. 開発サーバーを起動（npm run dev等）
+4. mcp__playwright__playwright_navigate でページにアクセス
+5. mcp__playwright__playwright_screenshot でスクリーンショット取得
+6. デザインと比較して、Panda CSSで調整
+7. 必要に応じて mcp__playwright__playwright_resize で各デバイス表示を確認
+8. 再度スクリーンショットを取得して完成を確認
 ```
 
 ---
