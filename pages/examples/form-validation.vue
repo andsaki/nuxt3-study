@@ -1,115 +1,160 @@
 <template>
-  <div class="min-h-screen bg-gray-50 py-12 px-4">
-    <div class="max-w-2xl mx-auto">
-      <h1 class="text-3xl font-bold text-gray-900 mb-8">フォームバリデーション</h1>
+  <div>
+    <AppHeader />
 
-      <!-- VeeValidate + Zod Example -->
-      <div class="bg-white shadow-md rounded-lg p-6 mb-8">
-        <h2 class="text-xl font-semibold text-blue-600 mb-4">ユーザー登録フォーム</h2>
+    <div :class="css({ minH: 'screen', bg: 'gray.50', py: '12', px: '4' })">
+      <div :class="css({ maxW: '2xl', mx: 'auto' })">
+        <h1 :class="css({ fontSize: '3xl', fontWeight: 'bold', color: 'gray.900', mb: '8' })">
+          フォームバリデーション
+        </h1>
 
-        <form @submit="onSubmit" class="space-y-4">
-          <!-- 名前 -->
-          <div>
-            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">名前</label>
-            <input
+        <!-- ユーザー登録フォーム -->
+        <DesignSystemCard title="ユーザー登録フォーム" icon="📝" color-scheme="blue">
+          <form @submit="onSubmit" :class="css({ spaceY: '4' })">
+            <!-- 名前 -->
+            <DesignSystemInput
               v-model="name"
+              label="名前"
               type="text"
-              id="name"
-              class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              :class="{ 'border-red-500': errors.name }"
+              :error="errors.name"
+              helper-text="2文字以上で入力してください"
+              required
+              clearable
+              @clear="name = ''"
             />
-            <p v-if="errors.name" class="mt-1 text-sm text-red-600">{{ errors.name }}</p>
-          </div>
 
-          <!-- メールアドレス -->
-          <div>
-            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">メールアドレス</label>
-            <input
+            <!-- メールアドレス -->
+            <DesignSystemInput
               v-model="email"
+              label="メールアドレス"
               type="email"
-              id="email"
-              class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              :class="{ 'border-red-500': errors.email }"
+              :error="errors.email"
+              helper-text="例: user@example.com"
+              required
+              clearable
+              @clear="email = ''"
             />
-            <p v-if="errors.email" class="mt-1 text-sm text-red-600">{{ errors.email }}</p>
-          </div>
 
-          <!-- パスワード -->
-          <div>
-            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">パスワード</label>
-            <input
+            <!-- パスワード -->
+            <DesignSystemInput
               v-model="password"
+              label="パスワード"
               type="password"
-              id="password"
-              class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              :class="{ 'border-red-500': errors.password }"
+              :error="errors.password"
+              helper-text="8文字以上、英字と数字を含む"
+              required
             />
-            <p v-if="errors.password" class="mt-1 text-sm text-red-600">{{ errors.password }}</p>
-          </div>
 
-          <!-- パスワード確認 -->
-          <div>
-            <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">パスワード確認</label>
-            <input
+            <!-- パスワード確認 -->
+            <DesignSystemInput
               v-model="confirmPassword"
+              label="パスワード確認"
               type="password"
-              id="confirmPassword"
-              class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              :class="{ 'border-red-500': errors.confirmPassword }"
+              :error="errors.confirmPassword"
+              required
             />
-            <p v-if="errors.confirmPassword" class="mt-1 text-sm text-red-600">{{ errors.confirmPassword }}</p>
-          </div>
 
-          <!-- 利用規約 -->
-          <div class="flex items-start">
-            <input
+            <!-- 性別 -->
+            <div>
+              <p :class="css({ fontSize: 'sm', fontWeight: 'medium', color: 'contents.primary', mb: '2' })">
+                性別
+              </p>
+              <div :class="css({ spaceY: '2' })">
+                <DesignSystemRadio
+                  v-model="gender"
+                  value="male"
+                  label="男性"
+                  name="gender"
+                />
+                <DesignSystemRadio
+                  v-model="gender"
+                  value="female"
+                  label="女性"
+                  name="gender"
+                />
+                <DesignSystemRadio
+                  v-model="gender"
+                  value="other"
+                  label="その他"
+                  name="gender"
+                />
+              </div>
+            </div>
+
+            <!-- 利用規約 -->
+            <DesignSystemCheckbox
               v-model="terms"
-              type="checkbox"
-              id="terms"
-              class="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+              label="利用規約に同意します"
+              :error="errors.terms"
             />
-            <label for="terms" class="ml-2 text-sm text-gray-700">
-              利用規約に同意します
-            </label>
-          </div>
-          <p v-if="errors.terms" class="mt-1 text-sm text-red-600">{{ errors.terms }}</p>
 
-          <!-- 送信ボタン -->
-          <button
-            type="submit"
-            class="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
-            :disabled="isSubmitting"
+            <!-- ニュースレター購読 -->
+            <DesignSystemCheckbox
+              v-model="newsletter"
+              label="ニュースレターを受け取る"
+              help-text="最新情報をメールでお届けします"
+            />
+
+            <!-- 送信ボタン -->
+            <DesignSystemButton
+              type="submit"
+              variant="primary"
+              size="lg"
+              :disabled="isSubmitting"
+              :class="css({ width: '100%' })"
+            >
+              {{ isSubmitting ? '送信中...' : '登録する' }}
+            </DesignSystemButton>
+          </form>
+
+          <!-- 送信結果 -->
+          <div
+            v-if="submitStatus"
+            :class="css({
+              mt: '4',
+              p: '4',
+              rounded: 'md',
+              bg: submitStatus === 'success' ? 'green.50' : 'red.50',
+              color: submitStatus === 'success' ? 'green.800' : 'red.800',
+            })"
           >
-            {{ isSubmitting ? '送信中...' : '登録する' }}
-          </button>
-        </form>
+            <p v-if="submitStatus === 'success'">✓ 登録が完了しました！</p>
+            <p v-if="submitStatus === 'error'">✗ エラーが発生しました。再度お試しください。</p>
+          </div>
+        </DesignSystemCard>
 
-        <!-- 送信結果 -->
-        <div v-if="submitStatus" class="mt-4 p-4 rounded-md" :class="{
-          'bg-green-50 text-green-800': submitStatus === 'success',
-          'bg-red-50 text-red-800': submitStatus === 'error'
-        }">
-          <p v-if="submitStatus === 'success'">✓ 登録が完了しました！</p>
-          <p v-if="submitStatus === 'error'">✗ エラーが発生しました。再度お試しください。</p>
-        </div>
+        <!-- 戻るボタン -->
+        <NuxtLink
+          to="/"
+          :class="css({
+            display: 'inline-block',
+            mt: '8',
+            px: '6',
+            py: '3',
+            color: 'green.600',
+            fontWeight: 'medium',
+            border: '2px solid',
+            borderColor: 'green.600',
+            rounded: 'md',
+            transition: 'all 0.2s',
+            _hover: {
+              bg: 'green.600',
+              color: 'white'
+            }
+          })"
+        >
+          ← ホームに戻る
+        </NuxtLink>
       </div>
-
-      <!-- 戻るボタン -->
-      <NuxtLink
-        to="/"
-        class="inline-block px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition"
-      >
-        ← ホームに戻る
-      </NuxtLink>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { css } from '~/styled-system/css'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
-import { ref } from 'vue'
 
 // Zodスキーマ定義
 const validationSchema = toTypedSchema(
@@ -147,6 +192,10 @@ const [password] = defineField('password')
 const [confirmPassword] = defineField('confirmPassword')
 const [terms] = defineField('terms')
 
+// 追加フィールド（バリデーション不要）
+const gender = ref('male')
+const newsletter = ref(false)
+
 // 送信状態
 const submitStatus = ref<'success' | 'error' | null>(null)
 
@@ -158,11 +207,12 @@ const onSubmit = handleSubmit(async (values: Record<string, any>) => {
     // ここでAPIリクエストなどを行う
     await new Promise(resolve => setTimeout(resolve, 1000))
 
-    console.log('フォーム送信:', values)
+    console.log('フォーム送信:', {
+      ...values,
+      gender: gender.value,
+      newsletter: newsletter.value,
+    })
     submitStatus.value = 'success'
-
-    // 成功後、フォームをリセット（オプション）
-    // resetForm()
   } catch (error) {
     console.error('送信エラー:', error)
     submitStatus.value = 'error'
