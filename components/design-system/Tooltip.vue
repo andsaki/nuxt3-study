@@ -11,8 +11,8 @@
     <Teleport to="body">
       <div
         v-if="isVisible"
-        ref="tooltipRef"
         :id="tooltipId"
+        ref="tooltipRef"
         role="tooltip"
         :class="tooltipClass"
         :style="tooltipStyle"

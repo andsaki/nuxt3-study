@@ -74,7 +74,7 @@ const comparison = [
         <p><strong>ステータス:</strong> {{ nuxtStatus }}</p>
         <p><strong>データ:</strong></p>
         <pre v-if="nuxtData">{{ nuxtData }}</pre>
-        <button @click="nuxtRefresh()" class="btn">再取得</button>
+        <button class="btn" @click="nuxtRefresh()">再取得</button>
       </div>
       <div class="code-block">
         <h3>コード例</h3>
@@ -93,7 +93,7 @@ const { data, refresh } = await useFetch('/api/posts/1', {
         <p><strong>読み込み中:</strong> {{ vueUseFetching }}</p>
         <p><strong>データ:</strong></p>
         <pre v-if="vueUseData">{{ vueUseData }}</pre>
-        <button @click="vueUseExecute()" class="btn">再取得</button>
+        <button class="btn" @click="vueUseExecute()">再取得</button>
       </div>
       <div class="code-block">
         <h3>コード例</h3>

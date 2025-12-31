@@ -192,7 +192,7 @@ const newsletter = ref(false)
 const submitStatus = ref<'success' | 'error' | null>(null)
 
 // 送信処理
-const handleFormSubmit = async (values: Record<string, any>) => {
+const handleFormSubmit = async (values: Record<string, unknown>) => {
   submitStatus.value = null
 
   try {

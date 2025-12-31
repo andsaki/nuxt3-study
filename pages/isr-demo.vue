@@ -75,7 +75,8 @@
           環境によってキャッシュの場所が異なります:
         </p>
 
-        <div :class="css({
+        <div
+:class="css({
           display: 'grid',
           gridTemplateColumns: { base: '1fr', md: 'repeat(2, 1fr)' },
           gap: '4',
@@ -148,7 +149,8 @@
             ホスティング別対応表
           </h3>
           <div :class="css({ overflowX: 'auto' })">
-            <table :class="css({
+            <table
+:class="css({
               w: 'full',
               bg: 'white',
               border: '1px solid',

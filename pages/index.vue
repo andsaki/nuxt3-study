@@ -132,6 +132,12 @@
       <DesignSystemCard title="フォーム" icon="📝" color-scheme="yellow">
         <nav :class="css({ spaceY: '2' })">
           <NuxtLink
+            to="/examples/form-best-practices"
+            :class="css({ display: 'block', p: '3', bg: 'purple.50', rounded: 'md', transition: 'all 0.2s', _hover: { bg: 'purple.100' } })"
+          >
+            ✅ フォームバリデーション ベストプラクティス
+          </NuxtLink>
+          <NuxtLink
             to="/examples/form-validation"
             :class="css({ display: 'block', p: '3', bg: 'yellow.50', rounded: 'md', transition: 'all 0.2s', _hover: { bg: 'yellow.100' } })"
           >

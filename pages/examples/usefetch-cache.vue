@@ -34,7 +34,7 @@ const { data: fresh } = await useFetch(
 )
 
 // SWRライクな動作: stale-while-revalidate
-const { data: stale, refresh: refreshStale } = await useFetch(
+const { data: _stale, refresh: _refreshStale } = await useFetch(
   'https://jsonplaceholder.typicode.com/posts/2',
   {
     key: 'stale-post',
@@ -45,7 +45,7 @@ const { data: stale, refresh: refreshStale } = await useFetch(
 
 // 条件付きフェッチ
 const shouldFetch = ref(true)
-const { data: conditional } = await useFetch(
+const { data: _conditional } = await useFetch(
   'https://jsonplaceholder.typicode.com/posts/3',
   {
     key: 'conditional-post',
@@ -80,7 +80,7 @@ const handleRefresh = async () => {
     <div class="section">
       <div class="section-header">
         <h2>投稿リスト（キャッシュあり）</h2>
-        <button @click="handleRefresh" class="btn">
+        <button class="btn" @click="handleRefresh">
           {{ status === 'pending' ? '更新中...' : '再取得' }}
         </button>
       </div>

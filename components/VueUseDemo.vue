@@ -13,9 +13,9 @@
         <div>isFetching: {{ isFetching }}</div>
       </div>
       <button
-        @click="() => execute()"
         :disabled="isFetching"
         class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 disabled:bg-gray-400 transition"
+        @click="() => execute()"
       >
         {{ isFetching ? '再取得中...' : '再取得' }}
       </button>
