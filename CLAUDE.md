@@ -252,10 +252,17 @@ Playwright MCPは、ブラウザを操作してUIの確認・テスト・スク�
 - **移植済みコンポーネント**:
   - Button (`components/design-system/Button.vue`)
   - Card (`components/design-system/Card.vue`)
+  - Input (`components/design-system/Input.vue`)
+  - TextArea (`components/design-system/TextArea.vue`)
+  - Select (`components/design-system/Select.vue`)
+  - Checkbox (`components/design-system/Checkbox.vue`)
+  - Radio (`components/design-system/Radio.vue`)
+  - Loading (`components/design-system/Loading.vue`)
+  - Modal (`components/design-system/Modal.vue`)
+  - Tooltip (`components/design-system/Tooltip.vue`)
 - **参照可能なコンポーネント** (必要に応じて移植):
-  - Input, TextArea, Select, Checkbox, Radio
-  - Modal, Tooltip, Dropdown, Accordion, Breadcrumbs, Table
-  - Loading, Toast, ColorPicker, Form, Text, InfoBox
+  - Dropdown, Accordion, Breadcrumbs, Table
+  - Toast, ColorPicker, Form, Text, InfoBox
 - レシピ: `panda-config/recipes/` 配下に各コンポーネントのスタイル定義
 
 ### マークアップ実装フロー

@@ -1,6 +1,14 @@
 import { defineConfig } from "@pandacss/dev";
 import { button } from "./panda-config/recipes/button";
 import { cardRecipe } from "./panda-config/recipes/card";
+import { input } from "./panda-config/recipes/input";
+import { textarea } from "./panda-config/recipes/textarea";
+import { select } from "./panda-config/recipes/select";
+import { checkbox } from "./panda-config/recipes/checkbox";
+import { radio } from "./panda-config/recipes/radio";
+import { loading } from "./panda-config/recipes/loading";
+import { modal } from "./panda-config/recipes/modal";
+import { tooltip } from "./panda-config/recipes/tooltip";
 
 export default defineConfig({
   // Whether to use css reset
@@ -27,9 +35,17 @@ export default defineConfig({
     extend: {
       recipes: {
         button,
+        input,
+        textarea,
+        loading,
+        tooltip,
       },
       slotRecipes: {
         card: cardRecipe,
+        select,
+        checkbox,
+        radio,
+        modal,
       },
       tokens: {
         colors: {
