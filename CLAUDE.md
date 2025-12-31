@@ -249,10 +249,13 @@ Playwright MCPは、ブラウザを操作してUIの確認・テスト・スク�
 
 **accessibility-learning プロジェクト**
 - パス: `../accessibility-learning/` (同じweb-developディレクトリ内)
-- 利用可能なコンポーネント:
-  - Button, Card (未移植の場合はInfoBox), Input, TextArea, Select, Checkbox, Radio
+- **移植済みコンポーネント**:
+  - Button (`components/design-system/Button.vue`)
+  - Card (`components/design-system/Card.vue`)
+- **参照可能なコンポーネント** (必要に応じて移植):
+  - Input, TextArea, Select, Checkbox, Radio
   - Modal, Tooltip, Dropdown, Accordion, Breadcrumbs, Table
-  - Loading, Toast, ColorPicker, Form, Text
+  - Loading, Toast, ColorPicker, Form, Text, InfoBox
 - レシピ: `panda-config/recipes/` 配下に各コンポーネントのスタイル定義
 
 ### マークアップ実装フロー
