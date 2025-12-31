@@ -4,6 +4,43 @@
 
 ---
 
+## Nuxt 3 自動インポート
+
+### コンポーネントの自動インポート
+
+`components/`ディレクトリ配下のコンポーネントは、**明示的なimport不要**で使用できます。
+
+**命名規則**:
+- ディレクトリ名 + ファイル名 = コンポーネント名（PascalCase）
+- 例: `components/design-system/Input.vue` → `<DesignSystemInput>`
+- 例: `components/AppHeader.vue` → `<AppHeader>`
+
+**使用例**:
+```vue
+<template>
+  <!-- import不要で使える -->
+  <DesignSystemInput v-model="name" label="名前" />
+  <DesignSystemButton>送信</DesignSystemButton>
+  <AppHeader />
+</template>
+
+<script setup lang="ts">
+// import文は不要！Nuxt 3が自動インポート
+const name = ref('')
+</script>
+```
+
+**自動インポートされるもの**:
+- `components/`配下の全コンポーネント
+- `composables/`配下のコンポーザブル関数
+- Nuxtの組み込み関数（`ref`, `computed`, `useRouter`など）
+
+**自動インポートされないもの**:
+- 外部ライブラリ（`import { css } from '~/styled-system/css'`などは必要）
+- `utils/`配下のユーティリティ関数（明示的なimportが必要）
+
+---
+
 ## TypeScript 操作ルール
 
 ### 基本方針
