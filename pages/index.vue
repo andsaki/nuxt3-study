@@ -48,6 +48,12 @@
       <DesignSystemCard title="レンダリングモード" icon="🎨">
         <nav :class="css({ spaceY: '2' })">
           <NuxtLink
+            to="/examples/nuxt-auto-import"
+            :class="css({ display: 'block', p: '3', bg: 'purple.50', rounded: 'md', transition: 'all 0.2s', _hover: { bg: 'purple.100' } })"
+          >
+            📚 Nuxt 3 自動インポート機能
+          </NuxtLink>
+          <NuxtLink
             to="/ssr-demo"
             :class="css({ display: 'block', p: '3', bg: 'yellow.50', rounded: 'md', transition: 'all 0.2s', _hover: { bg: 'yellow.100' } })"
           >

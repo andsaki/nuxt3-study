@@ -109,6 +109,18 @@ export default defineConfig({
             800: { value: "#166534" },
             900: { value: "#14532d" },
           },
+          purple: {
+            50: { value: "#faf5ff" },
+            100: { value: "#f3e8ff" },
+            200: { value: "#e9d5ff" },
+            300: { value: "#d8b4fe" },
+            400: { value: "#c084fc" },
+            500: { value: "#a855f7" },
+            600: { value: "#9333ea" },
+            700: { value: "#7e22ce" },
+            800: { value: "#6b21a8" },
+            900: { value: "#581c87" },
+          },
         },
         fontSizes: {
           xs: { value: "0.75rem" },
