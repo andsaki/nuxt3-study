@@ -70,7 +70,7 @@
   &lt;button type="submit"&gt;送信&lt;/button&gt;
 &lt;/form&gt;
 
-<!--
+&lt;!--
   空のまま送信すると、ブラウザが
   「このフィールドを入力してください」
   というツールチップを表示（変更不可）
@@ -90,7 +90,7 @@
   &lt;button type="submit"&gt;送信&lt;/button&gt;
 &lt;/form&gt;
 
-<!--
+&lt;!--
   ブラウザの標準バリデーションは動かず、
   VeeValidateのエラーメッセージのみ表示
 --&gt;</code></pre>
