@@ -10,102 +10,107 @@
 
         <!-- ユーザー登録フォーム -->
         <DesignSystemCard title="ユーザー登録フォーム" icon="📝" color-scheme="blue">
-          <form @submit="onSubmit" :class="css({ spaceY: '4' })">
-            <!-- 名前 -->
-            <DesignSystemInput
-              v-model="name"
-              label="名前"
-              type="text"
-              :error="errors.name"
-              helper-text="2文字以上で入力してください"
-              required
-              clearable
-              @clear="name = ''"
-            />
+          <DesignSystemForm
+            :validation-schema="validationSchema"
+            @submit="handleFormSubmit"
+          >
+            <template #default="{ errors, isSubmitting, defineField }">
+              <!-- 名前 -->
+              <DesignSystemInput
+                v-model="defineField('name')[0].value"
+                label="名前"
+                type="text"
+                :error="errors.name"
+                helper-text="2文字以上で入力してください"
+                required
+                clearable
+                @clear="defineField('name')[0].value = ''"
+              />
 
-            <!-- メールアドレス -->
-            <DesignSystemInput
-              v-model="email"
-              label="メールアドレス"
-              type="email"
-              :error="errors.email"
-              helper-text="例: user@example.com"
-              required
-              clearable
-              @clear="email = ''"
-            />
+              <!-- メールアドレス -->
+              <DesignSystemInput
+                v-model="defineField('email')[0].value"
+                label="メールアドレス"
+                type="email"
+                :error="errors.email"
+                helper-text="例: user@example.com"
+                required
+                clearable
+                @clear="defineField('email')[0].value = ''"
+              />
 
-            <!-- パスワード -->
-            <DesignSystemInput
-              v-model="password"
-              label="パスワード"
-              type="password"
-              :error="errors.password"
-              helper-text="8文字以上、英字と数字を含む"
-              required
-            />
+              <!-- パスワード -->
+              <DesignSystemInput
+                v-model="defineField('password')[0].value"
+                label="パスワード"
+                type="password"
+                :error="errors.password"
+                helper-text="8文字以上、英字と数字を含む"
+                required
+              />
 
-            <!-- パスワード確認 -->
-            <DesignSystemInput
-              v-model="confirmPassword"
-              label="パスワード確認"
-              type="password"
-              :error="errors.confirmPassword"
-              required
-            />
+              <!-- パスワード確認 -->
+              <DesignSystemInput
+                v-model="defineField('confirmPassword')[0].value"
+                label="パスワード確認"
+                type="password"
+                :error="errors.confirmPassword"
+                required
+              />
 
-            <!-- 性別 -->
-            <div>
-              <p :class="css({ fontSize: 'sm', fontWeight: 'medium', color: 'contents.primary', mb: '2' })">
-                性別
-              </p>
-              <div :class="css({ spaceY: '2' })">
-                <DesignSystemRadio
-                  v-model="gender"
-                  value="male"
-                  label="男性"
-                  name="gender"
-                />
-                <DesignSystemRadio
-                  v-model="gender"
-                  value="female"
-                  label="女性"
-                  name="gender"
-                />
-                <DesignSystemRadio
-                  v-model="gender"
-                  value="other"
-                  label="その他"
-                  name="gender"
-                />
+              <!-- 性別 -->
+              <div>
+                <p :class="css({ fontSize: 'sm', fontWeight: 'medium', color: 'contents.primary', mb: '2' })">
+                  性別
+                </p>
+                <div :class="css({ spaceY: '2' })">
+                  <DesignSystemRadio
+                    v-model="gender"
+                    value="male"
+                    label="男性"
+                    name="gender"
+                  />
+                  <DesignSystemRadio
+                    v-model="gender"
+                    value="female"
+                    label="女性"
+                    name="gender"
+                  />
+                  <DesignSystemRadio
+                    v-model="gender"
+                    value="other"
+                    label="その他"
+                    name="gender"
+                  />
+                </div>
               </div>
-            </div>
 
-            <!-- 利用規約 -->
-            <DesignSystemCheckbox
-              v-model="terms"
-              label="利用規約に同意します"
-              :error="errors.terms"
-            />
+              <!-- 利用規約 -->
+              <DesignSystemCheckbox
+                v-model="defineField('terms')[0].value"
+                label="利用規約に同意します"
+                :error="errors.terms"
+              />
 
-            <!-- ニュースレター購読 -->
-            <DesignSystemCheckbox
-              v-model="newsletter"
-              label="ニュースレターを受け取る"
-              help-text="最新情報をメールでお届けします"
-            />
+              <!-- ニュースレター購読 -->
+              <DesignSystemCheckbox
+                v-model="newsletter"
+                label="ニュースレターを受け取る"
+                help-text="最新情報をメールでお届けします"
+              />
 
-            <!-- 送信ボタン -->
-            <DesignSystemButton
-              type="submit"
-              variant="primary"
-              size="lg"
-              :disabled="isSubmitting"
-              :class="css({ width: '100%' })"
-            >
-              {{ isSubmitting ? '送信中...' : '登録する' }}
-            </DesignSystemButton>
-          </form>
+              <!-- 送信ボタン -->
+              <DesignSystemButton
+                type="submit"
+                variant="primary"
+                size="lg"
+                :disabled="isSubmitting"
+                :class="css({ width: '100%' })"
+              >
+                {{ isSubmitting ? '送信中...' : '登録する' }}
+              </DesignSystemButton>
+            </template>
+          </DesignSystemForm>
 
           <!-- 送信結果 -->
           <div
@@ -152,7 +157,6 @@
 
 <script setup lang="ts">
 import { css } from '~/styled-system/css'
-import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 
@@ -180,18 +184,6 @@ const validationSchema = toTypedSchema(
   })
 )
 
-// フォーム設定
-const { errors, defineField, handleSubmit, isSubmitting } = useForm({
-  validationSchema,
-})
-
-// フィールド定義
-const [name] = defineField('name')
-const [email] = defineField('email')
-const [password] = defineField('password')
-const [confirmPassword] = defineField('confirmPassword')
-const [terms] = defineField('terms')
-
 // 追加フィールド（バリデーション不要）
 const gender = ref('male')
 const newsletter = ref(false)
@@ -200,7 +192,7 @@ const newsletter = ref(false)
 const submitStatus = ref<'success' | 'error' | null>(null)
 
 // 送信処理
-const onSubmit = handleSubmit(async (values: Record<string, any>) => {
+const handleFormSubmit = async (values: Record<string, any>) => {
   submitStatus.value = null
 
   try {
@@ -217,5 +209,5 @@ const onSubmit = handleSubmit(async (values: Record<string, any>) => {
     console.error('送信エラー:', error)
     submitStatus.value = 'error'
   }
-})
+}
 </script>
