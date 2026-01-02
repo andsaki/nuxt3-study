@@ -103,6 +103,15 @@ export const cardRecipe: SlotRecipeConfig = {
           color: 'gray.900',
         },
       },
+      purple: {
+        root: {
+          borderColor: 'purple.200',
+          bg: 'purple.50',
+        },
+        title: {
+          color: 'purple.900',
+        },
+      },
     },
   },
   defaultVariants: {

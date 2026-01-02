@@ -21,7 +21,7 @@ export interface CardProps {
   /** タイトル横に表示するアイコン（絵文字） */
   icon?: string
   /** カラースキーム */
-  colorScheme?: 'blue' | 'green' | 'yellow' | 'red' | 'gray'
+  colorScheme?: 'blue' | 'green' | 'yellow' | 'red' | 'gray' | 'purple'
   /** カスタムスタイル */
   style?: Record<string, string>
 }
