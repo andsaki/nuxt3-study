@@ -29,7 +29,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   }
 
   // Promise rejection（未処理のPromiseエラー）
-  if (process.client) {
+  if (import.meta.client) {
     window.addEventListener('unhandledrejection', (event: PromiseRejectionEvent) => {
       console.error('Unhandled promise rejection:', event.reason)
       // エラーログサービスに送信

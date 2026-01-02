@@ -8,7 +8,7 @@ interface Data {
 }
 
 // 通常のuseAsyncData（レンダリングモードとは無関係）
-const { data } = await useAsyncData<Data>('demo-data', async () => {
+const { data: _data } = await useAsyncData<Data>('demo-data', async () => {
   return {
     timestamp: new Date().toISOString(),
     mode: 'データ取得メソッド',

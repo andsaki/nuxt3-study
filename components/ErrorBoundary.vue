@@ -34,7 +34,7 @@ onErrorCaptured((err, instance, info) => {
   }
 
   // 開発環境のみログ出力
-  if (process.dev) {
+  if (import.meta.dev) {
     console.error('ErrorBoundary caught:', err)
     console.error('Component:', errorInfo.value.componentName)
     console.error('Info:', info)
@@ -69,7 +69,7 @@ const resetError = () => {
             <pre>{{ error?.stack }}</pre>
           </div>
         </details>
-        <button @click="resetError" class="reset-button">
+        <button class="reset-button" @click="resetError">
           再試行
         </button>
       </div>

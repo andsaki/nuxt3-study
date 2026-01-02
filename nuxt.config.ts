@@ -5,10 +5,15 @@ export default defineNuxtConfig({
   modules: [
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
-    '@nuxtjs/tailwindcss',
-    '@vueuse/nuxt'
+    '@vueuse/nuxt',
+    '@nuxt/eslint'
   ],
   css: ['~/assets/css/main.css'],
+  postcss: {
+    plugins: {
+      '@pandacss/dev/postcss': {},
+    },
+  },
   typescript: {
     strict: true,
     typeCheck: true

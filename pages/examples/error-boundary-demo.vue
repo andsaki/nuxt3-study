@@ -1,5 +1,7 @@
 <script setup lang="ts">
 // エラーを発生させるコンポーネント
+import type { ComponentPublicInstance } from 'vue'
+
 const BuggyComponent = defineComponent({
   name: 'BuggyComponent',
   setup() {
@@ -41,8 +43,6 @@ const AsyncBuggyComponent = defineComponent({
     </div>
   `
 })
-
-import type { ComponentPublicInstance } from 'vue'
 
 // カスタムエラーハンドラ
 const handleError = (error: Error, instance: ComponentPublicInstance | null) => {
@@ -93,7 +93,7 @@ const ImmediateErrorComponent = defineComponent({
           <div class="custom-error">
             <h3>🔥 カスタムエラー表示</h3>
             <p>{{ error?.message }}</p>
-            <button @click="reset" class="custom-reset">
+            <button class="custom-reset" @click="reset">
               リトライ
             </button>
           </div>

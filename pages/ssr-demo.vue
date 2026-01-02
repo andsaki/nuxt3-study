@@ -1,4 +1,90 @@
+<template>
+  <div>
+    <AppHeader />
+
+    <div :class="css({ maxW: '1200px', mx: 'auto', p: '8' })">
+      <h1 :class="css({ fontSize: '3xl', fontWeight: 'bold', color: 'gray.900', mb: '8' })">
+        SSR デモページ
+      </h1>
+
+      <!-- レンダリング情報カード -->
+      <DesignSystemCard title="🖥️ レンダリング情報" color-scheme="blue">
+        <div :class="css({ spaceY: '2' })">
+          <p><strong>現在の環境:</strong> {{ isClient ? "クライアント" : "サーバー" }}</p>
+          <p><strong>サーバータイムスタンプ:</strong> {{ serverTime?.timestamp }}</p>
+          <p>{{ serverTime?.message }}</p>
+        </div>
+      </DesignSystemCard>
+
+      <!-- データ表示カード -->
+      <DesignSystemCard title="📝 サーバーサイドで取得した投稿">
+        <div v-if="posts" :class="css({ spaceY: '4' })">
+          <article
+            v-for="post in posts"
+            :key="post.id"
+            :class="css({
+              bg: 'white',
+              border: '1px solid',
+              borderColor: 'gray.200',
+              rounded: 'lg',
+              p: '6',
+              transition: 'all 0.2s',
+              _hover: { shadow: 'md', borderColor: 'gray.300' }
+            })"
+          >
+            <h3 :class="css({ fontSize: 'lg', fontWeight: 'semibold', color: 'gray.900', mb: '2' })">
+              {{ post.title }}
+            </h3>
+            <p :class="css({ color: 'gray.600', lineHeight: '1.6', mb: '2' })">
+              {{ post.body }}
+            </p>
+            <small :class="css({ color: 'gray.400', fontSize: 'sm' })">
+              投稿 ID: {{ post.id }}
+            </small>
+          </article>
+        </div>
+        <p v-else :class="css({ color: 'gray.500' })">読み込み中...</p>
+      </DesignSystemCard>
+
+      <!-- SSR説明カード -->
+      <DesignSystemCard title="💡 SSRについて" color-scheme="yellow">
+        <ul :class="css({ pl: '6', spaceY: '2', listStyleType: 'disc' })">
+          <li>このページはサーバーサイドでレンダリングされます</li>
+          <li>初回ロード時、HTMLは既にデータを含んでいます</li>
+          <li>useAsyncDataとuseFetchはSSRに対応しています</li>
+          <li>ページソースを表示すると、データが含まれていることが確認できます</li>
+        </ul>
+      </DesignSystemCard>
+
+      <!-- 戻るリンク -->
+      <NuxtLink
+        to="/"
+        :class="css({
+          display: 'inline-block',
+          mt: '8',
+          px: '6',
+          py: '3',
+          color: 'green.600',
+          fontWeight: 'medium',
+          border: '2px solid',
+          borderColor: 'green.600',
+          rounded: 'md',
+          transition: 'all 0.2s',
+          _hover: {
+            bg: 'green.600',
+            color: 'white'
+          }
+        })"
+      >
+        ← トップページに戻る
+      </NuxtLink>
+    </div>
+  </div>
+</template>
+
 <script setup lang="ts">
+import { css } from '~/styled-system/css'
+
 interface Post {
   id: number;
   userId: number;
@@ -25,143 +111,3 @@ onMounted(() => {
   isClient.value = true;
 });
 </script>
-
-<template>
-  <div class="container">
-    <h1>SSR デモページ</h1>
-
-    <div class="info-box">
-      <h2>レンダリング情報</h2>
-      <p>現在の環境: {{ isClient ? "クライアント" : "サーバー" }}</p>
-      <p>サーバータイムスタンプ: {{ serverTime?.timestamp }}</p>
-      <p>{{ serverTime?.message }}</p>
-    </div>
-
-    <div class="posts-section">
-      <h2>サーバーサイドで取得した投稿</h2>
-      <div v-if="posts" class="posts-list">
-        <article v-for="post in posts" :key="post.id" class="post-card">
-          <h3>{{ post.title }}</h3>
-          <p>{{ post.body }}</p>
-          <small>投稿 ID: {{ post.id }}</small>
-        </article>
-      </div>
-      <p v-else>読み込み中...</p>
-    </div>
-
-    <div class="explanation">
-      <h2>SSRについて</h2>
-      <ul>
-        <li>このページはサーバーサイドでレンダリングされます</li>
-        <li>初回ロード時、HTMLは既にデータを含んでいます</li>
-        <li>useAsyncDataとuseFetchはSSRに対応しています</li>
-        <li>
-          ページソースを表示すると、データが含まれていることが確認できます
-        </li>
-      </ul>
-    </div>
-
-    <NuxtLink to="/" class="back-link">← トップページに戻る</NuxtLink>
-  </div>
-</template>
-
-<style scoped>
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-h1 {
-  color: #00dc82;
-  margin-bottom: 2rem;
-}
-
-h2 {
-  color: #333;
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
-}
-
-.info-box {
-  background: #f0f9ff;
-  border-left: 4px solid #00dc82;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  border-radius: 4px;
-}
-
-.info-box p {
-  margin: 0.5rem 0;
-}
-
-.posts-section {
-  margin-bottom: 2rem;
-}
-
-.posts-list {
-  display: grid;
-  gap: 1rem;
-}
-
-.post-card {
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 1.5rem;
-  transition: box-shadow 0.2s;
-}
-
-.post-card:hover {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.post-card h3 {
-  color: #1f2937;
-  margin-bottom: 0.5rem;
-  font-size: 1.1rem;
-}
-
-.post-card p {
-  color: #6b7280;
-  line-height: 1.6;
-  margin-bottom: 0.5rem;
-}
-
-.post-card small {
-  color: #9ca3af;
-}
-
-.explanation {
-  background: #fef3c7;
-  border-left: 4px solid #f59e0b;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  border-radius: 4px;
-}
-
-.explanation ul {
-  margin: 0;
-  padding-left: 1.5rem;
-}
-
-.explanation li {
-  margin: 0.5rem 0;
-}
-
-.back-link {
-  display: inline-block;
-  color: #00dc82;
-  text-decoration: none;
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-  border: 2px solid #00dc82;
-  border-radius: 4px;
-  transition: all 0.2s;
-}
-
-.back-link:hover {
-  background: #00dc82;
-  color: white;
-}
-</style>

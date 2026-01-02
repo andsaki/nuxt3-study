@@ -14,9 +14,9 @@
         <div>status: {{ status }}</div>
       </div>
       <button
-        @click="() => refetch()"
         :disabled="isRefetching"
         class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-400 transition"
+        @click="() => refetch()"
       >
         {{ isRefetching ? '再取得中...' : '再取得' }}
       </button>

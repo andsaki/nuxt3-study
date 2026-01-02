@@ -1,0 +1,200 @@
+import { defineConfig } from "@pandacss/dev";
+import { button } from "./panda-config/recipes/button";
+import { cardRecipe } from "./panda-config/recipes/card";
+import { input } from "./panda-config/recipes/input";
+import { textarea } from "./panda-config/recipes/textarea";
+import { select } from "./panda-config/recipes/select";
+import { checkbox } from "./panda-config/recipes/checkbox";
+import { radio } from "./panda-config/recipes/radio";
+import { loading } from "./panda-config/recipes/loading";
+import { modal } from "./panda-config/recipes/modal";
+import { tooltip } from "./panda-config/recipes/tooltip";
+
+export default defineConfig({
+  // Whether to use css reset
+  preflight: true,
+
+  // Where to look for your css declarations (Nuxt3のディレクトリ構造に対応)
+  include: [
+    "./components/**/*.{js,jsx,ts,tsx,vue}",
+    "./pages/**/*.{js,jsx,ts,tsx,vue}",
+    "./app.vue"
+  ],
+
+  // Files to exclude
+  exclude: [],
+
+  // Theme conditions for dark mode support
+  conditions: {
+    light: "[data-theme=light] &",
+    dark: "[data-theme=dark] &",
+  },
+
+  // Recipes for component variants
+  theme: {
+    extend: {
+      recipes: {
+        button,
+        input,
+        textarea,
+        loading,
+        tooltip,
+      },
+      slotRecipes: {
+        card: cardRecipe,
+        select,
+        checkbox,
+        radio,
+        modal,
+      },
+      tokens: {
+        colors: {
+          gray: {
+            50: { value: "#f9fafb" },
+            100: { value: "#f3f4f6" },
+            200: { value: "#e5e7eb" },
+            300: { value: "#d1d5db" },
+            400: { value: "#9ca3af" },
+            500: { value: "#6b7280" },
+            600: { value: "#4b5563" },
+            700: { value: "#374151" },
+            800: { value: "#1f2937" },
+            900: { value: "#111827" },
+          },
+          blue: {
+            50: { value: "#eff6ff" },
+            100: { value: "#dbeafe" },
+            200: { value: "#bfdbfe" },
+            300: { value: "#93c5fd" },
+            400: { value: "#60a5fa" },
+            500: { value: "#3b82f6" },
+            600: { value: "#2563eb" },
+            700: { value: "#1d4ed8" },
+            800: { value: "#1e40af" },
+            900: { value: "#1e3a8a" },
+          },
+          red: {
+            50: { value: "#fef2f2" },
+            100: { value: "#fee2e2" },
+            200: { value: "#fecaca" },
+            300: { value: "#fca5a5" },
+            400: { value: "#f87171" },
+            500: { value: "#ef4444" },
+            600: { value: "#dc2626" },
+            700: { value: "#b91c1c" },
+            800: { value: "#991b1b" },
+            900: { value: "#7f1d1d" },
+          },
+          yellow: {
+            50: { value: "#fefce8" },
+            100: { value: "#fef9c3" },
+            200: { value: "#fef08a" },
+            300: { value: "#fde047" },
+            400: { value: "#facc15" },
+            500: { value: "#eab308" },
+            600: { value: "#ca8a04" },
+            700: { value: "#a16207" },
+            800: { value: "#854d0e" },
+            900: { value: "#713f12" },
+          },
+          green: {
+            50: { value: "#f0fdf4" },
+            100: { value: "#dcfce7" },
+            200: { value: "#bbf7d0" },
+            300: { value: "#86efac" },
+            400: { value: "#4ade80" },
+            500: { value: "#22c55e" },
+            600: { value: "#16a34a" },
+            700: { value: "#15803d" },
+            800: { value: "#166534" },
+            900: { value: "#14532d" },
+          },
+          purple: {
+            50: { value: "#faf5ff" },
+            100: { value: "#f3e8ff" },
+            200: { value: "#e9d5ff" },
+            300: { value: "#d8b4fe" },
+            400: { value: "#c084fc" },
+            500: { value: "#a855f7" },
+            600: { value: "#9333ea" },
+            700: { value: "#7e22ce" },
+            800: { value: "#6b21a8" },
+            900: { value: "#581c87" },
+          },
+        },
+        fontSizes: {
+          xs: { value: "0.75rem" },
+          sm: { value: "0.875rem" },
+          base: { value: "1rem" },
+          lg: { value: "1.125rem" },
+          xl: { value: "1.25rem" },
+        },
+        radii: {
+          sm: { value: "0.125rem" },
+          md: { value: "0.375rem" },
+          lg: { value: "0.5rem" },
+        },
+      },
+      semanticTokens: {
+        colors: {
+          contents: {
+            primary: {
+              value: { base: "{colors.gray.900}", _dark: "{colors.gray.50}" },
+            },
+            secondary: {
+              value: { base: "{colors.gray.600}", _dark: "{colors.gray.400}" },
+            },
+            link: {
+              value: { base: "{colors.blue.600}", _dark: "{colors.blue.400}" },
+            },
+          },
+          bg: {
+            primary: {
+              value: { base: "white", _dark: "{colors.gray.900}" },
+            },
+            secondary: {
+              value: { base: "{colors.gray.50}", _dark: "{colors.gray.800}" },
+            },
+            tertiary: {
+              value: { base: "{colors.gray.100}", _dark: "{colors.gray.700}" },
+            },
+          },
+          border: {
+            default: {
+              value: { base: "{colors.gray.200}", _dark: "{colors.gray.700}" },
+            },
+            focus: {
+              value: { base: "{colors.blue.500}", _dark: "{colors.blue.400}" },
+            },
+          },
+          input: {
+            bg: {
+              value: { base: "white", _dark: "{colors.gray.800}" },
+            },
+            text: {
+              value: { base: "{colors.gray.900}", _dark: "{colors.gray.50}" },
+            },
+            border: {
+              value: { base: "{colors.gray.300}", _dark: "{colors.gray.600}" },
+            },
+            borderError: {
+              value: { base: "{colors.red.500}", _dark: "{colors.red.400}" },
+            },
+            placeholder: {
+              value: { base: "{colors.gray.400}", _dark: "{colors.gray.500}" },
+            },
+            bgDisabled: {
+              value: { base: "{colors.gray.100}", _dark: "{colors.gray.700}" },
+            },
+            textDisabled: {
+              value: { base: "{colors.gray.500}", _dark: "{colors.gray.400}" },
+            },
+          },
+        },
+      },
+    },
+  },
+
+  // The output directory for your css system
+  outdir: "styled-system",
+});

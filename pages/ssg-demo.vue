@@ -1,4 +1,92 @@
+<template>
+  <div>
+    <AppHeader />
+
+    <div :class="css({ maxW: '1200px', mx: 'auto', p: '8' })">
+      <h1 :class="css({ fontSize: '3xl', fontWeight: 'bold', color: 'gray.900', mb: '8' })">
+        SSG デモページ
+      </h1>
+
+      <!-- SSG説明カード -->
+      <DesignSystemCard title="🏗️ SSG (Static Site Generation)" color-scheme="yellow">
+        <div :class="css({ spaceY: '3' })">
+          <p><strong>ビルド時刻:</strong> {{ buildTime?.generatedAt }}</p>
+          <p><strong>レンダリング:</strong> {{ buildTime?.type }}</p>
+          <ul :class="css({ mt: '4', pl: '6', spaceY: '2', listStyleType: 'disc' })">
+            <li>ビルド時に静的HTMLを生成</li>
+            <li>全てのページが事前レンダリング</li>
+            <li>CDNでの配信に最適</li>
+            <li>超高速なページ表示</li>
+          </ul>
+        </div>
+      </DesignSystemCard>
+
+      <!-- データ表示カード -->
+      <DesignSystemCard title="📝 ビルド時に取得された投稿">
+        <div v-if="posts" :class="css({ spaceY: '4' })">
+          <article
+            v-for="post in posts"
+            :key="post.id"
+            :class="css({
+              bg: 'white',
+              border: '1px solid',
+              borderColor: 'gray.200',
+              rounded: 'lg',
+              p: '6',
+              transition: 'all 0.2s',
+              _hover: { shadow: 'md', borderColor: 'gray.300' }
+            })"
+          >
+            <h3 :class="css({ fontSize: 'lg', fontWeight: 'semibold', color: 'gray.900', mb: '2' })">
+              {{ post.title }}
+            </h3>
+            <p :class="css({ color: 'gray.600', lineHeight: '1.6' })">
+              {{ post.body }}
+            </p>
+          </article>
+        </div>
+      </DesignSystemCard>
+
+      <!-- 設定方法カード -->
+      <DesignSystemCard title="⚙️ 設定方法（nuxt.config.ts）">
+        <div :class="css({ bg: 'gray.900', color: 'gray.50', p: '6', rounded: 'lg', overflow: 'auto' })">
+          <pre :class="css({ fontSize: 'sm' })"><code>export default defineNuxtConfig({
+  routeRules: {
+    '/ssg-demo': { prerender: true }, // SSG有効化
+  }
+})</code></pre>
+        </div>
+      </DesignSystemCard>
+
+      <!-- 戻るリンク -->
+      <NuxtLink
+        to="/"
+        :class="css({
+          display: 'inline-block',
+          mt: '8',
+          px: '6',
+          py: '3',
+          color: 'green.600',
+          fontWeight: 'medium',
+          border: '2px solid',
+          borderColor: 'green.600',
+          rounded: 'md',
+          transition: 'all 0.2s',
+          _hover: {
+            bg: 'green.600',
+            color: 'white'
+          }
+        })"
+      >
+        ← トップページに戻る
+      </NuxtLink>
+    </div>
+  </div>
+</template>
+
 <script setup lang="ts">
+import { css } from '~/styled-system/css'
+
 interface Post {
   id: number
   title: string
@@ -16,149 +104,3 @@ const { data: buildTime } = await useAsyncData('build-time', async () => {
   }
 })
 </script>
-
-<template>
-  <div class="container">
-    <h1>SSG デモページ</h1>
-
-    <div class="info-box ssg">
-      <h2>🏗️ SSG (Static Site Generation)</h2>
-      <p><strong>ビルド時刻:</strong> {{ buildTime?.generatedAt }}</p>
-      <p><strong>レンダリング:</strong> {{ buildTime?.type }}</p>
-      <ul>
-        <li>ビルド時に静的HTMLを生成</li>
-        <li>全てのページが事前レンダリング</li>
-        <li>CDNでの配信に最適</li>
-        <li>超高速なページ表示</li>
-      </ul>
-    </div>
-
-    <div class="posts-section">
-      <h2>ビルド時に取得された投稿</h2>
-      <div v-if="posts" class="posts-list">
-        <article v-for="post in posts" :key="post.id" class="post-card">
-          <h3>{{ post.title }}</h3>
-          <p>{{ post.body }}</p>
-        </article>
-      </div>
-    </div>
-
-    <div class="code-box">
-      <h3>設定方法（nuxt.config.ts）</h3>
-      <pre><code>export default defineNuxtConfig({
-  routeRules: {
-    '/ssg-demo': { prerender: true }, // SSG有効化
-  }
-})</code></pre>
-    </div>
-
-    <NuxtLink to="/" class="back-link">← トップページに戻る</NuxtLink>
-  </div>
-</template>
-
-<style scoped>
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-h1 {
-  color: #00dc82;
-  margin-bottom: 2rem;
-}
-
-h2 {
-  color: #333;
-  margin-bottom: 1rem;
-  font-size: 1.3rem;
-}
-
-.info-box {
-  border-left: 4px solid;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  border-radius: 4px;
-}
-
-.info-box.ssg {
-  background: #fef3c7;
-  border-color: #f59e0b;
-}
-
-.info-box p {
-  margin: 0.5rem 0;
-}
-
-.info-box ul {
-  margin-top: 1rem;
-  padding-left: 1.5rem;
-}
-
-.info-box li {
-  margin: 0.3rem 0;
-}
-
-.posts-section {
-  margin-bottom: 2rem;
-}
-
-.posts-list {
-  display: grid;
-  gap: 1rem;
-}
-
-.post-card {
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 1.5rem;
-}
-
-.post-card h3 {
-  color: #1f2937;
-  margin-bottom: 0.5rem;
-  font-size: 1.1rem;
-}
-
-.post-card p {
-  color: #6b7280;
-  line-height: 1.6;
-}
-
-.code-box {
-  background: #1f2937;
-  color: #f9fafb;
-  padding: 1.5rem;
-  border-radius: 8px;
-  margin-bottom: 2rem;
-}
-
-.code-box h3 {
-  color: #f9fafb;
-  margin-bottom: 1rem;
-}
-
-.code-box pre {
-  background: #111827;
-  padding: 1rem;
-  border-radius: 6px;
-  overflow-x: auto;
-}
-
-.back-link {
-  display: inline-block;
-  color: #00dc82;
-  text-decoration: none;
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-  border: 2px solid #00dc82;
-  border-radius: 4px;
-  transition: all 0.2s;
-}
-
-.back-link:hover {
-  background: #00dc82;
-  color: white;
-}
-</style>

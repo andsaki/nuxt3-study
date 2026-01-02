@@ -38,7 +38,7 @@
     <section class="demo">
       <h2>インタラクティブデモ</h2>
       <div class="demo-controls">
-        <button @click="runDemo" class="btn-primary">
+        <button class="btn-primary" @click="runDemo">
           デモを実行
         </button>
         <p v-if="demoResult" class="result">{{ demoResult }}</p>

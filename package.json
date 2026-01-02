@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "prepare": "panda codegen",
     "dev": "nuxt dev",
     "build": "nuxt build",
     "preview": "nuxt preview",
@@ -36,12 +37,17 @@
     "zod": "^3.23.0"
   },
   "devDependencies": {
+    "@nuxt/eslint": "^1.12.1",
     "@nuxtjs/tailwindcss": "^6.12.0",
+    "@pandacss/dev": "^1.7.2",
     "@playwright/test": "^1.45.0",
     "@types/node": "^25.0.1",
+    "@typescript-eslint/eslint-plugin": "^8.51.0",
+    "@typescript-eslint/parser": "^8.51.0",
     "@vue/test-utils": "^2.4.6",
     "drizzle-kit": "^0.24.0",
     "eslint": "^9",
+    "eslint-plugin-vue": "^10.6.2",
     "happy-dom": "^14.12.0",
     "playwright": "^1.45.0",
     "prisma": "^6.0.0",

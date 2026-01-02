@@ -1,14 +1,14 @@
 <script setup lang="ts">
-// Vue 3の型推論デモ
-const count = ref(0)  // Ref<number> と自動推論
-const name = ref('hello')  // Ref<string> と自動推論
+// Vue 3の型推論デモ（実際には使用していないがサンプルコード用）
+const _count = ref(0)  // Ref<number> と自動推論
+const _name = ref('hello')  // Ref<string> と自動推論
 
-const props = defineProps<{
+const _props = defineProps<{
   title: string
   count?: number
 }>()
 
-const emit = defineEmits<{
+const _emit = defineEmits<{
   update: [id: number, value: string]
   delete: [id: number]
 }>()
@@ -197,7 +197,7 @@ const [state, setState] = useState&lt;User | null&gt;(null)</code></pre>
       <table class="comparison-table">
         <thead>
           <tr>
-            <th></th>
+            <th/>
             <th>Vue 2</th>
             <th>React</th>
             <th>Vue 3</th>
