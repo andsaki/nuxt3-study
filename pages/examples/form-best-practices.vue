@@ -65,7 +65,7 @@
             <div>
               <p :class="css({ fontWeight: 'semibold', mb: '2', color: 'red.600' })">❌ novalidateなし</p>
               <div :class="css({ bg: 'gray.900', color: 'gray.50', p: '4', rounded: 'lg', overflow: 'auto' })">
-                <pre :class="css({ fontSize: 'sm' })"><code>&lt;form @submit="onSubmit"&gt;
+                <pre :class="css({ fontSize: 'sm' })"><code v-pre>&lt;form @submit="onSubmit"&gt;
   &lt;input type="email" required /&gt;
   &lt;button type="submit"&gt;送信&lt;/button&gt;
 &lt;/form&gt;
@@ -82,7 +82,7 @@
             <div>
               <p :class="css({ fontWeight: 'semibold', mb: '2', color: 'green.600' })">✅ novalidateあり</p>
               <div :class="css({ bg: 'gray.900', color: 'gray.50', p: '4', rounded: 'lg', overflow: 'auto' })">
-                <pre :class="css({ fontSize: 'sm' })"><code>&lt;form novalidate @submit="onSubmit"&gt;
+                <pre :class="css({ fontSize: 'sm' })"><code v-pre>&lt;form novalidate @submit="onSubmit"&gt;
   &lt;input type="email" v-model="email" /&gt;
   &lt;p v-if="errors.email"&gt;
     {{ errors.email }}
@@ -134,7 +134,7 @@
           </h3>
 
           <div :class="css({ bg: 'gray.900', color: 'gray.50', p: '6', rounded: 'lg', mb: '4', overflow: 'auto' })">
-            <pre :class="css({ fontSize: 'sm' })"><code>import { useForm } from 'vee-validate'
+            <pre :class="css({ fontSize: 'sm' })"><code v-pre>import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 
@@ -226,7 +226,7 @@ const onSubmit = handleSubmit((values) => {
           </h3>
 
           <div :class="css({ bg: 'gray.900', color: 'gray.50', p: '6', rounded: 'lg', overflow: 'auto' })">
-            <pre :class="css({ fontSize: 'sm' })"><code>&lt;!-- アクセシブルなエラー表示 --&gt;
+            <pre :class="css({ fontSize: 'sm' })"><code v-pre>&lt;!-- アクセシブルなエラー表示 --&gt;
 &lt;div&gt;
   &lt;label :for="inputId"&gt;メールアドレス&lt;/label&gt;
 
@@ -262,7 +262,7 @@ const onSubmit = handleSubmit((values) => {
           </h3>
 
           <div :class="css({ bg: 'gray.900', color: 'gray.50', p: '6', rounded: 'lg', mb: '4', overflow: 'auto' })">
-            <pre :class="css({ fontSize: 'sm' })"><code>&lt;template&gt;
+            <pre :class="css({ fontSize: 'sm' })"><code v-pre>&lt;template&gt;
   &lt;DesignSystemForm
     :validation-schema="validationSchema"
     @submit="handleFormSubmit"

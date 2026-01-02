@@ -10,38 +10,35 @@
 
         <!-- ユーザー登録フォーム -->
         <DesignSystemCard title="ユーザー登録フォーム" icon="📝" color-scheme="blue">
-          <DesignSystemForm
-            :validation-schema="validationSchema"
-            @submit="handleFormSubmit"
-          >
-            <template #default="{ errors, isSubmitting, defineField }">
+          <form novalidate @submit="onSubmit">
+            <div :class="css({ spaceY: '4' })">
               <!-- 名前 -->
               <DesignSystemInput
-                v-model="defineField('name')[0].value"
+                v-model="name"
                 label="名前"
                 type="text"
                 :error="errors.name"
                 helper-text="2文字以上で入力してください"
                 required
                 clearable
-                @clear="defineField('name')[0].value = ''"
+                @clear="name = ''"
               />
 
               <!-- メールアドレス -->
               <DesignSystemInput
-                v-model="defineField('email')[0].value"
+                v-model="email"
                 label="メールアドレス"
                 type="email"
                 :error="errors.email"
                 helper-text="例: user@example.com"
                 required
                 clearable
-                @clear="defineField('email')[0].value = ''"
+                @clear="email = ''"
               />
 
               <!-- パスワード -->
               <DesignSystemInput
-                v-model="defineField('password')[0].value"
+                v-model="password"
                 label="パスワード"
                 type="password"
                 :error="errors.password"
@@ -51,7 +48,7 @@
 
               <!-- パスワード確認 -->
               <DesignSystemInput
-                v-model="defineField('confirmPassword')[0].value"
+                v-model="confirmPassword"
                 label="パスワード確認"
                 type="password"
                 :error="errors.confirmPassword"
@@ -87,7 +84,7 @@
 
               <!-- 利用規約 -->
               <DesignSystemCheckbox
-                v-model="defineField('terms')[0].value"
+                v-model="terms"
                 label="利用規約に同意します"
                 :error="errors.terms"
               />
@@ -109,8 +106,8 @@
               >
                 {{ isSubmitting ? '送信中...' : '登録する' }}
               </DesignSystemButton>
-            </template>
-          </DesignSystemForm>
+            </div>
+          </form>
 
           <!-- 送信結果 -->
           <div
@@ -157,6 +154,7 @@
 
 <script setup lang="ts">
 import { css } from '~/styled-system/css'
+import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 
@@ -184,6 +182,18 @@ const validationSchema = toTypedSchema(
   })
 )
 
+// VeeValidateのuseFormでフォーム管理
+const { errors, defineField, handleSubmit, isSubmitting } = useForm({
+  validationSchema,
+})
+
+// フィールド定義（型安全）
+const [name] = defineField('name')
+const [email] = defineField('email')
+const [password] = defineField('password')
+const [confirmPassword] = defineField('confirmPassword')
+const [terms] = defineField('terms')
+
 // 追加フィールド（バリデーション不要）
 const gender = ref('male')
 const newsletter = ref(false)
@@ -192,7 +202,7 @@ const newsletter = ref(false)
 const submitStatus = ref<'success' | 'error' | null>(null)
 
 // 送信処理
-const handleFormSubmit = async (values: Record<string, unknown>) => {
+const onSubmit = handleSubmit(async (values) => {
   submitStatus.value = null
 
   try {
@@ -209,5 +219,5 @@ const handleFormSubmit = async (values: Record<string, unknown>) => {
     console.error('送信エラー:', error)
     submitStatus.value = 'error'
   }
-}
+})
 </script>
