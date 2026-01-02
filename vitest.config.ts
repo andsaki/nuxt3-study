@@ -1,10 +1,10 @@
 import { defineConfig } from 'vitest/config'
 import vue from '@vitejs/plugin-vue'
 import { fileURLToPath } from 'node:url'
-import type { Plugin } from 'vite'
 
 export default defineConfig({
-  plugins: [vue() as Plugin],
+  // @ts-expect-error - Vite plugin type mismatch between vitest's internal vite and @vitejs/plugin-vue
+  plugins: [vue()],
   test: {
     environment: 'happy-dom',
     globals: true,
