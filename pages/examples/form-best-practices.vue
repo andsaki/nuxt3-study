@@ -1,7 +1,5 @@
 <template>
   <div>
-    <AppHeader />
-
     <div :class="css({ minH: 'screen', bg: 'gray.50', py: '12', px: '4' })">
       <div :class="css({ maxW: '4xl', mx: 'auto' })">
         <h1 :class="css({ fontSize: '4xl', fontWeight: 'bold', color: 'gray.900', mb: '4' })">

@@ -1,119 +1,182 @@
 <template>
-  <div class="min-h-screen bg-gray-50 py-12 px-4">
-    <div class="max-w-2xl mx-auto">
-      <h1 class="text-3xl font-bold text-gray-900 mb-8">Zod 同期・非同期バリデーション</h1>
-
-      <div class="bg-white shadow-md rounded-lg p-6 mb-8">
-        <h2 class="text-xl font-semibold text-blue-600 mb-4">ユーザー登録フォーム（非同期チェック付き）</h2>
-
-        <form class="space-y-4" @submit="onSubmit">
-          <!-- ユーザー名 -->
-          <div>
-            <label for="username" class="block text-sm font-medium text-gray-700 mb-1">
-              ユーザー名（非同期チェック）
-            </label>
-            <input
-              id="username"
-              v-model="username"
-              type="text"
-              class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
-              :class="{ 'border-red-500': errors.username }"
-            >
-            <p v-if="errors.username" class="mt-1 text-sm text-red-600">{{ errors.username }}</p>
-            <p class="mt-1 text-xs text-gray-500">※APIで重複チェックします（test, admin, userは使用不可）</p>
-          </div>
-
-          <!-- メールアドレス -->
-          <div>
-            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
-              メールアドレス（同期チェック）
-            </label>
-            <input
-              id="email"
-              v-model="email"
-              type="email"
-              class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
-              :class="{ 'border-red-500': errors.email }"
-            >
-            <p v-if="errors.email" class="mt-1 text-sm text-red-600">{{ errors.email }}</p>
-          </div>
-
-          <!-- 年齢 -->
-          <div>
-            <label for="age" class="block text-sm font-medium text-gray-700 mb-1">
-              年齢（同期チェック）
-            </label>
-            <input
-              id="age"
-              v-model.number="age"
-              type="number"
-              class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
-              :class="{ 'border-red-500': errors.age }"
-            >
-            <p v-if="errors.age" class="mt-1 text-sm text-red-600">{{ errors.age }}</p>
-          </div>
-
-          <!-- パスワード -->
-          <div>
-            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
-              パスワード（同期チェック）
-            </label>
-            <input
-              id="password"
-              v-model="password"
-              type="password"
-              class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
-              :class="{ 'border-red-500': errors.password }"
-            >
-            <p v-if="errors.password" class="mt-1 text-sm text-red-600">{{ errors.password }}</p>
-          </div>
-
-          <!-- 送信ボタン -->
-          <button
-            type="submit"
-            class="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition disabled:bg-gray-400"
-            :disabled="isSubmitting"
-          >
-            {{ isSubmitting ? '検証中...' : '登録する' }}
-          </button>
-        </form>
-
-        <!-- 送信結果 -->
-        <div
-v-if="submitStatus" class="mt-4 p-4 rounded-md" :class="{
-          'bg-green-50 text-green-800': submitStatus === 'success',
-          'bg-red-50 text-red-800': submitStatus === 'error'
-        }">
-          <p v-if="submitStatus === 'success'">✓ 登録が完了しました！</p>
-          <p v-if="submitStatus === 'error'">✗ バリデーションエラーが発生しました。</p>
+  <main :class="css({ bg: 'gray.50', minH: 'screen', py: { base: '10', md: '16' }, px: { base: '4', md: '8' } })">
+    <div :class="css({ maxW: '6xl', mx: 'auto', display: 'flex', flexDirection: 'column', gap: { base: '8', md: '10' } })">
+      <header :class="css({ display: 'flex', flexDirection: 'column', gap: '4', textAlign: { base: 'left', md: 'center' } })">
+        <p :class="css({ fontSize: 'sm', fontWeight: 'semibold', color: 'blue.600', textTransform: 'uppercase', letterSpacing: 'wider' })">
+          VeeValidate × Zod
+        </p>
+        <h1 :class="css({ fontSize: { base: '3xl', md: '4xl' }, fontWeight: 'bold', color: 'gray.900' })">
+          Zod 同期・非同期バリデーション
+        </h1>
+        <p :class="css({ color: 'gray.600', maxW: '3xl', mx: { base: 0, md: 'auto' } })">
+          Zodの
+          <code :class="codeClass">refine</code>
+          による非同期チェックと、フォーム全体の同期ルールを同時に扱うデモです。Design Systemの入力コンポーネントでアクセシブルに構築しています。
+        </p>
+        <div :class="css({ display: 'flex', flexWrap: 'wrap', gap: '3', justifyContent: { base: 'flex-start', md: 'center' } })">
+          <span :class="badgeClass">Async refine</span>
+          <span :class="badgeClass">Panda CSS layout</span>
+          <span :class="badgeClass">Helper texts</span>
         </div>
-      </div>
+      </header>
 
-      <!-- 説明 -->
-      <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-8">
-        <h3 class="font-semibold mb-2">Zodの同期・非同期バリデーション</h3>
-        <ul class="list-disc list-inside space-y-1 text-sm">
-          <li><strong>同期バリデーション:</strong> z.string(), .email(), .min(), .max(), .regex()など</li>
-          <li><strong>非同期バリデーション:</strong> .refine()の第一引数にasync関数を渡す</li>
-          <li>ユーザー名フィールドは非同期でAPIチェックをシミュレート</li>
-          <li>その他のフィールドは同期的にバリデーション</li>
-        </ul>
+      <div :class="css({ display: 'grid', gap: { base: '6', lg: '8' }, gridTemplateColumns: { base: '1fr', lg: '3fr 2fr' } })">
+        <DesignSystemCard title="ユーザー登録フォーム（非同期チェック付き）" icon="🧾" color-scheme="blue">
+          <form :class="css({ display: 'flex', flexDirection: 'column', gap: '5' })" novalidate @submit="onSubmit">
+            <DesignSystemInput
+              v-model="username"
+              label="ユーザー名（非同期チェック）"
+              type="text"
+              autocomplete="username"
+              :error="errors.username"
+              helper-text="APIモックで test / admin / user を弾きます"
+              required
+              clearable
+              @clear="username = ''"
+            />
+
+            <DesignSystemInput
+              v-model="email"
+              label="メールアドレス（同期チェック）"
+              type="email"
+              autocomplete="email"
+              :error="errors.email"
+              helper-text="例: user@example.com"
+              required
+              clearable
+              @clear="email = ''"
+            />
+
+            <DesignSystemInput
+              v-model="age"
+              label="年齢（同期チェック）"
+              type="number"
+              inputmode="numeric"
+              :error="errors.age"
+              helper-text="18〜120 歳の範囲で入力"
+              required
+            />
+
+            <DesignSystemInput
+              v-model="password"
+              label="パスワード（同期チェック）"
+              type="password"
+              autocomplete="new-password"
+              :error="errors.password"
+              helper-text="8文字以上・英数字混在"
+              required
+            />
+
+            <DesignSystemButton
+              type="submit"
+              size="lg"
+              :is-loading="isSubmitting"
+              :disabled="isSubmitting"
+            >
+              {{ isSubmitting ? '検証中...' : '登録する' }}
+            </DesignSystemButton>
+
+            <div
+              v-if="submitStatus"
+              :class="css({
+                mt: '2',
+                p: '4',
+                rounded: 'md',
+                fontWeight: 'medium',
+                bg: submitStatus === 'success' ? 'green.50' : 'red.50',
+                color: submitStatus === 'success' ? 'green.800' : 'red.800',
+              })"
+            >
+              <p v-if="submitStatus === 'success'">✓ 登録が完了しました！</p>
+              <p v-else>✗ バリデーションエラーが発生しました。</p>
+            </div>
+          </form>
+
+          <dl :class="css({ mt: '6', display: 'grid', gap: '4', gridTemplateColumns: { base: '1fr', md: 'repeat(2, 1fr)' } })">
+            <div :class="css({ bg: 'green.50', p: '4', rounded: 'md', border: '1px solid', borderColor: 'green.100' })">
+              <dt :class="css({ fontSize: 'sm', textTransform: 'uppercase', letterSpacing: 'wide', color: 'green.700', mb: '1' })">
+                同期バリデーション
+              </dt>
+              <dd :class="css({ color: 'green.900', lineHeight: 'snug' })">
+                メール/年齢/パスワードで<code :class="codeClass">z.string()</code>や<code :class="codeClass">z.coerce.number()</code>を活用。
+              </dd>
+            </div>
+            <div :class="css({ bg: 'blue.50', p: '4', rounded: 'md', border: '1px solid', borderColor: 'blue.100' })">
+              <dt :class="css({ fontSize: 'sm', textTransform: 'uppercase', letterSpacing: 'wide', color: 'blue.700', mb: '1' })">
+                非同期バリデーション
+              </dt>
+              <dd :class="css({ color: 'blue.900', lineHeight: 'snug' })">
+                ユーザー名は<code :class="codeClass">refine(async)</code>で500msのAPIモックを実行。
+              </dd>
+            </div>
+          </dl>
+        </DesignSystemCard>
+
+        <div :class="css({ display: 'flex', flexDirection: 'column', gap: '4' })">
+          <DesignSystemCard title="🔍 ルールの内訳" color-scheme="green">
+            <ul :class="css({ pl: '5', listStyle: 'disc', spaceY: '2', color: 'gray.700' })">
+              <li>ユーザー名は重複チェック + 3文字以上でローディング状態を表示</li>
+              <li>メール・年齢・パスワードは同期で即座にエラー表示</li>
+              <li>DesignSystemInputのARIA対応でスクリーンリーダーも安心</li>
+            </ul>
+          </DesignSystemCard>
+
+          <DesignSystemCard title="🛰️ 非同期チェックの流れ" color-scheme="purple">
+            <ol :class="css({ pl: '5', listStyle: 'decimal', spaceY: '2', color: 'gray.700' })">
+              <li>入力値を<code :class="codeClass">handleSubmit</code>に渡す</li>
+              <li>Zodの<code :class="codeClass">refine</code>で擬似APIをawait</li>
+              <li>500ms待って禁止リスト（test / admin / user）を参照</li>
+              <li>結果をVeeValidateのエラーとしてUIに伝達</li>
+            </ol>
+          </DesignSystemCard>
+
+          <DesignSystemCard title="🛠️ 実践メモ" color-scheme="yellow">
+            <div :class="css({ display: 'flex', flexDirection: 'column', gap: '3', color: 'gray.700' })">
+              <p>
+                <strong :class="css({ color: 'gray.900' })">スキーマ共通化:</strong>
+                <span>実案件ではバックエンドと共有することで整合性を保てます。</span>
+              </p>
+              <p>
+                <strong :class="css({ color: 'gray.900' })">UX配慮:</strong>
+                <span>送信前でも非同期エラーを逐次表示し、無駄なAPI呼び出しを減らします。</span>
+              </p>
+              <p>
+                <strong :class="css({ color: 'gray.900' })">テスト:</strong>
+                <span>擬似APIのタイムアウトを調整してエラーハンドリングを確認しましょう。</span>
+              </p>
+            </div>
+          </DesignSystemCard>
+        </div>
       </div>
 
       <NuxtLink
         to="/"
-        class="inline-block px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition"
+        :class="css({
+          alignSelf: { base: 'stretch', md: 'flex-start' },
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '2',
+          px: '5',
+          py: '3',
+          bg: 'gray.900',
+          color: 'white',
+          rounded: 'md',
+          fontWeight: 'medium',
+          transition: 'all 0.2s',
+          _hover: { bg: 'gray.700' }
+        })"
       >
         ← ホームに戻る
       </NuxtLink>
     </div>
-  </div>
+  </main>
 </template>
 
 <script setup lang="ts">
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
+import { css } from '~/styled-system/css'
 
 // ユーザー名の重複チェックをシミュレート（非同期）
 const checkUsernameAvailability = async (username: string): Promise<boolean> => {
@@ -147,7 +210,7 @@ const validationSchema = toTypedSchema(
       .email('有効なメールアドレスを入力してください'),
 
     // 年齢 - 同期バリデーション
-    age: z.number({
+    age: z.coerce.number({
       required_error: '年齢を入力してください',
       invalid_type_error: '数値を入力してください',
     })
@@ -162,6 +225,32 @@ const validationSchema = toTypedSchema(
       .regex(/[0-9]/, 'パスワードには数字を含めてください'),
   })
 )
+
+// 見出しやインラインコード用のスタイル
+const badgeClass = css({
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: '1',
+  px: '3',
+  py: '1',
+  fontSize: 'xs',
+  textTransform: 'uppercase',
+  letterSpacing: 'wider',
+  borderRadius: 'full',
+  border: '1px solid',
+  borderColor: 'gray.200',
+  color: 'gray.700',
+  bg: 'white',
+})
+
+const codeClass = css({
+  fontFamily: 'mono',
+  fontSize: 'sm',
+  bg: 'gray.100',
+  px: '2',
+  py: '1',
+  rounded: 'sm',
+})
 
 // フォーム設定
 const { errors, defineField, handleSubmit, isSubmitting } = useForm({

@@ -101,6 +101,12 @@
           >
             📘 TypeScript: React vs Vue
           </NuxtLink>
+          <NuxtLink
+            to="/examples/hooks-verification"
+            :class="css({ display: 'block', p: '3', bg: 'blue.50', rounded: 'md', transition: 'all 0.2s', _hover: { bg: 'blue.100' } })"
+          >
+            ✅ React / Vue Hooks 検証
+          </NuxtLink>
         </nav>
       </DesignSystemCard>
 
