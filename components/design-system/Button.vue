@@ -12,8 +12,13 @@
       ⏳
     </span>
     <!-- アイコンの表示（装飾的なのでaria-hidden） -->
-    <span v-if="!isLoading && $slots.icon" aria-hidden="true">
-      <slot name="icon" />
+    <span v-if="!isLoading && (icon || $slots.icon)" aria-hidden="true">
+      <slot name="icon">
+        <component
+          v-if="iconComponent"
+          :is="iconComponent"
+        />
+      </slot>
     </span>
     <slot />
   </button>
@@ -21,10 +26,12 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import type { VNodeChild } from 'vue'
 import { button } from '../../styled-system/recipes'
 import { cx } from '../../styled-system/css'
+import type { ComponentWCAGLevel } from './constants/accessibility'
 
-export type WCAGLevel = 'A' | 'AA' | 'AAA'
+export type WCAGLevel = ComponentWCAGLevel
 export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'danger'
 export type ButtonSize = 'sm' | 'md' | 'lg'
 
@@ -43,6 +50,8 @@ interface ButtonProps {
   wcagLevel?: WCAGLevel
   /** カスタムクラス */
   class?: string
+  /** テキストの前に表示するアイコン */
+  icon?: VNodeChild
 }
 
 const props = withDefaults(defineProps<ButtonProps>(), {
@@ -69,6 +78,13 @@ defineOptions({
  * - aria-busyによるローディング状態
  * - Panda CSSレシピによる型安全なスタイリング
  */
+const iconComponent = computed(() => {
+  if (!props.icon) return null
+  return {
+    render: () => props.icon,
+  }
+})
+
 const buttonClass = computed(() => {
   const recipeClassName = button({
     variant: props.variant,

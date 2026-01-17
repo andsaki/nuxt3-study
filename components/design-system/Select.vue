@@ -69,6 +69,7 @@
 <script setup lang="ts">
 import { css, cx } from '~/styled-system/css'
 import { select as selectRecipe } from '~/styled-system/recipes'
+import type { ComponentWCAGLevel } from './constants/accessibility'
 
 /**
  * アクセシブルなセレクトボックスコンポーネント
@@ -80,8 +81,6 @@ import { select as selectRecipe } from '~/styled-system/recipes'
  * - フォーカス表示
  * - WCAG準拠のカラーコントラスト
  */
-
-type WCAGLevel = 'A' | 'AA' | 'AAA'
 
 interface SelectOption {
   value: string
@@ -109,7 +108,7 @@ interface Props {
   /** プレースホルダー（空の選択肢） */
   placeholder?: string
   /** WCAGアクセシビリティレベル (A/AA/AAA) */
-  wcagLevel?: WCAGLevel
+  wcagLevel?: ComponentWCAGLevel
 }
 
 const props = withDefaults(defineProps<Props>(), {

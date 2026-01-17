@@ -42,8 +42,7 @@
 <script setup lang="ts">
 import { cx } from '~/styled-system/css'
 import { radio as radioRecipe } from '~/styled-system/recipes'
-
-type WCAGLevel = 'A' | 'AA' | 'AAA'
+import type { ComponentWCAGLevel } from './constants/accessibility'
 
 interface Props {
   label: string
@@ -52,7 +51,7 @@ interface Props {
   error?: string
   helpText?: string
   disabled?: boolean
-  wcagLevel?: WCAGLevel
+  wcagLevel?: ComponentWCAGLevel
 }
 
 const props = withDefaults(defineProps<Props>(), {

@@ -89,6 +89,7 @@
 <script setup lang="ts">
 import { css } from '~/styled-system/css'
 import { textarea as textareaRecipe } from '~/styled-system/recipes'
+import type { ComponentWCAGLevel } from './constants/accessibility'
 
 /**
  * アクセシブルなテキストエリアコンポーネント
@@ -101,8 +102,6 @@ import { textarea as textareaRecipe } from '~/styled-system/recipes'
  * - フォーカス表示（キーボード操作時のみ）
  * - リサイズ可能
  */
-
-type WCAGLevel = 'A' | 'AA' | 'AAA'
 
 interface Props {
   /** ラベルテキスト */
@@ -122,7 +121,7 @@ interface Props {
   /** 最大文字数 */
   maxLength?: number
   /** WCAGアクセシビリティレベル (A/AA/AAA) */
-  wcagLevel?: WCAGLevel
+  wcagLevel?: ComponentWCAGLevel
 }
 
 const props = withDefaults(defineProps<Props>(), {

@@ -44,8 +44,7 @@
 <script setup lang="ts">
 import { css, cx } from '~/styled-system/css'
 import { checkbox } from '~/styled-system/recipes'
-
-type WCAGLevel = 'A' | 'AA' | 'AAA'
+import type { ComponentWCAGLevel } from './constants/accessibility'
 
 interface Props {
   label: string
@@ -54,7 +53,7 @@ interface Props {
   helpText?: string
   indeterminate?: boolean
   disabled?: boolean
-  wcagLevel?: WCAGLevel
+  wcagLevel?: ComponentWCAGLevel
 }
 
 const props = withDefaults(defineProps<Props>(), {

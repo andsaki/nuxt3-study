@@ -107,6 +107,12 @@
           >
             ✅ React / Vue Hooks 検証
           </NuxtLink>
+          <NuxtLink
+            to="/examples/vue-composition-api"
+            :class="css({ display: 'block', p: '3', bg: 'indigo.50', rounded: 'md', transition: 'all 0.2s', _hover: { bg: 'indigo.100' } })"
+          >
+            🧩 Vue Composition API 実例集
+          </NuxtLink>
         </nav>
       </DesignSystemCard>
 

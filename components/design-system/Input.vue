@@ -108,6 +108,7 @@
 <script setup lang="ts">
 import { css, cx } from '~/styled-system/css'
 import { input as inputRecipe } from '~/styled-system/recipes'
+import type { ComponentWCAGLevel } from './constants/accessibility'
 
 /**
  * アクセシブルな入力コンポーネント
@@ -119,8 +120,6 @@ import { input as inputRecipe } from '~/styled-system/recipes'
  * - フォーカス表示
  * - WCAG AA準拠のカラーコントラスト
  */
-
-type WCAGLevel = 'A' | 'AA' | 'AAA'
 
 interface Props {
   /** ラベルテキスト */
@@ -138,7 +137,7 @@ interface Props {
   /** 無効化 */
   disabled?: boolean
   /** WCAGアクセシビリティレベル (A/AA/AAA) */
-  wcagLevel?: WCAGLevel
+  wcagLevel?: ComponentWCAGLevel
   /** クリアボタンを表示するかどうか */
   clearable?: boolean
 }

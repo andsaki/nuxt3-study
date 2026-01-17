@@ -36,14 +36,13 @@
 
 <script setup lang="ts">
 import { modal as modalRecipe } from '~/styled-system/recipes'
-
-type WCAGLevel = 'A' | 'AA' | 'AAA'
+import type { ComponentWCAGLevel } from './constants/accessibility'
 
 interface Props {
   isOpen: boolean
   title: string
   size?: 'sm' | 'md' | 'lg'
-  wcagLevel?: WCAGLevel
+  wcagLevel?: ComponentWCAGLevel
 }
 
 const props = withDefaults(defineProps<Props>(), {
