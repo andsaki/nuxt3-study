@@ -54,6 +54,7 @@
 
 <script setup lang="ts">
 import { css } from '~/styled-system/css'
+import { token } from '~/styled-system/tokens'
 
 // サンプル記事データ
 const article = ref({
@@ -86,180 +87,181 @@ const formattedDate = computed(() => {
 
 // エディトリアルスタイル: 洗練されたタイポグラフィと非対称レイアウト
 const articleContainer = css({
-  maxWidth: '72rem',
-  margin: '0 auto',
-  padding: { base: '2rem', md: '4rem 2rem', lg: '6rem 4rem' },
-  backgroundColor: '#FAFAF8', // 温かみのあるオフホワイト
-  minHeight: '100vh'
+  maxW: '6xl',
+  mx: 'auto',
+  px: { base: '4', md: '8', lg: '12' },
+  py: { base: '8', md: '12', lg: '16' },
+  bg: 'stone.50',
+  minH: 'screen',
 })
 
 const headerSection = css({
-  maxWidth: '42rem',
-  marginBottom: '4rem',
-  paddingLeft: { base: '0', lg: '8rem' } // 非対称な左パディング
+  maxW: '3xl',
+  mb: '16',
+  pl: { base: '0', lg: '16' },
 })
 
 const categoryBadge = css({
-  display: 'inline-block',
-  fontSize: '0.75rem',
-  fontWeight: '600',
-  letterSpacing: '0.15em',
+  display: 'inline-flex',
+  fontSize: 'xs',
+  fontWeight: 'semibold',
+  letterSpacing: 'widest',
   textTransform: 'uppercase',
-  color: '#8B4513', // サドルブラウン
-  marginBottom: '1.5rem',
-  paddingBottom: '0.5rem',
-  borderBottom: '2px solid currentColor'
+  color: 'amber.800',
+  mb: '6',
+  pb: '2',
+  borderBottomWidth: '2px',
+  borderColor: 'amber.800',
 })
 
 const titleClass = css({
-  fontFamily: '"Crimson Pro", "Georgia", serif', // 独特なセリフ体
-  fontSize: { base: '2.5rem', md: '3.5rem', lg: '4.5rem' },
-  fontWeight: '400',
-  lineHeight: '1.1',
-  color: '#1a1a1a',
-  marginBottom: '2rem',
-  letterSpacing: '-0.02em'
+  fontFamily: '"Crimson Pro", "Georgia", serif',
+  fontSize: { base: '4xl', md: '5xl', lg: '6xl' },
+  fontWeight: 'semibold',
+  lineHeight: 'tight',
+  color: 'slate.900',
+  mb: '8',
+  letterSpacing: '-0.02em',
 })
 
 const metaInfo = css({
   display: 'flex',
   alignItems: 'center',
-  gap: '0.75rem',
-  fontSize: '0.875rem',
-  color: '#666',
-  fontFamily: 'system-ui, -apple-system, sans-serif'
+  gap: '3',
+  fontSize: 'sm',
+  color: 'slate.500',
+  fontFamily: 'body',
 })
 
-const separator = css({
-  color: '#ccc'
-})
+const separator = css({ color: 'slate.300' })
 
 const heroFigure = css({
-  marginBottom: '5rem',
+  mb: '20',
   display: 'grid',
   gridTemplateColumns: { base: '1fr', lg: '1fr 20rem' },
-  gap: '2rem',
-  alignItems: 'start'
+  gap: '8',
+  alignItems: 'start',
 })
 
 const imageWrapper = css({
-  aspectRatio: '16/10',
+  aspectRatio: '16 / 10',
   overflow: 'hidden',
-  borderRadius: '2px'
+  borderRadius: 'lg',
 })
 
 const imagePlaceholder = css({
-  width: '100%',
-  height: '100%',
-  background: 'linear-gradient(135deg, #D4A574 0%, #8B7355 100%)', // ゴールデンブラウン
+  w: 'full',
+  h: 'full',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   color: 'white',
   fontFamily: '"Crimson Pro", serif',
-  fontSize: '1.25rem',
+  fontSize: 'xl',
   fontStyle: 'italic',
-  padding: '2rem',
-  textAlign: 'center'
+  px: '8',
+  textAlign: 'center',
+  backgroundImage: `linear-gradient(135deg, ${token('colors.amber.300')} 0%, ${token('colors.orange.600')} 100%)`,
 })
 
 const caption = css({
-  fontFamily: 'system-ui, -apple-system, sans-serif',
-  fontSize: '0.875rem',
-  color: '#666',
+  fontFamily: 'body',
+  fontSize: 'sm',
+  color: 'slate.500',
   fontStyle: 'italic',
-  paddingTop: { base: '0', lg: '2rem' }
+  pt: { base: '0', lg: '8' },
 })
 
 const contentSection = css({
-  maxWidth: '38rem',
-  margin: '0 auto',
+  maxW: '3xl',
+  mx: 'auto',
   '& > * + *': {
-    marginTop: '1.75rem'
-  }
+    mt: '7',
+  },
 })
 
 const leadParagraph = css({
   fontFamily: '"Crimson Pro", "Georgia", serif',
-  fontSize: '1.375rem',
-  lineHeight: '1.7',
-  color: '#2a2a2a',
-  marginBottom: '2rem'
+  fontSize: 'xl',
+  lineHeight: 'tall',
+  color: 'slate.800',
+  mb: '8',
 })
 
 const dropCap = css({
   float: 'left',
   fontFamily: '"Crimson Pro", serif',
-  fontSize: '4.5rem',
-  lineHeight: '0.85',
-  fontWeight: '400',
-  marginRight: '0.5rem',
-  marginTop: '0.15rem',
-  color: '#8B4513'
+  fontSize: '6xl',
+  lineHeight: '0.9',
+  fontWeight: 'medium',
+  mr: '2',
+  mt: '1',
+  color: 'amber.700',
 })
 
 const bodyParagraph = css({
-  fontFamily: 'system-ui, -apple-system, sans-serif',
-  fontSize: '1.0625rem',
-  lineHeight: '1.8',
-  color: '#3a3a3a',
-  letterSpacing: '0.01em'
+  fontFamily: 'body',
+  fontSize: 'lg',
+  lineHeight: '2',
+  color: 'slate.700',
+  letterSpacing: 'wide',
 })
 
 const pullQuote = css({
-  margin: '4rem 0',
-  padding: '0 0 0 3rem',
-  borderLeft: '3px solid #D4A574',
+  my: '16',
+  pl: '12',
+  borderLeftWidth: '3px',
+  borderColor: 'amber.400',
   '& p': {
     fontFamily: '"Crimson Pro", serif',
-    fontSize: '1.75rem',
-    lineHeight: '1.5',
+    fontSize: '2xl',
+    lineHeight: 'tall',
     fontStyle: 'italic',
-    color: '#2a2a2a',
-    margin: '0'
-  }
+    color: 'slate.800',
+    m: '0',
+  },
 })
 
 const authorSection = css({
-  maxWidth: '38rem',
-  margin: '5rem auto 0',
-  padding: '3rem 0',
-  borderTop: '1px solid #ddd',
+  maxW: '3xl',
+  mx: 'auto',
+  mt: '20',
+  py: '12',
+  borderTopWidth: '1px',
+  borderColor: 'gray.200',
   display: 'flex',
-  gap: '1.5rem',
-  alignItems: 'center'
+  gap: '6',
+  alignItems: 'center',
 })
 
 const authorAvatar = css({
-  width: '4rem',
-  height: '4rem',
-  borderRadius: '50%',
-  backgroundColor: '#8B4513',
+  w: '16',
+  h: '16',
+  borderRadius: 'full',
+  bg: 'amber.800',
   color: 'white',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   fontFamily: '"Crimson Pro", serif',
-  fontSize: '1.25rem',
-  fontWeight: '600',
-  flexShrink: 0
+  fontSize: 'xl',
+  fontWeight: 'semibold',
+  flexShrink: 0,
 })
 
-const authorInfo = css({
-  flex: 1
-})
+const authorInfo = css({ flex: 1 })
 
 const authorName = css({
   fontFamily: '"Crimson Pro", serif',
-  fontSize: '1.125rem',
-  fontWeight: '600',
-  color: '#1a1a1a',
-  marginBottom: '0.25rem'
+  fontSize: 'lg',
+  fontWeight: 'semibold',
+  color: 'slate.900',
+  mb: '1',
 })
 
 const authorBio = css({
-  fontFamily: 'system-ui, sans-serif',
-  fontSize: '0.875rem',
-  color: '#666'
+  fontFamily: 'body',
+  fontSize: 'sm',
+  color: 'slate.500',
 })
 </script>

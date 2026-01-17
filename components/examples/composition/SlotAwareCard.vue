@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, useAttrs, useSlots } from 'vue'
+import { css } from '~/styled-system/css'
 
 defineOptions({
   inheritAttrs: false,
@@ -10,30 +11,90 @@ const slots = useSlots()
 
 const attrKeys = computed(() => Object.keys(attrs).filter(Boolean))
 const hasFooter = computed(() => Boolean(slots.footer))
+
+const forwardedAttrs = computed(() => {
+  const { class: _class, ...rest } = attrs as Record<string, unknown>
+  return rest
+})
+
+const externalClass = computed(() => attrs.class as string | undefined)
+
+const cardClass = css({
+  borderRadius: 'xl',
+  borderWidth: '1px',
+  borderColor: 'purple.200',
+  backgroundColor: 'purple.50',
+  p: '4',
+  shadow: 'sm',
+})
+
+const headerClass = css({
+  marginBottom: '3',
+})
+
+const defaultTitleClass = css({
+  fontSize: 'lg',
+  fontWeight: 'semibold',
+  color: 'purple.900',
+})
+
+const helperTextClass = css({
+  fontSize: 'xs',
+  textTransform: 'uppercase',
+  letterSpacing: '0.2em',
+  color: 'purple.500',
+})
+
+const contentClass = css({
+  fontSize: 'sm',
+  color: 'purple.900',
+})
+
+const footerClass = css({
+  marginTop: '3',
+  borderTop: '1px solid',
+  borderColor: 'purple.200',
+  paddingTop: '2',
+  fontSize: 'xs',
+  color: 'purple.700',
+})
+
+const attrsInfoClass = css({
+  marginTop: '3',
+  fontSize: 'xs',
+  color: 'purple.500',
+})
+
+const attrsHighlightClass = css({
+  fontFamily: 'mono',
+})
 </script>
 
 <template>
-  <article class="rounded-xl border border-indigo-200 bg-indigo-50 p-4 shadow-sm" v-bind="attrs">
-    <header class="mb-3">
+  <article
+    :class="[cardClass, externalClass]"
+    v-bind="forwardedAttrs"
+  >
+    <header :class="headerClass">
       <slot name="title">
-        <h4 class="text-lg font-semibold text-indigo-900">SlotAwareCard</h4>
+        <h4 :class="defaultTitleClass">SlotAwareCard</h4>
       </slot>
-      <p class="text-xs uppercase tracking-wide text-indigo-500">
+      <p :class="helperTextClass">
         slots: title / default / footer
       </p>
     </header>
 
-    <div class="text-sm text-indigo-900">
+    <div :class="contentClass">
       <slot>デフォルトスロットの内容です。</slot>
     </div>
 
-    <footer v-if="hasFooter" class="mt-3 border-t border-indigo-200 pt-2 text-xs text-indigo-700">
+    <footer v-if="hasFooter" :class="footerClass">
       <slot name="footer" />
     </footer>
 
-    <p class="mt-3 text-xs text-indigo-500">
+    <p :class="attrsInfoClass">
       付与された attrs:
-      <span class="font-mono">{{ attrKeys.length ? attrKeys.join(', ') : 'なし' }}</span>
+      <span :class="attrsHighlightClass">{{ attrKeys.length ? attrKeys.join(', ') : 'なし' }}</span>
     </p>
   </article>
 </template>

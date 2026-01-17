@@ -17,12 +17,13 @@ import {
   triggerRef,
   unref,
 } from 'vue'
+import { css } from '~/styled-system/css'
 
 const counter = ref(1)
 const message = ref('こんにちは')
 
 const userState = reactive({
-  name: 'Hotaru',
+  name: 'Hoge',
   stats: {
     visits: 1,
     likes: 2,
@@ -80,7 +81,7 @@ const bumpAll = () => {
 }
 
 const rename = () => {
-  nameRef.value = nameRef.value === 'Hotaru' ? 'Yuduki' : 'Hotaru'
+  nameRef.value = nameRef.value === 'Hoge' ? 'Fuga' : 'Hoge'
 }
 
 const explainShallow = () => {
@@ -89,101 +90,217 @@ const explainShallow = () => {
   // shallowRef/shallowReactive ではネストの変更を Vue が追跡しないため、必要に応じて triggerRef を使う
   triggerRef(palette)
 }
+
+const styles = {
+  page: css({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '4',
+  }),
+  header: css({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '1',
+  }),
+  grid: css({
+    display: 'grid',
+    gap: '4',
+    gridTemplateColumns: {
+      base: '1fr',
+      lg: 'repeat(2, minmax(0, 1fr))',
+    },
+  }),
+  primarySection: css({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '3',
+    borderRadius: 'xl',
+    borderWidth: '1px',
+    borderColor: 'gray.200',
+    backgroundColor: 'white',
+    p: '4',
+  }),
+  sectionTitle: css({
+    color: 'gray.800',
+    fontWeight: 'semibold',
+  }),
+  valueList: css({
+    listStyle: 'none',
+    margin: 0,
+    padding: 0,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '2',
+    fontSize: 'sm',
+    color: 'gray.700',
+  }),
+  labelText: css({
+    fontWeight: 'medium',
+    color: 'gray.600',
+    marginRight: '2',
+  }),
+  monoText: css({
+    fontFamily: 'mono',
+    color: 'gray.900',
+  }),
+  statusLine: css({
+    borderRadius: 'lg',
+    backgroundColor: 'gray.100',
+    padding: '3',
+    fontFamily: 'mono',
+    fontSize: 'xs',
+    color: 'gray.700',
+  }),
+  buttonRow: css({
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: '3',
+  }),
+  metaSection: css({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '3',
+    borderRadius: 'xl',
+    borderWidth: '1px',
+    borderColor: 'purple.200',
+    backgroundColor: 'purple.50',
+    p: '4',
+  }),
+  metaTitle: css({
+    color: 'purple.900',
+    fontWeight: 'semibold',
+  }),
+  metaList: css({
+    display: 'grid',
+    gap: '3',
+    gridTemplateColumns: {
+      base: '1fr',
+      sm: 'repeat(2, minmax(0, 1fr))',
+    },
+    fontSize: 'sm',
+    color: 'purple.900',
+  }),
+  metaLabel: css({
+    fontSize: 'xs',
+    textTransform: 'uppercase',
+    letterSpacing: '0.15em',
+    color: 'purple.600',
+  }),
+  metaValue: css({
+    fontFamily: 'mono',
+  }),
+  metaParagraph: css({
+    color: 'purple.900',
+  }),
+} as const
 </script>
 
 <template>
-  <div class="space-y-4">
-    <header class="space-y-1">
-      <h3 class="text-lg font-semibold text-gray-900">リアクティビティ実験</h3>
-      <p class="text-sm text-gray-600">
+  <div :class="styles.page">
+    <header :class="styles.header">
+      <DesignSystemText variant="h3">
+        リアクティビティ実験
+      </DesignSystemText>
+      <DesignSystemText variant="body-small" color="gray.600">
         ref / reactive / shallow 系 API をまとめて触り、<code>markRaw</code>・<code>toRef</code> などの挙動を確認できます。
-      </p>
+      </DesignSystemText>
     </header>
 
-    <div class="grid gap-4 lg:grid-cols-2">
-      <section class="space-y-3 rounded-xl border border-slate-200 p-4">
-        <h4 class="font-semibold text-slate-800">主要値</h4>
-        <ul class="space-y-2 text-sm text-slate-700">
+    <div :class="styles.grid">
+      <section :class="styles.primarySection">
+        <DesignSystemText variant="h4" :class="styles.sectionTitle">
+          主要値
+        </DesignSystemText>
+        <ul :class="styles.valueList">
           <li>
-            counter (ref):
-            <span class="font-mono text-slate-900">{{ counter }}</span>
+            <span :class="styles.labelText">counter (ref):</span>
+            <span :class="styles.monoText">{{ counter }}</span>
           </li>
           <li>
-            userState (reactive):
-            <span class="font-mono text-slate-900">
+            <span :class="styles.labelText">userState (reactive):</span>
+            <span :class="styles.monoText">
               {{ userState.name }} / visits {{ userState.stats.visits }} / likes {{ userState.stats.likes }}
             </span>
           </li>
           <li>
-            readonlyUser:
-            <span class="font-mono text-slate-900">{{ readonlyUser.name }}</span>
+            <span :class="styles.labelText">readonlyUser:</span>
+            <span :class="styles.monoText">{{ readonlyUser.name }}</span>
           </li>
           <li>
-            shallowProfile (shallowReactive):
-            <span class="font-mono text-slate-900">
+            <span :class="styles.labelText">shallowProfile (shallowReactive):</span>
+            <span :class="styles.monoText">
               tab {{ shallowProfile.preferences.tab }} / accent {{ shallowProfile.preferences.accent }}
             </span>
           </li>
           <li>
-            palette (shallowRef + triggerRef):
-            <span class="font-mono text-slate-900">{{ paletteSummary }}</span>
+            <span :class="styles.labelText">palette (shallowRef + triggerRef):</span>
+            <span :class="styles.monoText">{{ paletteSummary }}</span>
           </li>
           <li>
-            markRaw Map:
-            <span class="font-mono text-slate-900">saved {{ staticMap.get('saved') }}</span>
+            <span :class="styles.labelText">markRaw Map:</span>
+            <span :class="styles.monoText">saved {{ staticMap.get('saved') }}</span>
           </li>
         </ul>
 
-        <p class="rounded-lg bg-slate-100 p-3 font-mono text-xs text-slate-700">
+        <p :class="styles.statusLine">
           statusLine: {{ statusLine }}
         </p>
 
-        <div class="flex flex-wrap gap-3">
-          <button class="rounded-md bg-slate-900 px-3 py-2 text-sm font-semibold text-white" @click="bumpAll">
+        <div :class="styles.buttonRow">
+          <DesignSystemButton variant="primary" size="sm" @click="bumpAll">
             まとめて更新
-          </button>
-          <button class="rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-800" @click="rename">
+          </DesignSystemButton>
+          <DesignSystemButton variant="outline" size="sm" @click="rename">
             名前をトグル (toRef)
-          </button>
-          <button class="rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-800" @click="explainShallow">
+          </DesignSystemButton>
+          <DesignSystemButton variant="outline" size="sm" @click="explainShallow">
             shallowなネスト更新
-          </button>
+          </DesignSystemButton>
         </div>
       </section>
 
-      <section class="space-y-3 rounded-xl border border-purple-200 bg-purple-50/60 p-4">
-        <h4 class="font-semibold text-purple-900">メタ情報・ユーティリティ</h4>
-        <dl class="grid grid-cols-2 gap-3 text-sm text-purple-900">
+      <section :class="styles.metaSection">
+        <DesignSystemText variant="h4" :class="styles.metaTitle">
+          メタ情報・ユーティリティ
+        </DesignSystemText>
+        <dl :class="styles.metaList">
           <div>
-            <dt class="text-xs uppercase tracking-wide text-purple-600">isRef(counter)</dt>
-            <dd class="font-mono">{{ metaChecks.counter }}</dd>
+            <dt :class="styles.metaLabel">isRef(counter)</dt>
+            <dd :class="styles.metaValue">{{ metaChecks.counter }}</dd>
           </div>
           <div>
-            <dt class="text-xs uppercase tracking-wide text-purple-600">isReactive(userState)</dt>
-            <dd class="font-mono">{{ metaChecks.userState }}</dd>
+            <dt :class="styles.metaLabel">isReactive(userState)</dt>
+            <dd :class="styles.metaValue">{{ metaChecks.userState }}</dd>
           </div>
           <div>
-            <dt class="text-xs uppercase tracking-wide text-purple-600">isReadonly(readonlyUser)</dt>
-            <dd class="font-mono">{{ metaChecks.readonlyUser }}</dd>
+            <dt :class="styles.metaLabel">isReadonly(readonlyUser)</dt>
+            <dd :class="styles.metaValue">{{ metaChecks.readonlyUser }}</dd>
           </div>
           <div>
-            <dt class="text-xs uppercase tracking-wide text-purple-600">isProxy(shallowProfile)</dt>
-            <dd class="font-mono">{{ metaChecks.shallowProfile }}</dd>
+            <dt :class="styles.metaLabel">isProxy(shallowProfile)</dt>
+            <dd :class="styles.metaValue">{{ metaChecks.shallowProfile }}</dd>
           </div>
         </dl>
 
-        <p class="text-sm text-purple-900">
-          <code>nameRef</code> と <code>stats</code>（toRef）は
-          常に <code>userState</code> へ同期します:
-          <span class="font-mono">{{ nameRef }}</span>,
+        <DesignSystemText
+          as="p"
+          variant="body-small"
+          :class="styles.metaParagraph"
+        >
+          <code>nameRef</code> と <code>stats</code>（toRef）は常に <code>userState</code> へ同期します:
+          <span :class="styles.monoText">{{ nameRef }}</span>,
           visits ref:
-          <span class="font-mono">{{ stats.visits }}</span>
-        </p>
+          <span :class="styles.monoText">{{ stats.visits }}</span>
+        </DesignSystemText>
 
-        <p class="text-sm text-purple-900">
+        <DesignSystemText
+          as="p"
+          variant="body-small"
+          :class="styles.metaParagraph"
+        >
           <code>unref(message)</code>:
-          <span class="font-mono">{{ unref(message) }}</span>
-        </p>
+          <span :class="styles.monoText">{{ unref(message) }}</span>
+        </DesignSystemText>
       </section>
     </div>
   </div>

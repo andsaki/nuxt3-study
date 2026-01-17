@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, provide, ref } from 'vue'
+import { css } from '~/styled-system/css'
 import ModelCounter from '~/components/examples/composition/ModelCounter.vue'
 import SlotAwareCard from '~/components/examples/composition/SlotAwareCard.vue'
 import ThemeConsumer from '~/components/examples/composition/ThemeConsumer.vue'
@@ -29,27 +30,75 @@ const themePanelStyle = computed(() => ({
   background: mode.value === 'light' ? 'white' : '#0f172a',
   color: mode.value === 'light' ? '#0f172a' : 'white',
 }))
+
+const sectionClass = css({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '4',
+})
+
+const themePanelClass = css({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '4',
+  borderRadius: '2xl',
+  borderWidth: '1px',
+  p: '5',
+  shadow: 'sm',
+})
+
+const panelContentClass = css({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '4',
+})
+
+const accentTextClass = css({
+  fontWeight: 'semibold',
+})
+
+const modelWrapperClass = css({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '2',
+  borderRadius: 'xl',
+  borderWidth: '1px',
+  borderStyle: 'dashed',
+  borderColor: 'currentcolor',
+  p: '4',
+  fontSize: 'sm',
+})
+
+const monoTextClass = css({
+  fontFamily: 'mono',
+})
 </script>
 
 <template>
-  <section class="space-y-4">
-    <div class="space-y-4 rounded-2xl border p-5 shadow-sm" :style="themePanelStyle">
+  <section :class="sectionClass">
+    <div
+      :class="themePanelClass"
+      :style="themePanelStyle"
+    >
       <ThemeConsumer />
 
-      <SlotAwareCard data-demo="slot-card">
-        <template #title>
-          <h4 class="text-xl font-semibold">SlotAwareCard</h4>
-        </template>
-        provide/inject で共有されたテーマカラー: <span class="font-semibold">{{ accent }}</span>
-        <template #footer>useSlots() でフッタースロットの存在を検知</template>
-      </SlotAwareCard>
+      <div :class="panelContentClass">
+        <SlotAwareCard data-demo="slot-card">
+          <template #title>
+            <DesignSystemText variant="h4">SlotAwareCard</DesignSystemText>
+          </template>
+          provide/inject で共有されたテーマカラー:
+          <span :class="accentTextClass">{{ accent }}</span>
+          <template #footer>useSlots() でフッタースロットの存在を検知</template>
+        </SlotAwareCard>
 
-      <div class="space-y-2 rounded-xl border border-dashed border-current p-4 text-sm">
-        <p>
-          親から見る <code>v-model</code> の値:
-          <span class="font-mono">{{ parentCount }}</span>
-        </p>
-        <ModelCounter v-model="parentCount" />
+        <div :class="modelWrapperClass">
+          <p>
+            親から見る <code>v-model</code> の値:
+            <span :class="monoTextClass">{{ parentCount }}</span>
+          </p>
+          <ModelCounter v-model="parentCount" />
+        </div>
       </div>
     </div>
   </section>

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { css } from '~/styled-system/css'
+
 interface Post {
   id: number
   userId: number
@@ -6,53 +8,32 @@ interface Post {
   body: string
 }
 
-// 自動でキャッシュされる（keyで管理）
 const { data: posts, refresh, status } = await useFetch<Post[]>(
   'https://jsonplaceholder.typicode.com/posts?_limit=5',
-  {
-    key: 'posts-list', // キャッシュキー
-    // デフォルトでキャッシュされるが、明示的に設定も可能
-  }
+  { key: 'posts-list' },
 )
 
-// dedupe: 同時リクエストを防ぐ（デフォルト: 'cancel'）
-const { data: user } = await useFetch(
-  'https://jsonplaceholder.typicode.com/users/1',
-  {
-    key: 'user-1',
-    dedupe: 'cancel', // 'cancel' | 'defer'
-  }
-)
+const { data: user } = await useFetch('https://jsonplaceholder.typicode.com/users/1', {
+  key: 'user-1',
+  dedupe: 'cancel',
+})
 
-// キャッシュを無効化して常に再取得
-const { data: fresh } = await useFetch(
-  'https://jsonplaceholder.typicode.com/posts/1',
-  {
-    key: 'fresh-post',
-    getCachedData: () => null, // キャッシュを使わない
-  }
-)
+const { data: fresh } = await useFetch('https://jsonplaceholder.typicode.com/posts/1', {
+  key: 'fresh-post',
+  getCachedData: () => null,
+})
 
-// SWRライクな動作: stale-while-revalidate
-const { data: _stale, refresh: _refreshStale } = await useFetch(
-  'https://jsonplaceholder.typicode.com/posts/2',
-  {
-    key: 'stale-post',
-    // キャッシュされたデータを即座に返し、バックグラウンドで再取得
-    server: false, // サーバーでは実行しない
-  }
-)
+const { data: stale, refresh: refreshStale } = await useFetch('https://jsonplaceholder.typicode.com/posts/2', {
+  key: 'stale-post',
+  server: false,
+})
 
-// 条件付きフェッチ
 const shouldFetch = ref(true)
-const { data: _conditional } = await useFetch(
-  'https://jsonplaceholder.typicode.com/posts/3',
-  {
-    key: 'conditional-post',
-    watch: [shouldFetch],
-    immediate: shouldFetch.value,
-  }
-)
+const { data: conditional } = await useFetch('https://jsonplaceholder.typicode.com/posts/3', {
+  key: 'conditional-post',
+  watch: [shouldFetch],
+  immediate: shouldFetch.value,
+})
 
 const lastRefresh = ref<string>('')
 
@@ -60,203 +41,133 @@ const handleRefresh = async () => {
   await refresh()
   lastRefresh.value = new Date().toLocaleTimeString()
 }
+
+const styles = {
+  page: css({ minH: 'screen', bg: 'gray.50', py: '10' }),
+  container: css({
+    maxW: '6xl',
+    mx: 'auto',
+    px: { base: '4', sm: '6', lg: '8' },
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '6',
+  }),
+  title: css({ fontSize: '4xl', fontWeight: 'bold', color: 'emerald.500' }),
+  section: css({
+    bg: 'white',
+    borderRadius: '2xl',
+    borderWidth: '1px',
+    borderColor: 'gray.100',
+    p: '6',
+    boxShadow: 'md',
+  }),
+  infoBox: css({
+    bg: 'blue.50',
+    borderLeftWidth: '4px',
+    borderColor: 'cyan.500',
+    borderRadius: 'xl',
+    p: '5',
+    color: 'slate.700',
+  }),
+  sectionHeader: css({ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: '4' }),
+  primaryButton: css({
+    bg: 'emerald.500',
+    color: 'white',
+    borderRadius: 'lg',
+    px: '4',
+    py: '2',
+    fontWeight: 'semibold',
+    border: 'none',
+    _hover: { bg: 'emerald.600' },
+  }),
+  postsGrid: css({ display: 'grid', gap: '4' }),
+  postCard: css({
+    borderRadius: 'xl',
+    borderWidth: '1px',
+    borderColor: 'gray.200',
+    p: '4',
+    bg: 'gray.50',
+  }),
+  codeBlock: css({
+    bg: 'slate.900',
+    color: 'slate.50',
+    borderRadius: 'xl',
+    p: '4',
+    fontFamily: 'mono',
+    overflowX: 'auto',
+  }),
+  backLink: css({
+    alignSelf: 'flex-start',
+    color: 'emerald.500',
+    borderWidth: '2px',
+    borderColor: 'emerald.500',
+    borderRadius: 'xl',
+    px: '4',
+    py: '2',
+    fontWeight: 'medium',
+    _hover: { bg: 'emerald.500', color: 'white' },
+  }),
+}
 </script>
 
 <template>
-  <div class="container">
-    <h1>useFetch キャッシュデモ</h1>
+  <div :class="styles.page">
+    <div :class="styles.container">
+      <h1 :class="styles.title">useFetch キャッシュデモ</h1>
 
-    <div class="info-box">
-      <h2>キャッシュ機能</h2>
-      <ul>
-        <li>useFetchはデフォルトでkeyベースでキャッシュ</li>
-        <li>同じkeyの場合、キャッシュされたデータを返す</li>
-        <li>refresh()でキャッシュを更新</li>
-        <li>dedupeで同時リクエストを制御</li>
-        <li>getCachedDataでカスタムキャッシュロジック</li>
-      </ul>
-    </div>
+      <section :class="styles.infoBox">
+        <h2>キャッシュ機能</h2>
+        <ul>
+          <li>useFetchはデフォルトでkeyベースでキャッシュ</li>
+          <li>同じkeyの場合、キャッシュされたデータを返す</li>
+          <li>refresh()でキャッシュを更新</li>
+          <li>dedupeで同時リクエストを制御</li>
+          <li>getCachedDataでカスタムキャッシュロジック</li>
+        </ul>
+      </section>
 
-    <div class="section">
-      <div class="section-header">
-        <h2>投稿リスト（キャッシュあり）</h2>
-        <button class="btn" @click="handleRefresh">
-          {{ status === 'pending' ? '更新中...' : '再取得' }}
-        </button>
-      </div>
-      <p v-if="lastRefresh" class="text-sm">最終更新: {{ lastRefresh }}</p>
+      <section :class="styles.section">
+        <div :class="styles.sectionHeader">
+          <h2>投稿リスト（キャッシュあり）</h2>
+          <button :class="styles.primaryButton" @click="handleRefresh">
+            {{ status === 'pending' ? '更新中...' : '再取得' }}
+          </button>
+        </div>
+        <p v-if="lastRefresh">最終更新: {{ lastRefresh }}</p>
+        <div v-if="posts" :class="styles.postsGrid">
+          <article v-for="post in posts" :key="post.id" :class="styles.postCard">
+            <h3>{{ post.title }}</h3>
+            <p>{{ post.body.slice(0, 100) }}...</p>
+          </article>
+        </div>
+      </section>
 
-      <div v-if="posts" class="posts-list">
-        <article v-for="post in posts" :key="post.id" class="post-card">
-          <h3>{{ post.title }}</h3>
-          <p>{{ post.body.slice(0, 100) }}...</p>
-        </article>
-      </div>
-    </div>
+      <section :class="styles.section">
+        <h2>ユーザー情報（dedupe設定）</h2>
+        <pre v-if="user" :class="styles.codeBlock">{{ user }}</pre>
+      </section>
 
-    <div class="section">
-      <h2>ユーザー情報（dedupe設定）</h2>
-      <pre v-if="user">{{ user }}</pre>
-    </div>
+      <section :class="styles.section">
+        <h2>常に新しいデータ（キャッシュ無効）</h2>
+        <pre v-if="fresh" :class="styles.codeBlock">{{ fresh }}</pre>
+      </section>
 
-    <div class="section">
-      <h2>常に新しいデータ（キャッシュ無効）</h2>
-      <pre v-if="fresh">{{ fresh }}</pre>
-    </div>
-
-    <div class="code-example">
-      <h3>基本的な使い方</h3>
-      <pre><code>const { data, refresh, status } = await useFetch('/api/posts', {
+      <section :class="styles.section">
+        <h3>基本的な使い方</h3>
+        <pre :class="styles.codeBlock"><code>const { data, refresh, status } = await useFetch('/api/posts', {
   key: 'posts-list', // キャッシュキー
   dedupe: 'cancel',  // 同時リクエスト制御
 })</code></pre>
-    </div>
+      </section>
 
-    <div class="code-example">
-      <h3>キャッシュを無効化</h3>
-      <pre><code>const { data } = await useFetch('/api/posts', {
+      <section :class="styles.section">
+        <h3>キャッシュを無効化</h3>
+        <pre :class="styles.codeBlock"><code>const { data } = await useFetch('/api/posts', {
   getCachedData: () => null, // キャッシュを使わない
 })</code></pre>
-    </div>
+      </section>
 
-    <NuxtLink to="/" class="back-link">← トップページに戻る</NuxtLink>
+      <NuxtLink to="/" :class="styles.backLink">← トップページに戻る</NuxtLink>
+    </div>
   </div>
 </template>
-
-<style scoped>
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-h1 {
-  color: #00dc82;
-  margin-bottom: 2rem;
-}
-
-h2 {
-  color: #333;
-  margin-bottom: 1rem;
-  font-size: 1.3rem;
-}
-
-h3 {
-  color: #555;
-  margin-bottom: 0.5rem;
-  font-size: 1.1rem;
-}
-
-.info-box {
-  background: #f0f9ff;
-  border-left: 4px solid #00dc82;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  border-radius: 4px;
-}
-
-.info-box ul {
-  margin: 0.5rem 0 0 1.5rem;
-}
-
-.info-box li {
-  margin: 0.3rem 0;
-}
-
-.section {
-  margin-bottom: 2rem;
-  padding: 1.5rem;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-}
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.btn {
-  padding: 0.5rem 1rem;
-  background: #00dc82;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background 0.2s;
-}
-
-.btn:hover {
-  background: #00b86b;
-}
-
-.btn:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-}
-
-.text-sm {
-  font-size: 0.875rem;
-  color: #6b7280;
-  margin-bottom: 1rem;
-}
-
-.posts-list {
-  display: grid;
-  gap: 1rem;
-}
-
-.post-card {
-  background: #f9fafb;
-  padding: 1rem;
-  border-radius: 6px;
-  border: 1px solid #e5e7eb;
-}
-
-.post-card h3 {
-  color: #1f2937;
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-}
-
-.post-card p {
-  color: #6b7280;
-  font-size: 0.9rem;
-}
-
-pre {
-  background: #1f2937;
-  color: #f9fafb;
-  padding: 1rem;
-  border-radius: 6px;
-  overflow-x: auto;
-  font-size: 0.875rem;
-}
-
-.code-example {
-  background: #fef3c7;
-  border-left: 4px solid #f59e0b;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  border-radius: 4px;
-}
-
-.back-link {
-  display: inline-block;
-  color: #00dc82;
-  text-decoration: none;
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-  border: 2px solid #00dc82;
-  border-radius: 4px;
-  transition: all 0.2s;
-}
-
-.back-link:hover {
-  background: #00dc82;
-  color: white;
-}
-</style>

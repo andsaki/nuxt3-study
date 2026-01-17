@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { watchEffect } from 'vue'
+import { css } from '~/styled-system/css'
+
 const props = defineProps<{
   fail: boolean
 }>()
@@ -8,10 +11,21 @@ watchEffect(() => {
     throw new Error('意図的にエラーを投げました')
   }
 })
+
+const containerClass = css({
+  borderRadius: 'lg',
+  borderWidth: '1px',
+  borderColor: 'red.200',
+  backgroundColor: 'red.50',
+  px: '3',
+  py: '2',
+  fontSize: 'sm',
+  color: 'red.900',
+})
 </script>
 
 <template>
-  <div class="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-900">
+  <div :class="containerClass">
     ErrorGenerator 子コンポーネント
   </div>
 </template>

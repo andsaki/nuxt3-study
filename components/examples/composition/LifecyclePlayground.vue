@@ -14,6 +14,7 @@ import {
   onUpdated,
   ref,
 } from 'vue'
+import { css } from '~/styled-system/css'
 import ErrorGenerator from '~/components/examples/composition/ErrorGenerator.vue'
 
 const tick = ref(0)
@@ -63,33 +64,93 @@ onRenderTracked((event) => {
 onRenderTriggered((event) => {
   pushLog('onRenderTriggered', `${event.key as string} changed`)
 })
+
+const pageClass = css({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '4',
+})
+
+const headerClass = css({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '1',
+})
+
+const buttonRowClass = css({
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: '3',
+})
+
+const noteTextClass = css({
+  color: 'gray.600',
+})
+
+const logListClass = css({
+  listStyle: 'none',
+  margin: 0,
+  padding: 0,
+  borderRadius: 'xl',
+  borderWidth: '1px',
+  borderColor: 'gray.200',
+  backgroundColor: 'gray.50',
+  p: '4',
+  fontSize: 'sm',
+  color: 'gray.900',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '2',
+})
+
+const logItemClass = css({
+  borderRadius: 'lg',
+  backgroundColor: 'white',
+  paddingInline: '3',
+  paddingBlock: '2',
+})
+
+const logDetailClass = css({
+  color: 'gray.500',
+  marginLeft: '2',
+})
+
+const logLabelClass = css({
+  fontWeight: 'semibold',
+})
 </script>
 
 <template>
-  <div class="space-y-4">
-    <header class="space-y-1">
-      <h3 class="text-lg font-semibold text-gray-900">ライフサイクルフックの流れ</h3>
-      <p class="text-sm text-gray-600">
+  <div :class="pageClass">
+    <header :class="headerClass">
+      <DesignSystemText variant="h3">
+        ライフサイクルフックの流れ
+      </DesignSystemText>
+      <DesignSystemText variant="body-small" :class="noteTextClass">
         各フックが呼ばれる順序をログします。更新ボタンで再レンダー、エラーボタンで
         <code>onErrorCaptured</code> を確認できます。
-      </p>
+      </DesignSystemText>
     </header>
 
-    <div class="flex flex-wrap gap-3">
-      <button class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white" @click="increment">
+    <div :class="buttonRowClass">
+      <DesignSystemButton variant="primary" size="sm" @click="increment">
         tick を更新 ({{ tick }})
-      </button>
-      <button class="rounded-md border border-rose-300 px-3 py-2 text-sm font-semibold text-rose-600" @click="throwFromChild">
+      </DesignSystemButton>
+      <DesignSystemButton variant="danger" size="sm" @click="throwFromChild">
         子コンポーネントでエラー
-      </button>
+      </DesignSystemButton>
     </div>
 
     <ErrorGenerator :fail="failChild" />
 
-    <ul class="space-y-2 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-900">
-      <li v-for="entry in logEntries" :key="entry.id" class="rounded-lg bg-white px-3 py-2">
-        <span class="font-semibold">{{ entry.label }}</span>
-        <span v-if="entry.detail" class="text-slate-500">— {{ entry.detail }}</span>
+    <ul :class="logListClass">
+      <li
+        v-for="entry in logEntries"
+        :key="entry.id"
+        :class="logItemClass"
+      >
+        <span :class="logLabelClass">{{ entry.label }}</span>
+        <span v-if="entry.detail" :class="logDetailClass">— {{ entry.detail }}</span>
       </li>
     </ul>
   </div>

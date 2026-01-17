@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, effectScope, getCurrentScope, onScopeDispose, ref, watchEffect } from 'vue'
+import { css } from '~/styled-system/css'
 
 const manualSource = ref(0)
 const events = ref<string[]>([])
@@ -41,34 +42,113 @@ const bumpSource = () => {
 }
 
 const scopeStatus = computed(() => (scopeRef.value ? 'active' : 'idle'))
+
+const sectionClass = css({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '3',
+  borderRadius: 'xl',
+  borderWidth: '1px',
+  borderColor: 'purple.200',
+  backgroundColor: 'purple.50',
+  p: '4',
+  fontSize: 'sm',
+  color: 'purple.900',
+})
+
+const headerClass = css({
+  display: 'flex',
+  flexWrap: 'wrap',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: '3',
+})
+
+const eyebrowTextClass = css({
+  fontSize: 'xs',
+  textTransform: 'uppercase',
+  letterSpacing: '0.2em',
+  color: 'purple.500',
+  marginBottom: '1',
+})
+
+const buttonGroupClass = css({
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: '2',
+  justifyContent: 'flex-end',
+})
+
+const inlineButtonClass = css({
+  alignSelf: 'flex-start',
+})
+
+const logListClass = css({
+  listStyle: 'none',
+  padding: 0,
+  margin: 0,
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '1',
+  borderRadius: 'lg',
+  borderWidth: '1px',
+  borderColor: 'purple.200',
+  backgroundColor: 'white',
+  p: '3',
+  fontFamily: 'mono',
+  fontSize: 'xs',
+  color: 'purple.900',
+})
+
+const logItemClass = css({
+  lineHeight: '1.4',
+})
 </script>
 
 <template>
-  <section class="space-y-3 rounded-xl border border-fuchsia-200 bg-fuchsia-50 p-4 text-sm text-fuchsia-900">
-    <header class="flex items-center justify-between">
+  <section :class="sectionClass">
+    <header :class="headerClass">
       <div>
-        <p class="text-xs uppercase tracking-wide text-fuchsia-500">effectScope / getCurrentScope</p>
-        <p class="text-lg font-semibold">scope: {{ scopeStatus }}</p>
+        <p :class="eyebrowTextClass">effectScope / getCurrentScope</p>
+        <DesignSystemText variant="body-large" bold>
+          scope: {{ scopeStatus }}
+        </DesignSystemText>
       </div>
-      <div class="flex gap-2">
-        <button class="rounded-md bg-fuchsia-600 px-3 py-1 text-xs font-semibold text-white" @click="startScope">
+      <div :class="buttonGroupClass">
+        <DesignSystemButton
+          variant="primary"
+          size="sm"
+          @click="startScope"
+        >
           scope再生成
-        </button>
-        <button
-          class="rounded-md border border-fuchsia-300 px-3 py-1 text-xs font-semibold text-fuchsia-700"
+        </DesignSystemButton>
+        <DesignSystemButton
+          variant="outline"
+          size="sm"
           @click="stopScope"
         >
           stop
-        </button>
+        </DesignSystemButton>
       </div>
     </header>
 
-    <button class="rounded-md border border-fuchsia-300 px-3 py-1 text-xs font-semibold" @click="bumpSource">
+    <DesignSystemButton
+      variant="secondary"
+      size="sm"
+      :class="inlineButtonClass"
+      @click="bumpSource"
+    >
       manualSource を更新 ({{ manualSource }})
-    </button>
+    </DesignSystemButton>
 
-    <ul class="space-y-1 rounded-lg border border-fuchsia-200 bg-white p-3 font-mono text-xs text-fuchsia-900">
-      <li v-for="(event, index) in events" :key="index">{{ event }}</li>
+    <ul :class="logListClass">
+      <li
+        v-for="(event, index) in events"
+        :key="index"
+        :class="logItemClass"
+      >
+        {{ event }}
+      </li>
     </ul>
   </section>
 </template>

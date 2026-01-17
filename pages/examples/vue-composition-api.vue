@@ -10,7 +10,7 @@ import WatcherPlayground from '~/components/examples/composition/WatcherPlaygrou
 
 const showLifecycle = ref(true)
 const keepAliveEnabled = ref(true)
-const docUrl = 'https://github.com/YudukiHotaru/nuxt3-study/blob/main/docs/vue-composition-api-reference.md'
+const docUrl = '/docs/vue-composition-api-reference.md'
 
 const openDoc = () => {
   if (process.client) {

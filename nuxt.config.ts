@@ -21,5 +21,13 @@ export default defineNuxtConfig({
   routeRules: {
     '/ssg-demo': { prerender: true }, // SSG
     '/isr-demo': { swr: 60 }, // ISR: 60秒キャッシュ
+  },
+  nitro: {
+    publicAssets: [
+      {
+        dir: 'docs',
+        baseURL: '/docs'
+      }
+    ]
   }
 })

@@ -1,31 +1,48 @@
 <template>
-  <div class="bg-white shadow-md rounded-lg p-6">
-    <h3 class="text-xl font-semibold text-blue-600 mb-4">TanStack Vue Query</h3>
-
-    <div v-if="isPending" class="text-gray-500">読み込み中...</div>
-    <div v-else-if="error" class="text-red-500">エラー: {{ error.message }}</div>
-    <div v-else class="space-y-4">
-      <div class="text-sm text-gray-700">
-        <strong>取得データ:</strong> {{ data }}
-      </div>
-      <div class="text-xs text-gray-500">
-        <div>isFetching: {{ isFetching }}</div>
-        <div>isRefetching: {{ isRefetching }}</div>
-        <div>status: {{ status }}</div>
-      </div>
-      <button
-        :disabled="isRefetching"
-        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-400 transition"
-        @click="() => refetch()"
+  <DesignSystemCard title="TanStack Vue Query" icon="🧠" color-scheme="blue">
+    <div :class="contentClass">
+      <DesignSystemText
+        v-if="isPending"
+        variant="body-small"
+        :class="mutedTextClass"
       >
-        {{ isRefetching ? '再取得中...' : '再取得' }}
-      </button>
+        読み込み中...
+      </DesignSystemText>
+
+      <DesignSystemText
+        v-else-if="error"
+        variant="body-small"
+        :class="errorTextClass"
+      >
+        エラー: {{ error?.message ?? '不明なエラー' }}
+      </DesignSystemText>
+
+      <template v-else>
+        <p :class="dataTextClass">
+          <span :class="labelClass">取得データ:</span> {{ data }}
+        </p>
+        <div :class="metaListClass">
+          <span>isFetching: {{ isFetching }}</span>
+          <span>isRefetching: {{ isRefetching }}</span>
+          <span>status: {{ status }}</span>
+        </div>
+        <DesignSystemButton
+          variant="primary"
+          size="sm"
+          :class="actionButtonClass"
+          :disabled="isRefetching"
+          @click="refetch"
+        >
+          {{ isRefetching ? '再取得中...' : '再取得' }}
+        </DesignSystemButton>
+      </template>
     </div>
-  </div>
+  </DesignSystemCard>
 </template>
 
 <script setup lang="ts">
 import { useQuery } from '@tanstack/vue-query'
+import { css } from '~/styled-system/css'
 
 // シンプルなデータフェッチ関数
 const fetchData = async () => {
@@ -37,5 +54,42 @@ const { data, error, isPending, isFetching, isRefetching, status, refetch } = us
   queryKey: ['demo-data'],
   queryFn: fetchData,
   refetchOnWindowFocus: false,
+})
+
+const contentClass = css({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '4',
+})
+
+const mutedTextClass = css({
+  color: 'gray.600',
+})
+
+const errorTextClass = css({
+  color: 'red.600',
+  fontWeight: 'semibold',
+})
+
+const dataTextClass = css({
+  fontSize: 'sm',
+  color: 'gray.700',
+})
+
+const labelClass = css({
+  fontWeight: 'semibold',
+  color: 'gray.900',
+  marginRight: '2',
+})
+
+const metaListClass = css({
+  display: 'grid',
+  gap: '1',
+  fontSize: 'xs',
+  color: 'gray.600',
+})
+
+const actionButtonClass = css({
+  alignSelf: 'flex-start',
 })
 </script>

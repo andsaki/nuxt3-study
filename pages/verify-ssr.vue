@@ -1,13 +1,14 @@
 <script setup lang="ts">
+import { css } from '~/styled-system/css'
+
 interface Post {
   id: number
   title: string
   body: string
 }
 
-// SSRで取得されるデータ
 const { data: ssrData } = await useFetch<Post[]>(
-  'https://jsonplaceholder.typicode.com/posts?_limit=3'
+  'https://jsonplaceholder.typicode.com/posts?_limit=3',
 )
 
 const { data: serverTime } = await useAsyncData('verify-time', async () => {
@@ -17,9 +18,8 @@ const { data: serverTime } = await useAsyncData('verify-time', async () => {
   }
 })
 
-// クライアントサイドの情報
-const clientMountTime = ref<string>('')
-const clientRandom = ref<number>(0)
+const clientMountTime = ref('')
+const clientRandom = ref(0)
 const isHydrated = ref(false)
 
 onMounted(() => {
@@ -28,119 +28,236 @@ onMounted(() => {
   isHydrated.value = true
 })
 
-// HTMLソースを確認するための説明
-const howToVerify = `
-1. ページを右クリック → "ページのソースを表示"
-2. HTMLの中に以下が含まれているか確認:
-   - 投稿データ（title、bodyなど）
-   - サーバータイムスタンプ
-   - ランダム値
+const howToVerify = [
+  'ページを右クリック → "ページのソースを表示"',
+  'HTMLに投稿データ、サーバータイム、ランダム値が含まれているか確認',
+  'DevTools で実際のDOMを確認し、値の違いを比較',
+  'サーバー値とクライアント値が異なることを確認',
+]
 
-SSRが正しく動作している場合:
+const infoRows = [
+  { label: '生成時刻', value: () => serverTime.value?.generatedAt ?? '---' },
+  { label: 'ランダム値', value: () => serverTime.value?.random ?? '---' },
+  { label: 'データ件数', value: () => `${ssrData.value?.length ?? 0} 件` },
+]
+
+const clientRows = [
+  { label: 'マウント時刻', value: () => clientMountTime.value || '未マウント' },
+  { label: 'ランダム値', value: () => clientRandom.value || '未生成' },
+  { label: 'Hydration', value: () => (isHydrated.value ? '完了' : '未完了') },
+]
+
+const styles = {
+  page: css({
+    maxW: '6xl',
+    mx: 'auto',
+    py: '10',
+    px: { base: '4', md: '6', lg: '8' },
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8',
+  }),
+  title: css({ fontSize: '4xl', fontWeight: 'bold', color: 'emerald.500' }),
+  card: css({
+    bg: 'white',
+    borderWidth: '1px',
+    borderColor: 'gray.200',
+    borderRadius: '2xl',
+    p: '6',
+    boxShadow: 'md',
+  }),
+  sectionTitle: css({ fontSize: 'xl', fontWeight: 'semibold', color: 'slate.800', mb: '4' }),
+  verifySteps: css({
+    mt: '4',
+    bg: 'slate.900',
+    color: 'slate.100',
+    borderRadius: 'lg',
+    p: '4',
+    lineHeight: 'tall',
+    fontFamily: 'mono',
+    whiteSpace: 'pre-wrap',
+  }),
+  list: css({ display: 'flex', flexDirection: 'column', gap: '3' }),
+  infoSection: css({
+    display: 'grid',
+    gap: '4',
+  }),
+  infoGrid: css({
+    display: 'grid',
+    gap: '3',
+  }),
+  infoItem: css({
+    display: 'flex',
+    justifyContent: 'space-between',
+    bg: 'gray.50',
+    p: '3',
+    borderRadius: 'lg',
+    borderWidth: '1px',
+    borderColor: 'gray.200',
+  }),
+  infoLabel: css({ fontWeight: 'semibold', color: 'slate.600' }),
+  infoValue: css({ fontFamily: 'mono', color: 'slate.700' }),
+  postsGrid: css({
+    display: 'grid',
+    gap: '4',
+    gridTemplateColumns: { base: '1fr', sm: 'repeat(auto-fit, minmax(240px, 1fr))' },
+  }),
+  postCard: css({
+    bg: 'gray.50',
+    borderRadius: 'xl',
+    p: '4',
+    borderWidth: '1px',
+    borderColor: 'gray.200',
+    position: 'relative',
+  }),
+  postId: css({
+    position: 'absolute',
+    top: '3',
+    right: '3',
+    fontSize: 'sm',
+    fontWeight: 'semibold',
+    bg: 'emerald.500',
+    color: 'white',
+    px: '2',
+    py: '1',
+    borderRadius: 'md',
+  }),
+  postTitle: css({ fontWeight: 'semibold', color: 'slate.800', mb: '2', pr: '10' }),
+  postBody: css({ color: 'slate.600', lineHeight: 'relaxed', fontSize: 'sm' }),
+  resultGrid: css({
+    display: 'grid',
+    gap: '4',
+    gridTemplateColumns: { base: '1fr', md: 'repeat(auto-fit, minmax(200px, 1fr))' },
+  }),
+  resultItem: css({
+    display: 'flex',
+    alignItems: 'center',
+    gap: '3',
+    borderWidth: '2px',
+    borderRadius: 'xl',
+    p: '4',
+    bg: 'white',
+    borderColor: 'rose.400',
+    '&.success': {
+      borderColor: 'emerald.400',
+    },
+  }),
+  icon: css({ fontSize: '2xl', fontWeight: 'bold' }),
+  debugSection: css({
+    bg: 'slate.900',
+    color: 'slate.50',
+    borderRadius: 'xl',
+    p: '4',
+    '& summary': { cursor: 'pointer', fontWeight: 'semibold' },
+    '& pre': {
+      mt: '3',
+      bg: 'slate.800',
+      p: '4',
+      borderRadius: 'lg',
+      overflowX: 'auto',
+    },
+  }),
+  hint: css({ color: 'slate.500', fontStyle: 'italic', fontSize: 'sm', mb: '4' }),
+  backLink: css({
+    alignSelf: 'flex-start',
+    color: 'emerald.500',
+    borderWidth: '2px',
+    borderColor: 'emerald.500',
+    borderRadius: 'xl',
+    px: '4',
+    py: '2',
+    fontWeight: 'medium',
+    _hover: { bg: 'emerald.500', color: 'white' },
+  }),
+}
+</script>
+
+<template>
+  <div :class="styles.page">
+    <h1 :class="styles.title">SSR 検証ページ</h1>
+
+    <section :class="styles.card">
+      <h2 :class="styles.sectionTitle">🔍 検証方法</h2>
+      <ul :class="styles.list">
+        <li v-for="step in howToVerify" :key="step">
+          {{ step }}
+        </li>
+      </ul>
+      <pre :class="styles.verifySteps">SSRが正しく動作している場合:
 → HTMLソースにデータが含まれている
 → サーバーとクライアントのランダム値が異なる
 → クライアントのマウント時刻がサーバー時刻より遅い
 
 CSRの場合:
 → HTMLソースにデータが含まれていない
-→ ローディング表示だけがHTMLに含まれる
-`
-</script>
+→ ローディング表示だけがHTMLに含まれる</pre>
+    </section>
 
-<template>
-  <div class="container">
-    <h1>SSR 検証ページ</h1>
-
-    <!-- 検証方法 -->
-    <div class="verify-box">
-      <h2>🔍 検証方法</h2>
-      <pre class="verify-steps">{{ howToVerify }}</pre>
-    </div>
-
-    <!-- サーバー情報 -->
-    <div class="info-section server">
-      <h2>🖥️ サーバー情報（SSR）</h2>
-      <div class="info-grid">
-        <div class="info-item">
-          <span class="label">生成時刻:</span>
-          <span class="value">{{ serverTime?.generatedAt }}</span>
-        </div>
-        <div class="info-item">
-          <span class="label">ランダム値:</span>
-          <span class="value">{{ serverTime?.random }}</span>
-        </div>
-        <div class="info-item">
-          <span class="label">データ件数:</span>
-          <span class="value">{{ ssrData?.length }} 件</span>
+    <section :class="styles.infoSection">
+      <div :class="styles.card">
+        <h2 :class="styles.sectionTitle">🖥️ サーバー情報（SSR）</h2>
+        <div :class="styles.infoGrid">
+          <div v-for="row in infoRows" :key="row.label" :class="styles.infoItem">
+            <span :class="styles.infoLabel">{{ row.label }}:</span>
+            <span :class="styles.infoValue">{{ row.value() }}</span>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- クライアント情報 -->
-    <div class="info-section client">
-      <h2>💻 クライアント情報（CSR）</h2>
-      <div class="info-grid">
-        <div class="info-item">
-          <span class="label">マウント時刻:</span>
-          <span class="value">{{ clientMountTime || '未マウント' }}</span>
-        </div>
-        <div class="info-item">
-          <span class="label">ランダム値:</span>
-          <span class="value">{{ clientRandom || '未生成' }}</span>
-        </div>
-        <div class="info-item">
-          <span class="label">Hydration:</span>
-          <span class="value">{{ isHydrated ? '完了' : '未完了' }}</span>
+      <div :class="styles.card">
+        <h2 :class="styles.sectionTitle">💻 クライアント情報（CSR）</h2>
+        <div :class="styles.infoGrid">
+          <div v-for="row in clientRows" :key="row.label" :class="styles.infoItem">
+            <span :class="styles.infoLabel">{{ row.label }}:</span>
+            <span :class="styles.infoValue">{{ row.value() }}</span>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- SSRデータ表示 -->
-    <div class="data-section">
-      <h2>📄 SSRで取得されたデータ</h2>
-      <p class="hint">
+    <section :class="styles.card">
+      <h2 :class="styles.sectionTitle">📄 SSRで取得されたデータ</h2>
+      <p :class="styles.hint">
         ※このデータはHTMLソースに含まれています（ページソースを表示して確認）
       </p>
 
-      <div v-if="ssrData" class="posts-grid">
-        <article v-for="post in ssrData" :key="post.id" class="post-card">
-          <div class="post-id">ID: {{ post.id }}</div>
-          <h3>{{ post.title }}</h3>
-          <p>{{ post.body }}</p>
+      <div v-if="ssrData" :class="styles.postsGrid">
+        <article v-for="post in ssrData" :key="post.id" :class="styles.postCard">
+          <div :class="styles.postId">ID: {{ post.id }}</div>
+          <h3 :class="styles.postTitle">{{ post.title }}</h3>
+          <p :class="styles.postBody">{{ post.body }}</p>
         </article>
       </div>
-      <div v-else class="loading">
+      <div v-else>
         データを読み込んでいます...
       </div>
-    </div>
+    </section>
 
-    <!-- 検証結果 -->
-    <div class="result-section">
-      <h2>✅ 検証結果</h2>
-      <div class="result-grid">
-        <div class="result-item" :class="{ success: ssrData && ssrData.length > 0 }">
-          <span class="icon">{{ ssrData && ssrData.length > 0 ? '✓' : '✗' }}</span>
+    <section :class="styles.card">
+      <h2 :class="styles.sectionTitle">✅ 検証結果</h2>
+      <div :class="styles.resultGrid">
+        <div :class="[styles.resultItem, ssrData && ssrData.length > 0 ? 'success' : '']">
+          <span :class="styles.icon">{{ ssrData && ssrData.length > 0 ? '✓' : '✗' }}</span>
           <span>SSRデータ取得</span>
         </div>
-        <div class="result-item" :class="{ success: serverTime?.random }">
-          <span class="icon">{{ serverTime?.random ? '✓' : '✗' }}</span>
+        <div :class="[styles.resultItem, serverTime?.random ? 'success' : '']">
+          <span :class="styles.icon">{{ serverTime?.random ? '✓' : '✗' }}</span>
           <span>サーバー値生成</span>
         </div>
-        <div class="result-item" :class="{ success: isHydrated }">
-          <span class="icon">{{ isHydrated ? '✓' : '✗' }}</span>
+        <div :class="[styles.resultItem, isHydrated ? 'success' : '']">
+          <span :class="styles.icon">{{ isHydrated ? '✓' : '✗' }}</span>
           <span>クライアントHydration</span>
         </div>
-        <div class="result-item" :class="{ success: clientRandom !== serverTime?.random }">
-          <span class="icon">{{ clientRandom !== serverTime?.random ? '✓' : '✗' }}</span>
+        <div :class="[styles.resultItem, clientRandom !== serverTime?.random ? 'success' : '']">
+          <span :class="styles.icon">{{ clientRandom !== serverTime?.random ? '✓' : '✗' }}</span>
           <span>サーバー/クライアント分離</span>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- デバッグ情報 -->
-    <details class="debug-section">
+    <details :class="styles.debugSection">
       <summary>🐛 デバッグ情報（JSON）</summary>
-      <pre class="json-view">{{ {
+      <pre>{{ {
   server: {
     time: serverTime?.generatedAt,
     random: serverTime?.random,
@@ -155,235 +272,6 @@ CSRの場合:
 } }}</pre>
     </details>
 
-    <NuxtLink to="/" class="back-link">← トップページに戻る</NuxtLink>
+    <NuxtLink to="/" :class="styles.backLink">← トップページに戻る</NuxtLink>
   </div>
 </template>
-
-<style scoped>
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-h1 {
-  color: #00dc82;
-  margin-bottom: 2rem;
-  font-size: 2rem;
-}
-
-h2 {
-  color: #333;
-  margin-bottom: 1rem;
-  font-size: 1.3rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.verify-box {
-  background: #f0f9ff;
-  border: 2px solid #0ea5e9;
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.verify-steps {
-  background: #1f2937;
-  color: #f9fafb;
-  padding: 1rem;
-  border-radius: 6px;
-  overflow-x: auto;
-  font-size: 0.875rem;
-  line-height: 1.6;
-  white-space: pre-wrap;
-}
-
-.info-section {
-  padding: 1.5rem;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
-  border: 2px solid;
-}
-
-.info-section.server {
-  background: #fef3c7;
-  border-color: #f59e0b;
-}
-
-.info-section.client {
-  background: #dbeafe;
-  border-color: #3b82f6;
-}
-
-.info-grid {
-  display: grid;
-  gap: 1rem;
-}
-
-.info-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.75rem;
-  background: white;
-  border-radius: 6px;
-  border: 1px solid #e5e7eb;
-}
-
-.label {
-  font-weight: 600;
-  color: #374151;
-}
-
-.value {
-  font-family: 'Courier New', monospace;
-  color: #6b7280;
-}
-
-.data-section {
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.hint {
-  color: #6b7280;
-  font-size: 0.875rem;
-  margin-bottom: 1rem;
-  font-style: italic;
-}
-
-.posts-grid {
-  display: grid;
-  gap: 1rem;
-}
-
-.post-card {
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  padding: 1.25rem;
-  position: relative;
-}
-
-.post-id {
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  background: #00dc82;
-  color: white;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
-.post-card h3 {
-  color: #1f2937;
-  font-size: 1.1rem;
-  margin-bottom: 0.5rem;
-  padding-right: 3rem;
-}
-
-.post-card p {
-  color: #6b7280;
-  line-height: 1.6;
-  font-size: 0.9rem;
-}
-
-.loading {
-  text-align: center;
-  color: #9ca3af;
-  padding: 2rem;
-}
-
-.result-section {
-  background: #f0fdf4;
-  border: 2px solid #22c55e;
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.result-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-}
-
-.result-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1rem;
-  background: white;
-  border-radius: 6px;
-  border: 2px solid #ef4444;
-}
-
-.result-item.success {
-  border-color: #22c55e;
-}
-
-.icon {
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
-.result-item.success .icon {
-  color: #22c55e;
-}
-
-.result-item:not(.success) .icon {
-  color: #ef4444;
-}
-
-.debug-section {
-  background: #1f2937;
-  color: #f9fafb;
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.debug-section summary {
-  cursor: pointer;
-  font-weight: 600;
-  padding: 0.5rem;
-  user-select: none;
-}
-
-.debug-section summary:hover {
-  background: #374151;
-  border-radius: 4px;
-}
-
-.json-view {
-  background: #111827;
-  padding: 1rem;
-  border-radius: 6px;
-  overflow-x: auto;
-  font-size: 0.875rem;
-  margin-top: 1rem;
-  line-height: 1.6;
-}
-
-.back-link {
-  display: inline-block;
-  color: #00dc82;
-  text-decoration: none;
-  font-weight: 500;
-  padding: 0.75rem 1.5rem;
-  border: 2px solid #00dc82;
-  border-radius: 6px;
-  transition: all 0.2s;
-}
-
-.back-link:hover {
-  background: #00dc82;
-  color: white;
-}
-</style>

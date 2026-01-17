@@ -1,6 +1,36 @@
 <script setup lang="ts">
-// エラーを発生させるコンポーネント
-import type { ComponentPublicInstance } from 'vue'
+import { defineComponent, h, onMounted, ref, type ComponentPublicInstance } from 'vue'
+import { css } from '~/styled-system/css'
+
+const componentStyles = {
+  buggy: css({
+    p: '4',
+    bg: 'gray.50',
+    borderRadius: 'lg',
+  }),
+  primaryButton: css({
+    mt: '3',
+    bg: 'blue.500',
+    color: 'white',
+    borderRadius: 'lg',
+    px: '4',
+    py: '2',
+    fontWeight: 'semibold',
+    _hover: { bg: 'blue.600' },
+    border: 'none',
+  }),
+  asyncButton: css({
+    mt: '3',
+    bg: 'purple.500',
+    color: 'white',
+    borderRadius: 'lg',
+    px: '4',
+    py: '2',
+    fontWeight: 'semibold',
+    _hover: { bg: 'purple.600' },
+    border: 'none',
+  }),
+}
 
 const BuggyComponent = defineComponent({
   name: 'BuggyComponent',
@@ -14,45 +44,48 @@ const BuggyComponent = defineComponent({
       }
     }
 
-    return { count, increment }
+    return () =>
+      h('div', { class: componentStyles.buggy }, [
+        h('p', `カウント: ${count.value}`),
+        h(
+          'button',
+          {
+            class: componentStyles.primaryButton,
+            onClick: increment,
+          },
+          'クリックしてカウント（3でエラー）',
+        ),
+      ])
   },
-  template: `
-    <div class="buggy-component">
-      <p>カウント: {{ count }}</p>
-      <button @click="increment" class="count-button">
-        クリックしてカウント（3でエラー）
-      </button>
-    </div>
-  `
 })
 
 const AsyncBuggyComponent = defineComponent({
   name: 'AsyncBuggyComponent',
-  async setup() {
+  setup() {
     const throwError = () => {
       throw new Error('非同期エラーが発生しました！')
     }
 
-    return { throwError }
+    return () =>
+      h('div', { class: componentStyles.buggy }, [
+        h(
+          'button',
+          {
+            class: componentStyles.asyncButton,
+            onClick: throwError,
+          },
+          '非同期エラーを発生させる',
+        ),
+      ])
   },
-  template: `
-    <div class="buggy-component">
-      <button @click="throwError" class="error-button">
-        非同期エラーを発生させる
-      </button>
-    </div>
-  `
 })
 
-// カスタムエラーハンドラ
 const handleError = (error: Error, instance: ComponentPublicInstance | null) => {
   console.log('カスタムエラーハンドラが呼ばれました')
   console.log('エラー:', error.message)
   console.log('コンポーネント:', instance?.$options?.name)
-  // ここでエラーログサービスに送信など
 }
 
-// マウント時にエラーを発生させるコンポーネント
 const ImmediateErrorComponent = defineComponent({
   name: 'ImmediateErrorComponent',
   setup() {
@@ -60,82 +93,176 @@ const ImmediateErrorComponent = defineComponent({
       throw new Error('マウント時にエラーが発生しました！')
     })
 
-    return {}
+    return () =>
+      h('div', { class: componentStyles.buggy }, [h('p', 'マウント中...')])
   },
-  template: '<div class="buggy-component"><p>マウント中...</p></div>'
 })
+
+const styles = {
+  page: css({
+    bg: 'slate.50',
+    minH: 'screen',
+    py: '10',
+  }),
+  container: css({
+    maxW: '6xl',
+    mx: 'auto',
+    px: { base: '4', md: '6' },
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '6',
+  }),
+  title: css({ fontSize: '4xl', fontWeight: 'bold', color: 'emerald.500' }),
+  intro: css({
+    bg: 'blue.50',
+    borderLeftWidth: '4px',
+    borderColor: 'cyan.500',
+    borderRadius: 'xl',
+    p: '6',
+    color: 'slate.700',
+  }),
+  section: css({
+    bg: 'white',
+    borderRadius: '2xl',
+    p: '6',
+    borderWidth: '1px',
+    borderColor: 'gray.200',
+    boxShadow: 'md',
+  }),
+  sectionTitle: css({ fontSize: 'xl', fontWeight: 'semibold', color: 'slate.800', mb: '4' }),
+  customError: css({
+    mt: '4',
+    textAlign: 'center',
+    bg: 'orange.50',
+    borderRadius: 'xl',
+    borderWidth: '2px',
+    borderColor: 'orange.400',
+    p: '6',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '3',
+  }),
+  customReset: css({
+    alignSelf: 'center',
+    bg: 'orange.500',
+    color: 'white',
+    borderRadius: 'lg',
+    px: '4',
+    py: '2',
+    fontWeight: 'semibold',
+    border: 'none',
+    _hover: { bg: 'orange.600' },
+  }),
+  nestedContainer: css({
+    mt: '4',
+    bg: 'emerald.50',
+    borderRadius: 'xl',
+    borderWidth: '2px',
+    borderColor: 'emerald.400',
+    p: '4',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '3',
+  }),
+  codeSection: css({
+    bg: 'slate.900',
+    color: 'slate.50',
+    borderRadius: '2xl',
+    p: '6',
+    boxShadow: 'lg',
+  }),
+  codeBlock: css({
+    mt: '4',
+    bg: 'slate.800',
+    borderRadius: 'lg',
+    p: '4',
+    fontFamily: 'mono',
+    overflowX: 'auto',
+  }),
+  implementationList: css({
+    mt: '3',
+    pl: '5',
+    lineHeight: 'tall',
+    color: 'slate.100',
+  }),
+  backLink: css({
+    color: 'emerald.500',
+    fontWeight: 'medium',
+    borderWidth: '2px',
+    borderColor: 'emerald.500',
+    borderRadius: 'xl',
+    px: '4',
+    py: '2',
+    alignSelf: 'flex-start',
+    _hover: { bg: 'emerald.500', color: 'white' },
+  }),
+}
 </script>
 
 <template>
-  <div class="container">
-    <h1>Error Boundary デモ</h1>
+  <div :class="styles.page">
+    <div :class="styles.container">
+      <h1 :class="styles.title">Error Boundary デモ</h1>
 
-    <div class="intro">
-      <p>
-        Error Boundary（エラーバウンダリ）は、子コンポーネントで発生したエラーをキャッチして、
-        アプリ全体がクラッシュするのを防ぎます。
-      </p>
-    </div>
+      <div :class="styles.intro">
+        <p>
+          Error Boundary（エラーバウンダリ）は、子コンポーネントで発生したエラーをキャッチして、アプリ全体がクラッシュするのを防ぎます。
+        </p>
+      </div>
 
-    <!-- 例1: 基本的な使い方 -->
-    <div class="demo-section">
-      <h2>例1: 基本的なエラーバウンダリ</h2>
-      <ErrorBoundary>
-        <BuggyComponent />
-      </ErrorBoundary>
-    </div>
+      <section :class="styles.section">
+        <h2 :class="styles.sectionTitle">例1: 基本的なエラーバウンダリ</h2>
+        <ErrorBoundary>
+          <BuggyComponent />
+        </ErrorBoundary>
+      </section>
 
-    <!-- 例2: カスタムフォールバック -->
-    <div class="demo-section">
-      <h2>例2: カスタムエラー表示</h2>
-      <ErrorBoundary fallback="おっと！何か問題が発生しました">
-        <template #error="{ error, reset }">
-          <div class="custom-error">
-            <h3>🔥 カスタムエラー表示</h3>
-            <p>{{ error?.message }}</p>
-            <button class="custom-reset" @click="reset">
-              リトライ
-            </button>
+      <section :class="styles.section">
+        <h2 :class="styles.sectionTitle">例2: カスタムエラー表示</h2>
+        <ErrorBoundary fallback="おっと！何か問題が発生しました">
+          <template #error="{ error, reset }">
+            <div :class="styles.customError">
+              <h3>🔥 カスタムエラー表示</h3>
+              <p>{{ error?.message }}</p>
+              <button :class="styles.customReset" @click="reset">
+                リトライ
+              </button>
+            </div>
+          </template>
+          <BuggyComponent />
+        </ErrorBoundary>
+      </section>
+
+      <section :class="styles.section">
+        <h2 :class="styles.sectionTitle">例3: 非同期エラーのキャッチ</h2>
+        <ErrorBoundary :on-error="handleError">
+          <AsyncBuggyComponent />
+        </ErrorBoundary>
+      </section>
+
+      <section :class="styles.section">
+        <h2 :class="styles.sectionTitle">例4: マウント時のエラー</h2>
+        <ErrorBoundary>
+          <ImmediateErrorComponent />
+        </ErrorBoundary>
+      </section>
+
+      <section :class="styles.section">
+        <h2 :class="styles.sectionTitle">例5: ネストしたエラーバウンダリ</h2>
+        <ErrorBoundary fallback="外側のエラーバウンダリ">
+          <div :class="styles.nestedContainer">
+            <p>外側のコンテナ</p>
+            <ErrorBoundary fallback="内側のエラーバウンダリ">
+              <BuggyComponent />
+            </ErrorBoundary>
+            <p>外側のコンテナは正常に表示される</p>
           </div>
-        </template>
-        <BuggyComponent />
-      </ErrorBoundary>
-    </div>
+        </ErrorBoundary>
+      </section>
 
-    <!-- 例3: 非同期エラー -->
-    <div class="demo-section">
-      <h2>例3: 非同期エラーのキャッチ</h2>
-      <ErrorBoundary :on-error="handleError">
-        <AsyncBuggyComponent />
-      </ErrorBoundary>
-    </div>
-
-    <!-- 例4: 即座にエラー -->
-    <div class="demo-section">
-      <h2>例4: マウント時のエラー</h2>
-      <ErrorBoundary>
-        <ImmediateErrorComponent />
-      </ErrorBoundary>
-    </div>
-
-    <!-- 例5: ネストしたエラーバウンダリ -->
-    <div class="demo-section">
-      <h2>例5: ネストしたエラーバウンダリ</h2>
-      <ErrorBoundary fallback="外側のエラーバウンダリ">
-        <div class="nested-container">
-          <p>外側のコンテナ</p>
-          <ErrorBoundary fallback="内側のエラーバウンダリ">
-            <BuggyComponent />
-          </ErrorBoundary>
-          <p>外側のコンテナは正常に表示される</p>
-        </div>
-      </ErrorBoundary>
-    </div>
-
-    <!-- 使い方 -->
-    <div class="usage-section">
-      <h2>💻 使い方</h2>
-      <pre v-pre><code>&lt;ErrorBoundary&gt;
+      <section :class="styles.codeSection">
+        <h2 :class="styles.sectionTitle">💻 使い方</h2>
+        <pre v-pre :class="styles.codeBlock"><code>&lt;ErrorBoundary&gt;
   &lt;YourComponent /&gt;
 &lt;/ErrorBoundary&gt;
 
@@ -159,171 +286,20 @@ const ImmediateErrorComponent = defineComponent({
 &lt;ErrorBoundary :on-error="handleError"&gt;
   &lt;YourComponent /&gt;
 &lt;/ErrorBoundary&gt;</code></pre>
-    </div>
+      </section>
 
-    <!-- 実装 -->
-    <div class="implementation-section">
-      <h2>🔧 実装</h2>
-      <p>ErrorBoundaryコンポーネントは以下を使用しています:</p>
-      <ul>
-        <li><code>onErrorCaptured</code> - 子コンポーネントのエラーをキャッチ</li>
-        <li>falseを返してエラーの伝播を停止</li>
-        <li>エラー状態を管理してフォールバックUIを表示</li>
-        <li>リセット機能で再試行を可能に</li>
-      </ul>
-    </div>
+      <section :class="styles.codeSection">
+        <h2 :class="styles.sectionTitle">🔧 実装</h2>
+        <p>ErrorBoundaryコンポーネントは以下を使用しています:</p>
+        <ul :class="styles.implementationList">
+          <li><code>onErrorCaptured</code> - 子コンポーネントのエラーをキャッチ</li>
+          <li>falseを返してエラーの伝播を停止</li>
+          <li>エラー状態を管理してフォールバックUIを表示</li>
+          <li>リセット機能で再試行を可能に</li>
+        </ul>
+      </section>
 
-    <NuxtLink to="/" class="back-link">← トップページに戻る</NuxtLink>
+      <NuxtLink to="/" :class="styles.backLink">← トップページに戻る</NuxtLink>
+    </div>
   </div>
 </template>
-
-<style scoped>
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-h1 {
-  color: #00dc82;
-  margin-bottom: 2rem;
-}
-
-h2 {
-  color: #333;
-  margin-bottom: 1rem;
-  font-size: 1.3rem;
-}
-
-.intro {
-  background: #f0f9ff;
-  border-left: 4px solid #0ea5e9;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  border-radius: 8px;
-}
-
-.demo-section {
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.buggy-component {
-  padding: 1rem;
-  background: #f9fafb;
-  border-radius: 6px;
-}
-
-.count-button,
-.error-button {
-  padding: 0.75rem 1.5rem;
-  background: #3b82f6;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 1rem;
-}
-
-.count-button:hover,
-.error-button:hover {
-  background: #2563eb;
-}
-
-.custom-error {
-  padding: 2rem;
-  background: #fff7ed;
-  border: 2px solid #f59e0b;
-  border-radius: 8px;
-  text-align: center;
-}
-
-.custom-error h3 {
-  color: #92400e;
-  margin-bottom: 1rem;
-}
-
-.custom-reset {
-  padding: 0.75rem 1.5rem;
-  background: #f59e0b;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 1rem;
-}
-
-.custom-reset:hover {
-  background: #d97706;
-}
-
-.nested-container {
-  padding: 1rem;
-  background: #f0fdf4;
-  border: 2px solid #10b981;
-  border-radius: 6px;
-}
-
-.usage-section,
-.implementation-section {
-  background: #1f2937;
-  color: #f9fafb;
-  padding: 1.5rem;
-  border-radius: 8px;
-  margin-bottom: 2rem;
-}
-
-.usage-section h2,
-.implementation-section h2 {
-  color: #f9fafb;
-}
-
-.usage-section pre {
-  background: #111827;
-  padding: 1rem;
-  border-radius: 6px;
-  overflow-x: auto;
-  margin-top: 1rem;
-}
-
-.usage-section code {
-  color: #f9fafb;
-  font-size: 0.875rem;
-}
-
-.implementation-section ul {
-  margin-top: 1rem;
-  padding-left: 1.5rem;
-}
-
-.implementation-section li {
-  margin: 0.5rem 0;
-}
-
-.implementation-section code {
-  background: #374151;
-  padding: 0.2rem 0.4rem;
-  border-radius: 3px;
-}
-
-.back-link {
-  display: inline-block;
-  color: #00dc82;
-  text-decoration: none;
-  font-weight: 500;
-  padding: 0.75rem 1.5rem;
-  border: 2px solid #00dc82;
-  border-radius: 6px;
-  transition: all 0.2s;
-}
-
-.back-link:hover {
-  background: #00dc82;
-  color: white;
-}
-</style>

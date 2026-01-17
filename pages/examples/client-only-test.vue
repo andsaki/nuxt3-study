@@ -1,156 +1,29 @@
 <script setup lang="ts">
+import { css } from '~/styled-system/css'
+
 const timestamp = new Date().toISOString()
-</script>
 
-<template>
-  <div class="container">
-    <h1>ClientOnly 動作確認</h1>
+const instructions = [
+  'このページで右クリック → 「ページのソースを表示」',
+  'HTMLソースに何が含まれているか確認',
+  'DevTools（F12）で実際のDOMを確認',
+  '違いを比較',
+]
 
-    <div class="instruction">
-      <h2>🔍 確認方法</h2>
-      <ol>
-        <li>このページで右クリック → 「ページのソースを表示」</li>
-        <li>HTMLソースに何が含まれているか確認</li>
-        <li>DevTools（F12）で実際のDOMを確認</li>
-        <li>違いを比較</li>
-      </ol>
-    </div>
+const htmlSourceRows = [
+  { case: 'fallbackあり', html: '✅ fallbackの内容', dom: '✅ デフォルトスロット' },
+  { case: 'fallbackなし', html: '❌ コメントノードのみ', dom: '✅ デフォルトスロット' },
+  { case: '通常のSSR', html: '✅ 全内容', dom: '✅ 全内容' },
+]
 
-    <div class="example-section">
-      <h2>例1: fallbackあり</h2>
-      <div class="demo-box">
-        <ClientOnly>
-          <div class="client-content">
-            <p><strong>クライアント側の内容</strong></p>
-            <p>この内容は<code>HTMLソース</code>には含まれません</p>
-            <p>DevToolsでのみ見えます</p>
-          </div>
-          <template #fallback>
-            <div class="server-content">
-              <p><strong>サーバー側の内容（fallback）</strong></p>
-              <p>この内容は<code>HTMLソース</code>に含まれます</p>
-              <p>Hydration後に上の内容に切り替わります</p>
-            </div>
-          </template>
-        </ClientOnly>
-      </div>
-    </div>
+const timelineSteps = [
+  { title: 'サーバー側レンダリング', desc: '#fallback をHTMLとして出力', code: '<p>サーバー側の内容</p>' },
+  { title: 'ブラウザでHTML受信', desc: 'fallbackの内容が表示される', code: '<p>サーバー側の内容</p>' },
+  { title: 'Hydration（マッチング）', desc: 'fallbackとサーバーHTMLが一致 ✅', code: '<p>サーバー側の内容</p>' },
+  { title: 'onMounted後', desc: 'デフォルトスロットに切り替え', code: '<p>クライアント側の内容</p>' },
+]
 
-    <div class="example-section">
-      <h2>例2: fallbackなし</h2>
-      <div class="demo-box">
-        <ClientOnly>
-          <div class="client-content">
-            <p><strong>クライアント側のみ</strong></p>
-            <p>HTMLソースには何も出力されません</p>
-            <p>空のコメントノードだけが出力されます</p>
-          </div>
-        </ClientOnly>
-      </div>
-    </div>
-
-    <div class="example-section">
-      <h2>例3: 通常のSSR（比較用）</h2>
-      <div class="demo-box">
-        <div class="ssr-content">
-          <p><strong>通常のSSRコンテンツ</strong></p>
-          <p>この内容は<code>HTMLソース</code>に含まれます</p>
-          <p>タイムスタンプ: {{ timestamp }}</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="html-source">
-      <h2>📄 HTMLソースに含まれるもの</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>ケース</th>
-            <th>HTMLソース</th>
-            <th>DevTools（DOM）</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>fallbackあり</td>
-            <td>✅ fallbackの内容</td>
-            <td>✅ デフォルトスロット</td>
-          </tr>
-          <tr>
-            <td>fallbackなし</td>
-            <td>❌ コメントノードのみ</td>
-            <td>✅ デフォルトスロット</td>
-          </tr>
-          <tr>
-            <td>通常のSSR</td>
-            <td>✅ 全内容</td>
-            <td>✅ 全内容</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="lifecycle">
-      <h2>⏱️ ClientOnlyのライフサイクル</h2>
-      <div class="timeline">
-        <div class="step">
-          <div class="step-number">1</div>
-          <div class="step-content">
-            <h3>サーバー側レンダリング</h3>
-            <p><code>#fallback</code>をHTMLとして出力</p>
-            <code>&lt;p&gt;サーバー側の内容&lt;/p&gt;</code>
-          </div>
-        </div>
-        <div class="arrow">↓</div>
-        <div class="step">
-          <div class="step-number">2</div>
-          <div class="step-content">
-            <h3>ブラウザでHTML受信</h3>
-            <p>fallbackの内容が表示される</p>
-            <code>&lt;p&gt;サーバー側の内容&lt;/p&gt;</code>
-          </div>
-        </div>
-        <div class="arrow">↓</div>
-        <div class="step">
-          <div class="step-number">3</div>
-          <div class="step-content">
-            <h3>Hydration（マッチング）</h3>
-            <p>fallbackとサーバーHTMLが一致 ✅</p>
-            <code>&lt;p&gt;サーバー側の内容&lt;/p&gt;</code>
-          </div>
-        </div>
-        <div class="arrow">↓</div>
-        <div class="step">
-          <div class="step-number">4</div>
-          <div class="step-content">
-            <h3>onMounted後</h3>
-            <p>デフォルトスロットに切り替え</p>
-            <code>&lt;p&gt;クライアント側の内容&lt;/p&gt;</code>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="code-example">
-      <h2>💻 実装</h2>
-      <pre><code>&lt;ClientOnly&gt;
-  &lt;!-- この部分はHTMLソースに含まれない --&gt;
-  &lt;p&gt;クライアント側の内容&lt;/p&gt;
-
-  &lt;!-- この部分がHTMLソースに含まれる --&gt;
-  &lt;template #fallback&gt;
-    &lt;p&gt;サーバー側の内容&lt;/p&gt;
-  &lt;/template&gt;
-&lt;/ClientOnly&gt;</code></pre>
-    </div>
-
-    <div class="hydration-section">
-      <h2>⚠️ Hydrationエラーが起きるケース・起きないケース</h2>
-
-      <div class="case-grid">
-        <div class="case-card safe">
-          <h3>✅ エラーにならない（安全）</h3>
-          <pre v-pre><code>&lt;script setup&gt;
+const safeCaseCode = `&lt;script setup&gt;
 const isClient = ref(false)
 onMounted(() => {
   isClient.value = true
@@ -160,15 +33,9 @@ onMounted(() => {
 &lt;template&gt;
   &lt;!-- 初期値が一致するのでOK --&gt;
   &lt;p&gt;{{ isClient ? "クライアント" : "サーバー" }}&lt;/p&gt;
-&lt;/template&gt;</code></pre>
-          <p class="explanation">
-            <strong>理由:</strong> サーバーもクライアントも初期値は<code>false</code>なので一致する
-          </p>
-        </div>
+&lt;/template&gt;`
 
-        <div class="case-card danger">
-          <h3>❌ エラーになる（危険）</h3>
-          <pre v-pre><code>&lt;template&gt;
+const dangerCaseCode = `&lt;template&gt;
   &lt;!-- サーバーとクライアントで値が違う --&gt;
   &lt;p&gt;{{ new Date().toISOString() }}&lt;/p&gt;
 
@@ -177,16 +44,397 @@ onMounted(() => {
 
   &lt;!-- 環境で最初から値が異なる --&gt;
   &lt;p&gt;{{ import.meta.client ? "クライアント" : "サーバー" }}&lt;/p&gt;
-&lt;/template&gt;</code></pre>
-          <p class="explanation">
+&lt;/template&gt;`
+
+const comparisonRows = [
+  { pattern: 'ref(false) + 三項演算子', server: '"サーバー"', client: '"サーバー"', result: '✅ 一致', safe: true },
+  { pattern: 'ref(false) + v-if', server: 'elseブロック', client: 'elseブロック', result: '✅ 一致', safe: true },
+  { pattern: 'ClientOnly', server: 'fallback表示', client: 'fallback表示', result: '✅ 一致（特別扱い）', safe: true },
+  { pattern: 'new Date()', server: '2024-01-01T10:00:00', client: '2024-01-01T10:00:01', result: '❌ 不一致', safe: false },
+  { pattern: 'import.meta.client', server: 'false', client: 'true', result: '❌ 不一致', safe: false },
+]
+
+const methodCards = [
+  {
+    title: '三項演算子',
+    code: '&lt;p&gt;{{ isClient ? "A" : "B" }}&lt;/p&gt;',
+    points: ['DOM構造は不変', 'テキストノードのみ変更', '軽量'],
+  },
+  {
+    title: 'v-if / v-else',
+    code: '&lt;p v-if="isClient"&gt;A&lt;/p&gt;\n&lt;p v-else&gt;B&lt;/p&gt;',
+    points: ['要素の削除・追加', 'DOM構造が変化', 'やや重い'],
+  },
+  {
+    title: 'ClientOnly',
+    code: `&lt;ClientOnly&gt;
+  &lt;p&gt;A&lt;/p&gt;
+  &lt;template #fallback&gt;
+    &lt;p&gt;B&lt;/p&gt;
+  &lt;/template&gt;
+&lt;/ClientOnly&gt;`,
+    points: ['Vueが特別扱い', '明示的で安全', 'SEO/JSオフ考慮'],
+  },
+]
+
+const recommendations = [
+  { title: '初期値が一致', desc: '三項演算子や v-if でOK（シンプル）' },
+  { title: '初期値が異なる', desc: 'ClientOnly を使う（安全）' },
+  { title: 'SEOが重要', desc: 'ClientOnly + fallback（検索エンジン対応）' },
+  { title: 'ブラウザAPI依存', desc: 'ClientOnly（window, localStorage等）' },
+]
+
+const styles = {
+  page: css({
+    maxW: '6xl',
+    mx: 'auto',
+    py: '10',
+    px: { base: '4', md: '6', lg: '8' },
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8',
+  }),
+  title: css({ fontSize: '4xl', fontWeight: 'bold', color: 'emerald.500' }),
+  instruction: css({
+    bg: 'blue.50',
+    borderLeftWidth: '4px',
+    borderColor: 'cyan.500',
+    borderRadius: 'xl',
+    p: '6',
+  }),
+  instructionList: css({ mt: '4', pl: '5', listStyle: 'decimal', lineHeight: 'tall', color: 'slate.600' }),
+  section: css({ display: 'flex', flexDirection: 'column', gap: '4' }),
+  sectionTitle: css({ fontSize: 'xl', fontWeight: 'semibold', color: 'slate.800' }),
+  demoBox: css({
+    borderWidth: '1px',
+    borderColor: 'gray.200',
+    borderRadius: 'xl',
+    bg: 'white',
+    p: '6',
+    boxShadow: 'sm',
+  }),
+  clientContent: css({
+    bg: 'blue.100',
+    borderWidth: '1px',
+    borderColor: 'blue.500',
+    borderRadius: 'lg',
+    p: '4',
+  }),
+  serverContent: css({
+    bg: 'amber.100',
+    borderWidth: '1px',
+    borderColor: 'amber.500',
+    borderRadius: 'lg',
+    p: '4',
+  }),
+  ssrContent: css({
+    bg: 'emerald.100',
+    borderWidth: '1px',
+    borderColor: 'emerald.500',
+    borderRadius: 'lg',
+    p: '4',
+  }),
+  htmlTable: css({
+    width: 'full',
+    borderCollapse: 'collapse',
+    mt: '4',
+    '& th, & td': {
+      px: '3',
+      py: '3',
+      borderBottomWidth: '1px',
+      borderColor: 'gray.200',
+      textAlign: 'left',
+    },
+    '& th': {
+      bg: 'gray.50',
+      fontWeight: 'semibold',
+      color: 'slate.700',
+    },
+  }),
+  card: css({
+    bg: 'white',
+    borderWidth: '1px',
+    borderColor: 'gray.200',
+    borderRadius: 'xl',
+    p: '6',
+    boxShadow: 'sm',
+  }),
+  timeline: css({ mt: '4', display: 'flex', flexDirection: 'column', gap: '3' }),
+  step: css({ display: 'flex', gap: '4', alignItems: 'flex-start' }),
+  stepNumber: css({
+    w: '8',
+    h: '8',
+    borderRadius: 'full',
+    bg: 'emerald.400',
+    color: 'white',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontWeight: 'semibold',
+    flexShrink: 0,
+  }),
+  stepContent: css({
+    flex: 1,
+    bg: 'gray.50',
+    borderRadius: 'lg',
+    p: '4',
+    '& code': {
+      display: 'block',
+      mt: '2',
+      bg: 'slate.900',
+      color: 'slate.100',
+      p: '3',
+      borderRadius: 'md',
+    },
+  }),
+  codeExample: css({
+    bg: 'slate.900',
+    color: 'slate.50',
+    borderRadius: 'xl',
+    p: '6',
+    boxShadow: 'md',
+    '& pre': {
+      mt: '4',
+      bg: 'slate.800',
+      p: '4',
+      borderRadius: 'lg',
+      overflowX: 'auto',
+    },
+  }),
+  link: css({
+    alignSelf: 'flex-start',
+    mt: '4',
+    color: 'emerald.500',
+    fontWeight: 'medium',
+    borderWidth: '2px',
+    borderColor: 'emerald.500',
+    borderRadius: 'lg',
+    px: '4',
+    py: '2',
+    transition: 'all 0.2s',
+    _hover: { bg: 'emerald.500', color: 'white' },
+  }),
+  hydrationGrid: css({
+    display: 'grid',
+    gridTemplateColumns: { base: '1fr', md: 'repeat(auto-fit, minmax(320px, 1fr))' },
+    gap: '4',
+    mt: '4',
+  }),
+  caseCard: css({
+    borderWidth: '2px',
+    borderRadius: 'xl',
+    p: '5',
+    '& pre': {
+      mt: '4',
+      bg: 'slate.900',
+      color: 'slate.50',
+      p: '4',
+      borderRadius: 'lg',
+      overflowX: 'auto',
+    },
+  }),
+  caseExplanation: css({
+    mt: '3',
+    bg: 'white',
+    borderRadius: 'lg',
+    p: '3',
+    fontSize: 'sm',
+    color: 'slate.700',
+  }),
+  caseSafe: css({ bg: 'emerald.50', borderColor: 'emerald.400' }),
+  caseDanger: css({ bg: 'rose.50', borderColor: 'rose.400' }),
+  comparisonBox: css({ mt: '8' }),
+  comparisonTable: css({
+    width: 'full',
+    borderCollapse: 'collapse',
+    mt: '4',
+    '& th, & td': {
+      px: '3',
+      py: '3',
+      borderBottomWidth: '1px',
+      borderColor: 'gray.200',
+    },
+    '& th': {
+      bg: 'gray.50',
+      fontWeight: 'semibold',
+      color: 'slate.700',
+    },
+  }),
+  safeRow: css({ bg: 'emerald.50' }),
+  dangerRow: css({ bg: 'rose.50' }),
+  methodGrid: css({
+    display: 'grid',
+    gridTemplateColumns: { base: '1fr', md: 'repeat(auto-fit, minmax(280px, 1fr))' },
+    gap: '4',
+    mt: '4',
+  }),
+  methodCard: css({
+    borderWidth: '1px',
+    borderColor: 'gray.200',
+    borderRadius: 'xl',
+    bg: 'gray.50',
+    p: '5',
+    '& pre': {
+      mt: '3',
+      bg: 'slate.900',
+      color: 'slate.50',
+      p: '3',
+      borderRadius: 'lg',
+      overflowX: 'auto',
+    },
+    '& ul': {
+      mt: '3',
+      pl: '5',
+      color: 'slate.600',
+    },
+  }),
+  methodTitle: css({ color: 'emerald.500', fontWeight: 'semibold' }),
+  recommendation: css({
+    bg: 'blue.50',
+    borderLeftWidth: '4px',
+    borderColor: 'cyan.500',
+    borderRadius: 'xl',
+    p: '5',
+    mt: '6',
+    '& ul': {
+      mt: '3',
+      pl: '5',
+      color: 'slate.700',
+      lineHeight: 'tall',
+    },
+  }),
+}
+</script>
+
+<template>
+  <div :class="styles.page">
+    <h1 :class="styles.title">ClientOnly 動作確認</h1>
+
+    <section :class="styles.instruction">
+      <h2 :class="styles.sectionTitle">🔍 確認方法</h2>
+      <ol :class="styles.instructionList">
+        <li v-for="instruction in instructions" :key="instruction">
+          {{ instruction }}
+        </li>
+      </ol>
+    </section>
+
+    <section :class="styles.section">
+      <h2 :class="styles.sectionTitle">例1: fallbackあり</h2>
+      <div :class="styles.demoBox">
+        <ClientOnly>
+          <div :class="styles.clientContent">
+            <p><strong>クライアント側の内容</strong></p>
+            <p>この内容は<code>HTMLソース</code>には含まれません</p>
+            <p>DevToolsでのみ見えます</p>
+          </div>
+
+          <template #fallback>
+            <div :class="styles.serverContent">
+              <p><strong>サーバー側の内容（fallback）</strong></p>
+              <p>この内容は<code>HTMLソース</code>に含まれます</p>
+              <p>Hydration後に上の内容に切り替わります</p>
+            </div>
+          </template>
+        </ClientOnly>
+      </div>
+    </section>
+
+    <section :class="styles.section">
+      <h2 :class="styles.sectionTitle">例2: fallbackなし</h2>
+      <div :class="styles.demoBox">
+        <ClientOnly>
+          <div :class="styles.clientContent">
+            <p><strong>クライアント側のみ</strong></p>
+            <p>HTMLソースには何も出力されません</p>
+            <p>空のコメントノードだけが出力されます</p>
+          </div>
+        </ClientOnly>
+      </div>
+    </section>
+
+    <section :class="styles.section">
+      <h2 :class="styles.sectionTitle">例3: 通常のSSR（比較用）</h2>
+      <div :class="styles.demoBox">
+        <div :class="styles.ssrContent">
+          <p><strong>通常のSSRコンテンツ</strong></p>
+          <p>この内容は<code>HTMLソース</code>に含まれます</p>
+          <p>タイムスタンプ: {{ timestamp }}</p>
+        </div>
+      </div>
+    </section>
+
+    <section :class="styles.card">
+      <h2 :class="styles.sectionTitle">📄 HTMLソースに含まれるもの</h2>
+      <table :class="styles.htmlTable">
+        <thead>
+          <tr>
+            <th>ケース</th>
+            <th>HTMLソース</th>
+            <th>DevTools（DOM）</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="row in htmlSourceRows" :key="row.case">
+            <td>{{ row.case }}</td>
+            <td>{{ row.html }}</td>
+            <td>{{ row.dom }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section :class="styles.card">
+      <h2 :class="styles.sectionTitle">⏱️ ClientOnlyのライフサイクル</h2>
+      <div :class="styles.timeline">
+        <div v-for="(step, index) in timelineSteps" :key="step.title" :class="styles.step">
+          <div :class="styles.stepNumber">{{ index + 1 }}</div>
+          <div :class="styles.stepContent">
+            <h3>{{ step.title }}</h3>
+            <p>{{ step.desc }}</p>
+            <code>{{ step.code }}</code>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section :class="styles.codeExample">
+      <h2 :class="styles.sectionTitle">💻 実装</h2>
+      <pre><code>&lt;ClientOnly&gt;
+  &lt;!-- この部分はHTMLソースに含まれない --&gt;
+  &lt;p&gt;クライアント側の内容&lt;/p&gt;
+
+  &lt;!-- この部分がHTMLソースに含まれる --&gt;
+  &lt;template #fallback&gt;
+    &lt;p&gt;サーバー側の内容&lt;/p&gt;
+  &lt;/template&gt;
+&lt;/ClientOnly&gt;</code></pre>
+    </section>
+
+    <section :class="styles.card">
+      <h2 :class="styles.sectionTitle">⚠️ Hydrationエラーが起きるケース・起きないケース</h2>
+
+      <div :class="styles.hydrationGrid">
+        <div :class="[styles.caseCard, styles.caseSafe]">
+          <h3>✅ エラーにならない（安全）</h3>
+          <pre v-pre><code>{{ safeCaseCode }}</code></pre>
+          <p :class="styles.caseExplanation">
+            <strong>理由:</strong> サーバーもクライアントも初期値は<code>false</code>なので一致する
+          </p>
+        </div>
+
+        <div :class="[styles.caseCard, styles.caseDanger]">
+          <h3>❌ エラーになる（危険）</h3>
+          <pre v-pre><code>{{ dangerCaseCode }}</code></pre>
+          <p :class="styles.caseExplanation">
             <strong>理由:</strong> サーバーとクライアントでHydration時の値が異なる
           </p>
         </div>
       </div>
 
-      <div class="comparison-box">
+      <div :class="styles.comparisonBox">
         <h3>パターン別比較</h3>
-        <table>
+        <table :class="styles.comparisonTable">
           <thead>
             <tr>
               <th>パターン</th>
@@ -196,432 +444,44 @@ onMounted(() => {
             </tr>
           </thead>
           <tbody>
-            <tr class="safe-row">
-              <td><code>ref(false)</code> + 三項演算子</td>
-              <td>"サーバー"</td>
-              <td>"サーバー"</td>
-              <td>✅ 一致</td>
-            </tr>
-            <tr class="safe-row">
-              <td><code>ref(false)</code> + v-if</td>
-              <td>elseブロック表示</td>
-              <td>elseブロック表示</td>
-              <td>✅ 一致</td>
-            </tr>
-            <tr class="safe-row">
-              <td><code>ClientOnly</code></td>
-              <td>fallback表示</td>
-              <td>fallback表示</td>
-              <td>✅ 一致（特別扱い）</td>
-            </tr>
-            <tr class="danger-row">
-              <td><code>new Date()</code></td>
-              <td>2024-01-01T10:00:00</td>
-              <td>2024-01-01T10:00:01</td>
-              <td>❌ 不一致</td>
-            </tr>
-            <tr class="danger-row">
-              <td><code>import.meta.client</code></td>
-              <td>false</td>
-              <td>true</td>
-              <td>❌ 不一致</td>
+            <tr
+              v-for="row in comparisonRows"
+              :key="row.pattern"
+              :class="row.safe ? styles.safeRow : styles.dangerRow"
+            >
+              <td><code>{{ row.pattern }}</code></td>
+              <td>{{ row.server }}</td>
+              <td>{{ row.client }}</td>
+              <td>{{ row.result }}</td>
             </tr>
           </tbody>
         </table>
       </div>
-    </div>
+    </section>
 
-    <div class="vif-section">
-      <h2>🔀 v-if vs 三項演算子 vs ClientOnly</h2>
+    <section :class="styles.card">
+      <h2 :class="styles.sectionTitle">🔀 v-if vs 三項演算子 vs ClientOnly</h2>
 
-      <div class="method-grid">
-        <div class="method-card">
-          <h3>三項演算子</h3>
-          <pre v-pre><code>&lt;p&gt;{{ isClient ? "A" : "B" }}&lt;/p&gt;</code></pre>
+      <div :class="styles.methodGrid">
+        <div v-for="card in methodCards" :key="card.title" :class="styles.methodCard">
+          <h3 :class="styles.methodTitle">{{ card.title }}</h3>
+          <pre v-pre><code>{{ card.code }}</code></pre>
           <ul>
-            <li>DOM構造は不変</li>
-            <li>テキストノードのみ変更</li>
-            <li>軽量</li>
-          </ul>
-        </div>
-
-        <div class="method-card">
-          <h3>v-if / v-else</h3>
-          <pre v-pre><code>&lt;p v-if="isClient"&gt;A&lt;/p&gt;
-&lt;p v-else&gt;B&lt;/p&gt;</code></pre>
-          <ul>
-            <li>要素の削除・追加</li>
-            <li>DOM構造が変化</li>
-            <li>やや重い</li>
-          </ul>
-        </div>
-
-        <div class="method-card">
-          <h3>ClientOnly</h3>
-          <pre><code>&lt;ClientOnly&gt;
-  &lt;p&gt;A&lt;/p&gt;
-  &lt;template #fallback&gt;
-    &lt;p&gt;B&lt;/p&gt;
-  &lt;/template&gt;
-&lt;/ClientOnly&gt;</code></pre>
-          <ul>
-            <li>Vueが特別扱い</li>
-            <li>明示的で安全</li>
-            <li>SEO/JSオフ考慮</li>
+            <li v-for="point in card.points" :key="point">{{ point }}</li>
           </ul>
         </div>
       </div>
 
-      <div class="recommendation-final">
+      <div :class="styles.recommendation">
         <h3>💡 推奨される使い分け</h3>
         <ul>
-          <li><strong>初期値が一致:</strong> 三項演算子やv-ifでOK（シンプル）</li>
-          <li><strong>初期値が異なる:</strong> ClientOnlyを使う（安全）</li>
-          <li><strong>SEOが重要:</strong> ClientOnly + fallback（検索エンジン対応）</li>
-          <li><strong>ブラウザAPI依存:</strong> ClientOnly（window, localStorage等）</li>
+          <li v-for="recommendation in recommendations" :key="recommendation.title">
+            <strong>{{ recommendation.title }}:</strong> {{ recommendation.desc }}
+          </li>
         </ul>
       </div>
-    </div>
+    </section>
 
-    <NuxtLink to="/" class="back-link">← トップページに戻る</NuxtLink>
+    <NuxtLink to="/" :class="styles.link">← トップページに戻る</NuxtLink>
   </div>
 </template>
-
-<style scoped>
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-h1 {
-  color: #00dc82;
-  margin-bottom: 2rem;
-}
-
-h2 {
-  color: #333;
-  margin-bottom: 1rem;
-  font-size: 1.3rem;
-}
-
-h3 {
-  color: #555;
-  margin-bottom: 0.5rem;
-  font-size: 1.1rem;
-}
-
-.instruction {
-  background: #f0f9ff;
-  border-left: 4px solid #0ea5e9;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  border-radius: 8px;
-}
-
-.instruction ol {
-  margin-top: 1rem;
-  padding-left: 1.5rem;
-}
-
-.instruction li {
-  margin: 0.5rem 0;
-}
-
-.example-section {
-  margin-bottom: 2rem;
-}
-
-.demo-box {
-  border: 2px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 1.5rem;
-  background: white;
-}
-
-.client-content {
-  background: #dbeafe;
-  border: 2px solid #3b82f6;
-  padding: 1rem;
-  border-radius: 6px;
-}
-
-.server-content {
-  background: #fef3c7;
-  border: 2px solid #f59e0b;
-  padding: 1rem;
-  border-radius: 6px;
-}
-
-.ssr-content {
-  background: #d1fae5;
-  border: 2px solid #10b981;
-  padding: 1rem;
-  border-radius: 6px;
-}
-
-.client-content p,
-.server-content p,
-.ssr-content p {
-  margin: 0.5rem 0;
-}
-
-code {
-  background: rgba(0, 0, 0, 0.05);
-  padding: 0.2rem 0.4rem;
-  border-radius: 3px;
-  font-family: 'Courier New', monospace;
-  font-size: 0.9em;
-}
-
-.html-source {
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-}
-
-th, td {
-  padding: 0.75rem;
-  text-align: left;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-th {
-  background: #f9fafb;
-  font-weight: 600;
-  color: #374151;
-}
-
-tbody tr:last-child td {
-  border-bottom: none;
-}
-
-.lifecycle {
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.timeline {
-  margin-top: 1.5rem;
-}
-
-.step {
-  display: flex;
-  gap: 1rem;
-  align-items: flex-start;
-  margin: 1rem 0;
-}
-
-.step-number {
-  background: #00dc82;
-  color: white;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  flex-shrink: 0;
-}
-
-.step-content {
-  flex: 1;
-  background: #f9fafb;
-  padding: 1rem;
-  border-radius: 6px;
-}
-
-.step-content code {
-  display: block;
-  margin-top: 0.5rem;
-  background: #1f2937;
-  color: #f9fafb;
-  padding: 0.5rem;
-  border-radius: 4px;
-}
-
-.arrow {
-  text-align: center;
-  font-size: 1.5rem;
-  color: #00dc82;
-  margin: 0.5rem 0;
-}
-
-.code-example {
-  background: #1f2937;
-  color: #f9fafb;
-  padding: 1.5rem;
-  border-radius: 8px;
-  margin-bottom: 2rem;
-}
-
-.code-example pre {
-  background: #111827;
-  padding: 1rem;
-  border-radius: 6px;
-  overflow-x: auto;
-  margin-top: 1rem;
-}
-
-.code-example code {
-  background: transparent;
-  color: #f9fafb;
-  padding: 0;
-}
-
-.back-link {
-  display: inline-block;
-  color: #00dc82;
-  text-decoration: none;
-  font-weight: 500;
-  padding: 0.75rem 1.5rem;
-  border: 2px solid #00dc82;
-  border-radius: 6px;
-  transition: all 0.2s;
-}
-
-.back-link:hover {
-  background: #00dc82;
-  color: white;
-}
-
-.hydration-section {
-  background: white;
-  border: 2px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-}
-
-.case-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-}
-
-.case-card {
-  border: 2px solid;
-  border-radius: 8px;
-  padding: 1.5rem;
-}
-
-.case-card.safe {
-  background: #d1fae5;
-  border-color: #10b981;
-}
-
-.case-card.danger {
-  background: #fee2e2;
-  border-color: #ef4444;
-}
-
-.case-card h3 {
-  margin-bottom: 1rem;
-}
-
-.case-card pre {
-  margin: 1rem 0;
-}
-
-.explanation {
-  margin-top: 1rem;
-  padding: 0.75rem;
-  background: rgba(255, 255, 255, 0.5);
-  border-radius: 6px;
-  font-size: 0.9rem;
-}
-
-.comparison-box {
-  margin-top: 2rem;
-}
-
-.comparison-box table {
-  margin-top: 1rem;
-}
-
-.safe-row {
-  background: #f0fdf4;
-}
-
-.danger-row {
-  background: #fef2f2;
-}
-
-.vif-section {
-  background: white;
-  border: 2px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-}
-
-.method-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-}
-
-.method-card {
-  border: 2px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 1.5rem;
-  background: #f9fafb;
-}
-
-.method-card h3 {
-  color: #00dc82;
-  margin-bottom: 1rem;
-}
-
-.method-card pre {
-  margin: 1rem 0;
-  background: #1f2937;
-}
-
-.method-card ul {
-  margin: 0;
-  padding-left: 1.5rem;
-  font-size: 0.9rem;
-}
-
-.method-card li {
-  margin: 0.4rem 0;
-}
-
-.recommendation-final {
-  background: #f0f9ff;
-  border-left: 4px solid #0ea5e9;
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin-top: 2rem;
-}
-
-.recommendation-final h3 {
-  color: #0c4a6e;
-  margin-bottom: 1rem;
-}
-
-.recommendation-final ul {
-  margin: 0;
-  padding-left: 1.5rem;
-}
-
-.recommendation-final li {
-  margin: 0.75rem 0;
-  line-height: 1.6;
-}
-</style>
