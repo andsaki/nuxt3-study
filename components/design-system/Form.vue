@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { css, cx } from '~/styled-system/css'
-import { defineComponent, h } from 'vue'
-import { useForm, type FormContext, type Path } from 'vee-validate'
+import { css } from '~/styled-system/css'
+import { useForm, type Path } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import { z } from 'zod'
-import type { CSSProperties, InputHTMLAttributes, PropType, Ref } from 'vue'
+import type { CSSProperties, InputHTMLAttributes, Ref } from 'vue'
 import DesignSystemInput from './Input.vue'
 import DesignSystemButton from './Button.vue'
 import type { ComponentWCAGLevel } from './constants/accessibility'
@@ -86,67 +85,6 @@ const onSubmit = handleSubmit((values) => {
   props.onSubmit?.(values)
   emit('submit', values)
 })
-
-export const FormWithHook = defineComponent({
-  name: 'DesignSystemFormWithHook',
-  inheritAttrs: false,
-  props: {
-    form: {
-      type: Object as () => FormContext<Record<string, unknown>>,
-      required: true,
-    },
-    style: {
-      type: [Object, String] as PropType<CSSProperties | string | undefined>,
-      default: undefined,
-    },
-    onSubmit: {
-      type: Function as PropType<((values: Record<string, unknown>) => void) | undefined>,
-      default: undefined,
-    },
-  },
-  emits: ['submit'],
-  setup(formProps, { slots, emit, attrs }) {
-    const handle = formProps.form.handleSubmit((values) => {
-      formProps.onSubmit?.(values)
-      emit('submit', values)
-    })
-
-    return () =>
-      h(
-        'form',
-        {
-          ...attrs,
-          class: cx(formClass, attrs.class as string | undefined),
-          style: formProps.style,
-          novalidate: true,
-          onSubmit: (event: Event) => {
-            event.preventDefault()
-            handle()
-          },
-        },
-        slots.default?.({ form: formProps.form }),
-      )
-  },
-})
-
-export const formSchemas = {
-  email: z.string().email('有効なメールアドレスを入力してください'),
-  required: (fieldName: string) => z.string().min(1, `${fieldName}は必須です`),
-  minLength: (min: number, fieldName: string) =>
-    z.string().min(min, `${fieldName}は${min}文字以上で入力してください`),
-  maxLength: (max: number, fieldName: string) =>
-    z.string().max(max, `${fieldName}は${max}文字以内で入力してください`),
-  password: z
-    .string()
-    .min(8, 'パスワードは8文字以上で入力してください')
-    .regex(/[A-Z]/, 'パスワードには大文字を含めてください')
-    .regex(/[a-z]/, 'パスワードには小文字を含めてください')
-    .regex(/[0-9]/, 'パスワードには数字を含めてください'),
-  urlString: z.string().url('有効なURLを入力してください'),
-  phone: z
-    .string()
-    .regex(/^[0-9-]+$/, '電話番号は数字とハイフンのみで入力してください'),
-} as const
 </script>
 
 <template>

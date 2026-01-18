@@ -22,7 +22,7 @@
 
       <div :class="css({ display: 'grid', gap: { base: '6', lg: '8' }, gridTemplateColumns: { base: '1fr', lg: '3fr 2fr' } })">
         <DesignSystemCard title="ユーザー登録フォーム（非同期チェック付き）" icon="🧾" color-scheme="blue">
-          <form :class="css({ display: 'flex', flexDirection: 'column', gap: '5' })" novalidate @submit="onSubmit">
+          <DesignSystemFormWithHook :form="form" :class="css({ display: 'flex', flexDirection: 'column', gap: '5' })" @submit="onSubmit">
             <DesignSystemInput
               v-model="username"
               label="ユーザー名（非同期チェック）"
@@ -76,21 +76,16 @@
               {{ isSubmitting ? '検証中...' : '登録する' }}
             </DesignSystemButton>
 
-            <div
+            <DesignSystemInfoBox
               v-if="submitStatus"
-              :class="css({
-                mt: '2',
-                p: '4',
-                rounded: 'md',
-                fontWeight: 'medium',
-                bg: submitStatus === 'success' ? 'green.50' : 'red.50',
-                color: submitStatus === 'success' ? 'green.800' : 'red.800',
-              })"
+              :variant="submitStatus === 'success' ? 'success' : 'warning'"
+              :icon="submitStatus === 'success' ? '✅' : '⚠️'"
+              left-border
             >
-              <p v-if="submitStatus === 'success'">✓ 登録が完了しました！</p>
-              <p v-else>✗ バリデーションエラーが発生しました。</p>
-            </div>
-          </form>
+              <p v-if="submitStatus === 'success'">登録が完了しました！</p>
+              <p v-else>バリデーションエラーが発生しました。</p>
+            </DesignSystemInfoBox>
+          </DesignSystemFormWithHook>
 
           <dl :class="css({ mt: '6', display: 'grid', gap: '4', gridTemplateColumns: { base: '1fr', md: 'repeat(2, 1fr)' } })">
             <div :class="css({ bg: 'green.50', p: '4', rounded: 'md', border: '1px solid', borderColor: 'green.100' })">
@@ -113,60 +108,49 @@
         </DesignSystemCard>
 
         <div :class="css({ display: 'flex', flexDirection: 'column', gap: '4' })">
-          <DesignSystemCard title="🔍 ルールの内訳" color-scheme="green">
-            <ul :class="css({ pl: '5', listStyle: 'disc', spaceY: '2', color: 'gray.700' })">
-              <li>ユーザー名は重複チェック + 3文字以上でローディング状態を表示</li>
-              <li>メール・年齢・パスワードは同期で即座にエラー表示</li>
-              <li>DesignSystemInputのARIA対応でスクリーンリーダーも安心</li>
-            </ul>
-          </DesignSystemCard>
+            <DesignSystemInfoBox variant="success" icon="🔍" left-border>
+              <p :class="css({ fontWeight: 'semibold', mb: '2' })">ルールの内訳</p>
+              <ul :class="css({ pl: '5', listStyle: 'disc', spaceY: '2' })">
+                <li>ユーザー名は重複チェック + 3文字以上でローディング状態を表示</li>
+                <li>メール・年齢・パスワードは同期で即座にエラー表示</li>
+                <li>DesignSystemInputのARIA対応でスクリーンリーダーも安心</li>
+              </ul>
+            </DesignSystemInfoBox>
 
-          <DesignSystemCard title="🛰️ 非同期チェックの流れ" color-scheme="purple">
-            <ol :class="css({ pl: '5', listStyle: 'decimal', spaceY: '2', color: 'gray.700' })">
-              <li>入力値を<code :class="codeClass">handleSubmit</code>に渡す</li>
-              <li>Zodの<code :class="codeClass">refine</code>で擬似APIをawait</li>
-              <li>500ms待って禁止リスト（test / admin / user）を参照</li>
-              <li>結果をVeeValidateのエラーとしてUIに伝達</li>
-            </ol>
-          </DesignSystemCard>
+            <DesignSystemInfoBox variant="info" icon="🛰️" left-border>
+              <p :class="css({ fontWeight: 'semibold', mb: '2' })">非同期チェックの流れ</p>
+              <ol :class="css({ pl: '5', listStyle: 'decimal', spaceY: '2' })">
+                <li>入力値を<code :class="codeClass">handleSubmit</code>に渡す</li>
+                <li>Zodの<code :class="codeClass">refine</code>で擬似APIをawait</li>
+                <li>500ms待って禁止リスト（test / admin / user）を参照</li>
+                <li>結果をVeeValidateのエラーとしてUIに伝達</li>
+              </ol>
+            </DesignSystemInfoBox>
 
-          <DesignSystemCard title="🛠️ 実践メモ" color-scheme="yellow">
-            <div :class="css({ display: 'flex', flexDirection: 'column', gap: '3', color: 'gray.700' })">
-              <p>
-                <strong :class="css({ color: 'gray.900' })">スキーマ共通化:</strong>
-                <span>実案件ではバックエンドと共有することで整合性を保てます。</span>
-              </p>
-              <p>
-                <strong :class="css({ color: 'gray.900' })">UX配慮:</strong>
-                <span>送信前でも非同期エラーを逐次表示し、無駄なAPI呼び出しを減らします。</span>
-              </p>
-              <p>
-                <strong :class="css({ color: 'gray.900' })">テスト:</strong>
-                <span>擬似APIのタイムアウトを調整してエラーハンドリングを確認しましょう。</span>
-              </p>
-            </div>
-          </DesignSystemCard>
+            <DesignSystemInfoBox variant="warning" icon="🛠️" left-border>
+              <p :class="css({ fontWeight: 'semibold', mb: '2' })">実践メモ</p>
+              <div :class="css({ display: 'flex', flexDirection: 'column', gap: '3' })">
+                <p>
+                  <strong>スキーマ共通化:</strong>
+                  実案件ではバックエンドと共有することで整合性を保てます。
+                </p>
+                <p>
+                  <strong>UX配慮:</strong>
+                  送信前でも非同期エラーを逐次表示し、無駄なAPI呼び出しを減らします。
+                </p>
+                <p>
+                  <strong>テスト:</strong>
+                  擬似APIのタイムアウトを調整してエラーハンドリングを確認しましょう。
+                </p>
+              </div>
+            </DesignSystemInfoBox>
         </div>
       </div>
 
-      <NuxtLink
-        to="/"
-        :class="css({
-          alignSelf: { base: 'stretch', md: 'flex-start' },
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '2',
-          px: '5',
-          py: '3',
-          bg: 'gray.900',
-          color: 'white',
-          rounded: 'md',
-          fontWeight: 'medium',
-          transition: 'all 0.2s',
-          _hover: { bg: 'gray.700' }
-        })"
-      >
-        ← ホームに戻る
+      <NuxtLink to="/" :class="css({ alignSelf: { base: 'stretch', md: 'flex-start' }, display: 'inline-flex' })">
+        <DesignSystemButton variant="secondary">
+          ← ホームに戻る
+        </DesignSystemButton>
       </NuxtLink>
     </div>
   </main>
@@ -177,6 +161,7 @@ import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 import { css } from '~/styled-system/css'
+import { DesignSystemFormWithHook } from '~/components/design-system'
 
 // ユーザー名の重複チェックをシミュレート（非同期）
 const checkUsernameAvailability = async (username: string): Promise<boolean> => {
@@ -253,9 +238,10 @@ const codeClass = css({
 })
 
 // フォーム設定
-const { errors, defineField, handleSubmit, isSubmitting } = useForm({
+const form = useForm({
   validationSchema,
 })
+const { errors, defineField, isSubmitting } = form
 
 // フィールド定義
 const [username] = defineField('username')
@@ -267,7 +253,7 @@ const [password] = defineField('password')
 const submitStatus = ref<'success' | 'error' | null>(null)
 
 // 送信処理
-const onSubmit = handleSubmit(async (values) => {
+const onSubmit = async (values: Record<string, unknown>) => {
   submitStatus.value = null
 
   try {
@@ -280,5 +266,5 @@ const onSubmit = handleSubmit(async (values) => {
     console.error('送信エラー:', error)
     submitStatus.value = 'error'
   }
-})
+}
 </script>

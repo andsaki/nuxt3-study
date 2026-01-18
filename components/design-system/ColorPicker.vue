@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, ref, useAttrs, useId, watch } from 'vue'
-import type { InputHTMLAttributes } from 'vue'
 import { css, cx } from '~/styled-system/css'
 import { colorpicker } from '~/styled-system/recipes'
 import type { ComponentWCAGLevel } from './constants/accessibility'
@@ -47,7 +46,7 @@ const errorClass = css({
   color: 'colors.red.700',
 })
 
-type ColorPickerProps = Omit<InputHTMLAttributes, 'type' | 'size' | 'modelValue'> & {
+type ColorPickerProps = {
   label: string
   helperText?: string
   error?: string
@@ -57,6 +56,12 @@ type ColorPickerProps = Omit<InputHTMLAttributes, 'type' | 'size' | 'modelValue'
   size?: 'sm' | 'md' | 'lg'
   wcagLevel?: Extract<ComponentWCAGLevel, 'AA' | 'AAA'>
   class?: string
+  required?: boolean
+  disabled?: boolean
+  name?: string
+  id?: string
+  autofocus?: boolean
+  form?: string
 }
 
 const props = withDefaults(defineProps<ColorPickerProps>(), {

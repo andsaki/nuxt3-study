@@ -1,123 +1,89 @@
 <script setup lang="ts">
 import { css } from '~/styled-system/css'
 
-// レンダリングモードはrouteRulesで設定
-// useAsyncDataはデータ取得のみを担当
-
-interface Data {
-  timestamp: string
-  mode: string
-}
-
-// 通常のuseAsyncData（レンダリングモードとは無関係）
-const { data: _data } = await useAsyncData<Data>('demo-data', async () => {
-  return {
-    timestamp: new Date().toISOString(),
-    mode: 'データ取得メソッド',
-  }
-})
-
 const styles = {
-  container: css({
-    maxW: '1200px',
+  page: css({
+    maxW: '5xl',
     mx: 'auto',
-    py: '8',
-    px: { base: '4', md: '8' },
+    py: '12',
+    px: { base: '4', md: '6' },
     display: 'flex',
     flexDirection: 'column',
-    gap: '8',
-  }),
-  title: css({ color: '#00dc82', fontSize: '2rem', fontWeight: 'bold' }),
-  sectionTitle: css({ color: '#333333', fontSize: '1.3rem', fontWeight: '600', mb: '4' }),
-  subTitle: css({ color: '#555555', fontSize: '1.1rem', fontWeight: '600', mb: '3' }),
-  alert: css({
-    bg: '#fee2e2',
-    borderWidth: '2px',
-    borderColor: '#ef4444',
-    borderRadius: '8px',
-    p: '6',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '2',
-    '& h2': { color: '#991b1b', fontWeight: 'bold', fontSize: '1.2rem' },
-    '& p': { color: '#7f1d1d', fontWeight: '600', fontSize: '1.1rem' },
-  }),
-  comparison: css({
-    display: 'grid',
-    gridTemplateColumns: { base: '1fr', md: 'repeat(2, 1fr)' },
     gap: '6',
   }),
-  card: css({
-    borderRadius: '8px',
-    borderWidth: '2px',
-    p: '6',
-    '& pre': { mt: '4' },
-  }),
-  cardWrong: css({ bg: '#fee2e2', borderColor: '#ef4444' }),
-  cardCorrect: css({ bg: '#d1fae5', borderColor: '#10b981' }),
-  modes: css({
+  gridTwo: css({
     display: 'grid',
     gap: '4',
+    gridTemplateColumns: { base: '1fr', md: 'repeat(2, 1fr)' },
   }),
-  modeCard: css({
-    bg: 'white',
-    borderWidth: '1px',
-    borderColor: '#e5e7eb',
-    borderRadius: '8px',
-    p: '6',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '3',
-    '& ul': { pl: '6', listStyleType: 'disc', color: '#6b7280' },
-    '& li': { my: '1' },
-  }),
-  useAsyncDataOptions: css({
-    bg: '#f0f9ff',
-    borderLeftWidth: '4px',
-    borderLeftColor: '#3b82f6',
-    borderRadius: '8px',
-    p: '6',
-    '& p': { color: '#1e40af', mb: '4' },
+  modeGrid: css({
+    display: 'grid',
+    gap: '4',
+    gridTemplateColumns: { base: '1fr', md: 'repeat(2, 1fr)' },
   }),
   codeBlock: css({
-    bg: '#1f2937',
-    color: '#f9fafb',
-    p: '4',
-    borderRadius: '6px',
-    overflowX: 'auto',
-    fontSize: '0.875rem',
+    fontFamily:
+      "'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', 'Courier New', monospace",
+    bg: 'gray.900',
+    color: 'gray.50',
+    fontSize: 'sm',
     lineHeight: '1.6',
-    fontFamily: "'Courier New', monospace",
+    borderRadius: 'lg',
+    p: '4',
+    whiteSpace: 'pre-wrap',
+    overflowX: 'auto',
+  }),
+  bulletList: css({
+    mt: '3',
+    pl: '5',
+    listStyleType: 'disc',
+    color: 'contents.secondary',
+    spaceY: '1',
   }),
   backLink: css({
     alignSelf: 'flex-start',
-    color: '#00dc82',
-    textDecoration: 'none',
-    fontWeight: '500',
+    mt: '4',
+    color: 'green.600',
+    fontWeight: 'medium',
+    borderWidth: '2px',
+    borderColor: 'green.600',
+    borderRadius: 'lg',
     px: '4',
     py: '2',
-    borderWidth: '2px',
-    borderColor: '#00dc82',
-    borderRadius: '6px',
     transition: 'all 0.2s ease',
-    _hover: { bg: '#00dc82', color: 'white' },
+    textDecoration: 'none',
+    _hover: {
+      bg: 'green.600',
+      color: 'white',
+    },
   }),
 }
-</script>
 
-<template>
-  <div :class="styles.container">
-    <h1 :class="styles.title">レンダリングモードの設定</h1>
+type CardScheme = 'blue' | 'green' | 'yellow' | 'red' | 'gray' | 'purple'
 
-    <div :class="styles.alert">
-      <h2>⚠️ 重要</h2>
-      <p>useAsyncDataではSSG/ISRの設定はできません！</p>
-    </div>
+interface ComparisonExample {
+  title: string
+  icon: string
+  colorScheme: CardScheme
+  description: string
+  code: string
+}
 
-    <div :class="styles.comparison">
-      <div :class="[styles.card, styles.cardWrong]">
-        <h3 :class="styles.subTitle">❌ できないこと</h3>
-        <pre :class="styles.codeBlock"><code>// useAsyncDataでSSG/ISRは設定できない
+interface RenderingModeCard {
+  title: string
+  icon: string
+  colorScheme: CardScheme
+  code: string
+  bullets: string[]
+}
+
+const comparisonExamples: ComparisonExample[] = [
+  {
+    title: '❌ できないこと',
+    icon: '🚫',
+    colorScheme: 'red',
+    description: 'useAsyncDataのオプションではSSR / SSG / ISRを切り替えられません。',
+    code: `// useAsyncDataでSSG/ISRは設定できない
 const { data } = await useAsyncData('key',
   async () => { ... },
   {
@@ -126,12 +92,14 @@ const { data } = await useAsyncData('key',
     swr: 60,          // ❌
     isr: true,        // ❌
   }
-)</code></pre>
-      </div>
-
-      <div :class="[styles.card, styles.cardCorrect]">
-        <h3 :class="styles.subTitle">✅ 正しい方法</h3>
-        <pre :class="styles.codeBlock"><code>// nuxt.config.ts で設定
+)`,
+  },
+  {
+    title: '✅ 正しい方法',
+    icon: '✅',
+    colorScheme: 'green',
+    description: 'routeRules（または各ページのdefinePageMeta）でレンダリングモードを宣言します。',
+    code: `// nuxt.config.ts で設定
 export default defineNuxtConfig({
   routeRules: {
     '/page': { prerender: true },  // SSG
@@ -143,64 +111,51 @@ export default defineNuxtConfig({
 // ページ内ではuseAsyncDataは普通に使う
 const { data } = await useAsyncData('key',
   async () => { ... }
-)</code></pre>
-      </div>
-    </div>
+)`,
+  },
+]
 
-    <div :class="styles.modes">
-      <h2 :class="styles.sectionTitle">レンダリングモード一覧</h2>
-
-      <div :class="styles.modeCard">
-        <h3 :class="styles.subTitle">SSR (Server-Side Rendering)</h3>
-        <pre :class="styles.codeBlock"><code>// デフォルト（設定不要）
+const renderingModes: RenderingModeCard[] = [
+  {
+    title: 'SSR (Server-Side Rendering)',
+    icon: '🖥️',
+    colorScheme: 'blue',
+    code: `// デフォルト（設定不要）
 routeRules: {
   '/page': { ssr: true }
-}</code></pre>
-        <ul>
-          <li>リクエストごとにサーバーでレンダリング</li>
-          <li>最新のデータを常に表示</li>
-        </ul>
-      </div>
-
-      <div :class="styles.modeCard">
-        <h3 :class="styles.subTitle">SSG (Static Site Generation)</h3>
-        <pre :class="styles.codeBlock"><code>routeRules: {
+}`,
+    bullets: ['リクエストごとにサーバーでレンダリング', '常に最新データを取得'],
+  },
+  {
+    title: 'SSG (Static Site Generation)',
+    icon: '🏗️',
+    colorScheme: 'yellow',
+    code: `routeRules: {
   '/page': { prerender: true }
-}</code></pre>
-        <ul>
-          <li>ビルド時に静的HTML生成</li>
-          <li>CDN配信に最適</li>
-        </ul>
-      </div>
-
-      <div :class="styles.modeCard">
-        <h3 :class="styles.subTitle">ISR (Incremental Static Regeneration)</h3>
-        <pre :class="styles.codeBlock"><code>routeRules: {
+}`,
+    bullets: ['ビルド時に静的HTMLを生成', 'CDN配信に最適'],
+  },
+  {
+    title: 'ISR (Incremental Static Regeneration)',
+    icon: '⚡',
+    colorScheme: 'purple',
+    code: `routeRules: {
   '/page': { swr: 60 } // 60秒
-}</code></pre>
-        <ul>
-          <li>キャッシュ + バックグラウンド再生成</li>
-          <li>Stale-While-Revalidate方式</li>
-        </ul>
-      </div>
-
-      <div :class="styles.modeCard">
-        <h3 :class="styles.subTitle">CSR (Client-Side Rendering)</h3>
-        <pre :class="styles.codeBlock"><code>routeRules: {
+}`,
+    bullets: ['キャッシュ + バックグラウンド再生成', 'Stale-While-Revalidate方式'],
+  },
+  {
+    title: 'CSR (Client-Side Rendering)',
+    icon: '🧪',
+    colorScheme: 'gray',
+    code: `routeRules: {
   '/page': { ssr: false }
-}</code></pre>
-        <ul>
-          <li>クライアントでのみレンダリング</li>
-          <li>SPAモード</li>
-        </ul>
-      </div>
-    </div>
+}`,
+    bullets: ['クライアントでのみレンダリング', 'SPAモード'],
+  },
+]
 
-    <div :class="styles.useAsyncDataOptions">
-      <h2 :class="styles.sectionTitle">useAsyncDataのオプション</h2>
-      <p>レンダリングモードは設定できないが、以下は設定可能:</p>
-
-      <pre :class="styles.codeBlock"><code>const { data } = await useAsyncData('key', async () => {...}, {
+const useAsyncDataOptionsExample = `const { data } = await useAsyncData('key', async () => {...}, {
   // データ取得制御
   server: true,        // サーバーで実行するか
   lazy: false,         // 遅延読み込み
@@ -218,9 +173,61 @@ routeRules: {
   // 変換
   transform: (data) => data,
   pick: ['id', 'name'],
-})</code></pre>
+})`
+</script>
+
+<template>
+  <div :class="styles.page">
+    <DesignSystemInfoBox variant="info" icon="ℹ️" title="レンダリングモードの設定">
+      <p>
+        Nuxt 3ではページ単位でSSR / SSG / ISR / CSRを切り替えられます。アプリの要件に合わせて、適切なレンダリング方法を組み合わせることが重要です。
+      </p>
+    </DesignSystemInfoBox>
+
+    <DesignSystemInfoBox variant="warning" icon="⚠️" title="重要">
+      <p>useAsyncDataのオプションではレンダリングモードを変更できません。設定は必ずnuxt.config.tsのrouteRulesで行います。</p>
+    </DesignSystemInfoBox>
+
+    <div :class="styles.gridTwo">
+      <DesignSystemCard
+        v-for="example in comparisonExamples"
+        :key="example.title"
+        :title="example.title"
+        :icon="example.icon"
+        :color-scheme="example.colorScheme"
+      >
+        <p>{{ example.description }}</p>
+        <pre :class="styles.codeBlock"><code>{{ example.code }}</code></pre>
+      </DesignSystemCard>
     </div>
 
-    <NuxtLink to="/" :class="styles.backLink">← トップページに戻る</NuxtLink>
+    <DesignSystemCard title="レンダリングモード一覧" icon="🧭" color-scheme="blue">
+      <div :class="styles.modeGrid">
+        <DesignSystemCard
+          v-for="mode in renderingModes"
+          :key="mode.title"
+          variant="bordered"
+          :title="mode.title"
+          :icon="mode.icon"
+          :color-scheme="mode.colorScheme"
+        >
+          <pre :class="styles.codeBlock"><code>{{ mode.code }}</code></pre>
+          <ul :class="styles.bulletList">
+            <li v-for="point in mode.bullets" :key="point">
+              {{ point }}
+            </li>
+          </ul>
+        </DesignSystemCard>
+      </div>
+    </DesignSystemCard>
+
+    <DesignSystemCard title="useAsyncDataのオプション" icon="🛠️" color-scheme="green">
+      <p>レンダリングモードとは独立して、useAsyncDataでは実行タイミングやキャッシュ挙動を細かく制御できます。代表的なオプションは以下のとおりです。</p>
+      <pre :class="styles.codeBlock"><code>{{ useAsyncDataOptionsExample }}</code></pre>
+    </DesignSystemCard>
+
+    <NuxtLink to="/" :class="styles.backLink">
+      ← トップページに戻る
+    </NuxtLink>
   </div>
 </template>

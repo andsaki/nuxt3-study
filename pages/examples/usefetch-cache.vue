@@ -70,16 +70,7 @@ const styles = {
     color: 'slate.700',
   }),
   sectionHeader: css({ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: '4' }),
-  primaryButton: css({
-    bg: 'emerald.500',
-    color: 'white',
-    borderRadius: 'lg',
-    px: '4',
-    py: '2',
-    fontWeight: 'semibold',
-    border: 'none',
-    _hover: { bg: 'emerald.600' },
-  }),
+  refreshButton: css({ alignSelf: 'flex-start' }),
   postsGrid: css({ display: 'grid', gap: '4' }),
   postCard: css({
     borderRadius: 'xl',
@@ -129,9 +120,15 @@ const styles = {
       <section :class="styles.section">
         <div :class="styles.sectionHeader">
           <h2>投稿リスト（キャッシュあり）</h2>
-          <button :class="styles.primaryButton" @click="handleRefresh">
+          <DesignSystemButton
+            variant="primary"
+            size="sm"
+            :class="styles.refreshButton"
+            :disabled="status === 'pending'"
+            @click="handleRefresh"
+          >
             {{ status === 'pending' ? '更新中...' : '再取得' }}
-          </button>
+          </DesignSystemButton>
         </div>
         <p v-if="lastRefresh">最終更新: {{ lastRefresh }}</p>
         <div v-if="posts" :class="styles.postsGrid">

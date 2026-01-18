@@ -142,17 +142,7 @@ const styles = {
     flexDirection: 'column',
     gap: '3',
   }),
-  customReset: css({
-    alignSelf: 'center',
-    bg: 'orange.500',
-    color: 'white',
-    borderRadius: 'lg',
-    px: '4',
-    py: '2',
-    fontWeight: 'semibold',
-    border: 'none',
-    _hover: { bg: 'orange.600' },
-  }),
+  customReset: css({ alignSelf: 'center' }),
   nestedContainer: css({
     mt: '4',
     bg: 'emerald.50',
@@ -224,9 +214,14 @@ const styles = {
             <div :class="styles.customError">
               <h3>🔥 カスタムエラー表示</h3>
               <p>{{ error?.message }}</p>
-              <button :class="styles.customReset" @click="reset">
+              <DesignSystemButton
+                size="sm"
+                variant="secondary"
+                :class="styles.customReset"
+                @click="reset"
+              >
                 リトライ
-              </button>
+              </DesignSystemButton>
             </div>
           </template>
           <BuggyComponent />

@@ -1,6 +1,6 @@
 <template>
   <div :class="css({ minH: 'screen', display: 'flex', alignItems: 'center', justifyContent: 'center', bg: 'gray.50' })">
-    <div :class="css({ maxW: 'md', w: 'full', spaceY: '8', p: '8' })">
+    <div :class="css({ maxW: 'md', w: 'full', spaceY: '8', p: '8', gap: '4' })">
       <!-- タイトル -->
       <div :class="css({ textAlign: 'center' })">
         <h1 :class="css({ fontSize: '4xl', fontWeight: 'bold', color: 'gray.900', mb: '2' })">
@@ -46,7 +46,7 @@
 
       <!-- レンダリングモード -->
       <DesignSystemCard title="レンダリングモード" icon="🎨">
-        <nav :class="css({ spaceY: '2' })">
+        <nav :class="css({ spaceY: '2', mt: '4' })">
           <NuxtLink
             to="/examples/nuxt-auto-import"
             :class="css({ display: 'block', p: '3', bg: 'purple.50', rounded: 'md', transition: 'all 0.2s', _hover: { bg: 'purple.100' } })"
@@ -118,7 +118,7 @@
 
       <!-- 検索UI比較 -->
       <DesignSystemCard title="検索UI比較 (.vue / h / TSX)" icon="🔍" color-scheme="purple">
-        <nav :class="css({ spaceY: '2' })">
+        <nav :class="css({ spaceY: '2', mt: '4' })">
           <NuxtLink
             to="/examples/search-sfc"
             :class="css({ display: 'block', p: '3', bg: 'purple.50', rounded: 'md', transition: 'all 0.2s', _hover: { bg: 'purple.100' } })"
@@ -142,7 +142,7 @@
 
       <!-- データ取得 -->
       <DesignSystemCard title="データ取得" icon="🔄" color-scheme="green">
-        <nav :class="css({ spaceY: '2' })">
+        <nav :class="css({ spaceY: '2', mt: '4' })">
           <NuxtLink
             to="/examples/query-comparison"
             :class="css({ display: 'block', p: '3', bg: 'green.50', rounded: 'md', transition: 'all 0.2s', _hover: { bg: 'green.100' } })"
@@ -166,7 +166,7 @@
 
       <!-- フォーム -->
       <DesignSystemCard title="フォーム" icon="📝" color-scheme="yellow">
-        <nav :class="css({ spaceY: '2' })">
+        <nav :class="css({ spaceY: '2', mt: '4' })">
           <NuxtLink
             to="/examples/form-best-practices"
             :class="css({ display: 'block', p: '3', bg: 'purple.50', rounded: 'md', transition: 'all 0.2s', _hover: { bg: 'purple.100' } })"

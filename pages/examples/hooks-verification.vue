@@ -271,9 +271,15 @@ const toggleClasses = (done: boolean) =>
                   {{ hook.description }}
                 </p>
               </div>
-              <button type="button" :class="toggleClasses(isHookDone(hook.name))" @click="toggleHook(hook.name)">
+              <DesignSystemButton
+                type="button"
+                variant="secondary"
+                size="sm"
+                :class="toggleClasses(isHookDone(hook.name))"
+                @click="toggleHook(hook.name)"
+              >
                 {{ isHookDone(hook.name) ? '検証済み' : '未検証' }}
-              </button>
+              </DesignSystemButton>
             </div>
           </div>
         </DesignSystemCard>
@@ -303,9 +309,15 @@ const toggleClasses = (done: boolean) =>
                   {{ hook.description }}
                 </p>
               </div>
-              <button type="button" :class="toggleClasses(isHookDone(hook.name))" @click="toggleHook(hook.name)">
+              <DesignSystemButton
+                type="button"
+                variant="secondary"
+                size="sm"
+                :class="toggleClasses(isHookDone(hook.name))"
+                @click="toggleHook(hook.name)"
+              >
                 {{ isHookDone(hook.name) ? '検証済み' : '未検証' }}
-              </button>
+              </DesignSystemButton>
             </div>
           </div>
         </DesignSystemCard>

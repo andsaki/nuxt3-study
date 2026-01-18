@@ -74,32 +74,8 @@ const styles = {
   nuxtSection: css({ bg: 'emerald.50', borderColor: 'emerald.400' }),
   vueuseSection: css({ bg: 'blue.50', borderColor: 'blue.400' }),
   info: css({ display: 'flex', flexDirection: 'column', gap: '2' }),
-  primaryButton: css({
-    alignSelf: 'flex-start',
-    mt: '2',
-    bg: 'emerald.500',
-    color: 'white',
-    borderRadius: 'lg',
-    px: '4',
-    py: '2',
-    fontWeight: 'semibold',
-    border: 'none',
-    transition: 'all 0.2s',
-    _hover: { bg: 'emerald.600' },
-  }),
-  secondaryButton: css({
-    alignSelf: 'flex-start',
-    mt: '2',
-    bg: 'blue.500',
-    color: 'white',
-    borderRadius: 'lg',
-    px: '4',
-    py: '2',
-    fontWeight: 'semibold',
-    border: 'none',
-    transition: 'all 0.2s',
-    _hover: { bg: 'blue.600' },
-  }),
+  primaryButton: css({ alignSelf: 'flex-start', mt: '2' }),
+  secondaryButton: css({ alignSelf: 'flex-start', mt: '2' }),
   codeBlock: css({
     bg: 'slate.900',
     color: 'slate.50',
@@ -183,7 +159,15 @@ const styles = {
             <p><strong>ステータス:</strong> {{ nuxtStatus }}</p>
             <p><strong>データ:</strong></p>
             <pre v-if="nuxtData" :class="styles.codeBlock">{{ nuxtData }}</pre>
-            <button :class="styles.primaryButton" @click="nuxtRefresh()">再取得</button>
+            <DesignSystemButton
+              variant="primary"
+              size="sm"
+              :class="styles.primaryButton"
+              :disabled="nuxtStatus === 'pending'"
+              @click="nuxtRefresh()"
+            >
+              {{ nuxtStatus === 'pending' ? '更新中...' : '再取得' }}
+            </DesignSystemButton>
           </div>
           <div>
             <h3>コード例</h3>
@@ -201,7 +185,15 @@ const { data, refresh } = await useFetch('/api/posts/1', {
             <p><strong>読み込み中:</strong> {{ vueUseFetching }}</p>
             <p><strong>データ:</strong></p>
             <pre v-if="vueUseData" :class="styles.codeBlock">{{ vueUseData }}</pre>
-            <button :class="styles.secondaryButton" @click="vueUseExecute()">再取得</button>
+            <DesignSystemButton
+              variant="secondary"
+              size="sm"
+              :class="styles.secondaryButton"
+              :disabled="vueUseFetching"
+              @click="vueUseExecute()"
+            >
+              {{ vueUseFetching ? '更新中...' : '再取得' }}
+            </DesignSystemButton>
           </div>
           <div>
             <h3>コード例</h3>

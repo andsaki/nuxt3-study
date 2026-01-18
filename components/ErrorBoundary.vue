@@ -69,9 +69,14 @@ const resetError = () => {
             <pre>{{ error?.stack }}</pre>
           </div>
         </details>
-        <button class="reset-button" @click="resetError">
+        <DesignSystemButton
+          class="reset-button"
+          variant="danger"
+          size="md"
+          @click="resetError"
+        >
           再試行
-        </button>
+        </DesignSystemButton>
       </div>
     </slot>
   </div>
@@ -149,14 +154,7 @@ const resetError = () => {
 }
 
 .reset-button {
-  padding: 0.75rem 1.5rem;
-  background: #ef4444;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
+  margin-top: 1rem;
 }
 
 .reset-button:hover {

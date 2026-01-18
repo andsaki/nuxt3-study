@@ -1,14 +1,20 @@
 <template>
   <div>
     <div :class="css({ minH: 'screen', bg: 'gray.50', py: '12', px: '4' })">
-      <div :class="css({ maxW: '2xl', mx: 'auto' })">
+      <div :class="css({ maxW: '2xl', mx: 'auto', spaceY: '6' })">
         <h1 :class="css({ fontSize: '3xl', fontWeight: 'bold', color: 'gray.900', mb: '8' })">
           フォームバリデーション
         </h1>
+        <DesignSystemInfoBox variant="info" icon="🛠️" left-border>
+          <p>
+            VeeValidate + Zod + DesignSystemInput を組み合わせた基本のユーザー登録フォームです。
+            ブラウザ標準バリデーションを無効化し、完全にカスタムエクスペリエンスで統一しています。
+          </p>
+        </DesignSystemInfoBox>
 
         <!-- ユーザー登録フォーム -->
         <DesignSystemCard title="ユーザー登録フォーム" icon="📝" color-scheme="blue">
-          <form novalidate @submit="onSubmit">
+          <DesignSystemFormWithHook :form="form" :class="css({ w: 'full' })" @submit="onSubmit">
             <div :class="css({ spaceY: '4' })">
               <!-- 名前 -->
               <DesignSystemInput
@@ -105,45 +111,25 @@
                 {{ isSubmitting ? '送信中...' : '登録する' }}
               </DesignSystemButton>
             </div>
-          </form>
+          </DesignSystemFormWithHook>
 
           <!-- 送信結果 -->
-          <div
+          <DesignSystemInfoBox
             v-if="submitStatus"
-            :class="css({
-              mt: '4',
-              p: '4',
-              rounded: 'md',
-              bg: submitStatus === 'success' ? 'green.50' : 'red.50',
-              color: submitStatus === 'success' ? 'green.800' : 'red.800',
-            })"
+            :variant="submitStatus === 'success' ? 'success' : 'warning'"
+            :icon="submitStatus === 'success' ? '✅' : '⚠️'"
+            left-border
           >
-            <p v-if="submitStatus === 'success'">✓ 登録が完了しました！</p>
-            <p v-if="submitStatus === 'error'">✗ エラーが発生しました。再度お試しください。</p>
-          </div>
+            <p v-if="submitStatus === 'success'">登録が完了しました！</p>
+            <p v-else>エラーが発生しました。再度お試しください。</p>
+          </DesignSystemInfoBox>
         </DesignSystemCard>
 
         <!-- 戻るボタン -->
-        <NuxtLink
-          to="/"
-          :class="css({
-            display: 'inline-block',
-            mt: '8',
-            px: '6',
-            py: '3',
-            color: 'green.600',
-            fontWeight: 'medium',
-            border: '2px solid',
-            borderColor: 'green.600',
-            rounded: 'md',
-            transition: 'all 0.2s',
-            _hover: {
-              bg: 'green.600',
-              color: 'white'
-            }
-          })"
-        >
-          ← ホームに戻る
+        <NuxtLink to="/" :class="css({ display: 'inline-block', mt: '4' })">
+          <DesignSystemButton variant="secondary">
+            ← ホームに戻る
+          </DesignSystemButton>
         </NuxtLink>
       </div>
     </div>
@@ -155,6 +141,7 @@ import { css } from '~/styled-system/css'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
+import { DesignSystemFormWithHook } from '~/components/design-system'
 
 // Zodスキーマ定義
 const validationSchema = toTypedSchema(
@@ -181,9 +168,10 @@ const validationSchema = toTypedSchema(
 )
 
 // VeeValidateのuseFormでフォーム管理
-const { errors, defineField, handleSubmit, isSubmitting } = useForm({
+const form = useForm({
   validationSchema,
 })
+const { errors, defineField, isSubmitting } = form
 
 // フィールド定義（型安全）
 const [name] = defineField('name')
@@ -200,7 +188,7 @@ const newsletter = ref(false)
 const submitStatus = ref<'success' | 'error' | null>(null)
 
 // 送信処理
-const onSubmit = handleSubmit(async (values) => {
+const onSubmit = async (values: Record<string, unknown>) => {
   submitStatus.value = null
 
   try {
@@ -217,5 +205,5 @@ const onSubmit = handleSubmit(async (values) => {
     console.error('送信エラー:', error)
     submitStatus.value = 'error'
   }
-})
+}
 </script>

@@ -78,15 +78,17 @@ const paletteButtonClass = css({
     </header>
 
     <div :class="paletteWrapperClass">
-      <button
+      <DesignSystemButton
         v-for="preset in palettePresets"
         :key="preset.value"
+        variant="secondary"
+        size="sm"
         :class="paletteButtonClass"
         :style="{ background: preset.value, opacity: ctx.accent.value === preset.value ? 1 : 0.5 }"
         @click="ctx.setAccent(preset.value)"
       >
         {{ preset.label }}
-      </button>
+      </DesignSystemButton>
     </div>
   </section>
 </template>

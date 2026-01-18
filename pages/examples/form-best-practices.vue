@@ -1,7 +1,7 @@
 <template>
   <div>
     <div :class="css({ minH: 'screen', bg: 'gray.50', py: '12', px: '4' })">
-      <div :class="css({ maxW: '4xl', mx: 'auto' })">
+      <div :class="css({ maxW: '4xl', mx: 'auto', display: 'flex', flexDirection: 'column', gap: { base: '6', md: '8' } })">
         <h1 :class="css({ fontSize: '4xl', fontWeight: 'bold', color: 'gray.900', mb: '4' })">
           フォームバリデーション ベストプラクティス
         </h1>
@@ -21,37 +21,37 @@
           </h3>
 
           <div :class="css({ spaceY: '4', mb: '6' })">
-            <div :class="css({ bg: 'blue.50', p: '4', rounded: 'md', borderLeft: '4px solid', borderColor: 'blue.500' })">
-              <p :class="css({ fontWeight: 'semibold', color: 'blue.900', mb: '2' })">
+            <DesignSystemInfoBox variant="info" icon="🛠️" left-border>
+              <p :class="css({ fontWeight: 'semibold', mb: '2' })">
                 1. カスタムバリデーションを使用するため
               </p>
-              <p :class="css({ color: 'blue.800' })">
+              <p>
                 VeeValidate + Zod で独自のバリデーションを実装している場合、ブラウザの標準バリデーションと競合しないようにする必要があります。
               </p>
-            </div>
+            </DesignSystemInfoBox>
 
-            <div :class="css({ bg: 'blue.50', p: '4', rounded: 'md', borderLeft: '4px solid', borderColor: 'blue.500' })">
-              <p :class="css({ fontWeight: 'semibold', color: 'blue.900', mb: '2' })">
+            <DesignSystemInfoBox variant="info" icon="⚠️" left-border>
+              <p :class="css({ fontWeight: 'semibold', mb: '2' })">
                 2. ブラウザのデフォルトバリデーションの問題点
               </p>
-              <ul :class="css({ pl: '6', spaceY: '1', listStyleType: 'disc', color: 'blue.800' })">
+              <ul :class="css({ pl: '6', spaceY: '1', listStyleType: 'disc' })">
                 <li>エラーメッセージのスタイルを変更できない</li>
                 <li>多言語対応が困難</li>
                 <li>ツールチップ表示でアクセシビリティが低い</li>
                 <li>デザインの統一が難しい</li>
               </ul>
-            </div>
+            </DesignSystemInfoBox>
 
-            <div :class="css({ bg: 'blue.50', p: '4', rounded: 'md', borderLeft: '4px solid', borderColor: 'blue.500' })">
-              <p :class="css({ fontWeight: 'semibold', color: 'blue.900', mb: '2' })">
+            <DesignSystemInfoBox variant="info" icon="🎨" left-border>
+              <p :class="css({ fontWeight: 'semibold', mb: '2' })">
                 3. 一貫したUXを実現
               </p>
-              <ul :class="css({ pl: '6', spaceY: '1', listStyleType: 'disc', color: 'blue.800' })">
+              <ul :class="css({ pl: '6', spaceY: '1', listStyleType: 'disc' })">
                 <li>すべてのエラーメッセージを統一したデザインで表示</li>
                 <li>エラーメッセージの文言を自由にカスタマイズ</li>
                 <li>アクセシビリティ対応のエラー表示を実装</li>
               </ul>
-            </div>
+            </DesignSystemInfoBox>
           </div>
 
           <h3 :class="css({ fontSize: 'lg', fontWeight: 'semibold', mb: '3', color: 'gray.900' })">
@@ -108,23 +108,23 @@
           </h3>
 
           <div :class="css({ spaceY: '3', mb: '6' })">
-            <div :class="css({ bg: 'green.50', p: '4', rounded: 'md' })">
-              <p :class="css({ fontWeight: 'semibold', color: 'green.900', mb: '2' })">
+            <DesignSystemInfoBox variant="success" icon="✅" left-border>
+              <p :class="css({ fontWeight: 'semibold', mb: '2' })">
                 VeeValidate
               </p>
-              <p :class="css({ color: 'green.800' })">
+              <p>
                 Vue.js向けのフォームバリデーションライブラリ。フォームの状態管理、エラー表示、送信処理などを簡単に実装できる。
               </p>
-            </div>
+            </DesignSystemInfoBox>
 
-            <div :class="css({ bg: 'green.50', p: '4', rounded: 'md' })">
-              <p :class="css({ fontWeight: 'semibold', color: 'green.900', mb: '2' })">
+            <DesignSystemInfoBox variant="success" icon="📏" left-border>
+              <p :class="css({ fontWeight: 'semibold', mb: '2' })">
                 Zod
               </p>
-              <p :class="css({ color: 'green.800' })">
+              <p>
                 TypeScript優先のスキーマバリデーションライブラリ。型安全なバリデーションルールを定義でき、TypeScriptの型推論も活用できる。
               </p>
-            </div>
+            </DesignSystemInfoBox>
           </div>
 
           <h3 :class="css({ fontSize: 'lg', fontWeight: 'semibold', mb: '3', color: 'gray.900' })">
@@ -165,15 +165,15 @@ const onSubmit = handleSubmit((values) => {
 })</code></pre>
           </div>
 
-          <div :class="css({ bg: 'green.50', p: '4', rounded: 'md' })">
-            <p :class="css({ fontWeight: 'semibold', color: 'green.900', mb: '2' })">メリット</p>
-            <ul :class="css({ pl: '6', spaceY: '1', listStyleType: 'disc', color: 'green.800' })">
+          <DesignSystemInfoBox variant="success" icon="✨" left-border>
+            <p :class="css({ fontWeight: 'semibold', mb: '2' })">メリット</p>
+            <ul :class="css({ pl: '6', spaceY: '1', listStyleType: 'disc' })">
               <li>型安全なバリデーション（TypeScriptの恩恵）</li>
               <li>再利用可能なスキーマ定義</li>
               <li>複雑なバリデーションルールも簡潔に記述</li>
               <li>エラーメッセージのカスタマイズが容易</li>
             </ul>
-          </div>
+          </DesignSystemInfoBox>
         </DesignSystemCard>
 
         <!-- エラー表示のアクセシビリティ -->
@@ -187,36 +187,36 @@ const onSubmit = handleSubmit((values) => {
           </h3>
 
           <div :class="css({ spaceY: '3', mb: '6' })">
-            <div :class="css({ bg: 'yellow.50', p: '4', rounded: 'md', borderLeft: '4px solid', borderColor: 'yellow.500' })">
-              <p :class="css({ fontWeight: 'semibold', color: 'yellow.900', mb: '2' })">
+            <DesignSystemInfoBox variant="warning" icon="👁️" left-border>
+              <p :class="css({ fontWeight: 'semibold', mb: '2' })">
                 1. エラーの視覚的な識別（WCAG 3.3.1 - Level A）
               </p>
-              <ul :class="css({ pl: '6', spaceY: '1', listStyleType: 'disc', color: 'yellow.800' })">
+              <ul :class="css({ pl: '6', spaceY: '1', listStyleType: 'disc' })">
                 <li>エラーがあるフィールドを赤い枠線で強調</li>
                 <li>エラーメッセージを赤い文字で表示</li>
                 <li>エラーアイコン（✗）を表示</li>
               </ul>
-            </div>
+            </DesignSystemInfoBox>
 
-            <div :class="css({ bg: 'yellow.50', p: '4', rounded: 'md', borderLeft: '4px solid', borderColor: 'yellow.500' })">
-              <p :class="css({ fontWeight: 'semibold', color: 'yellow.900', mb: '2' })">
+            <DesignSystemInfoBox variant="warning" icon="🔖" left-border>
+              <p :class="css({ fontWeight: 'semibold', mb: '2' })">
                 2. aria属性の使用
               </p>
-              <ul :class="css({ pl: '6', spaceY: '1', listStyleType: 'disc', color: 'yellow.800' })">
+              <ul :class="css({ pl: '6', spaceY: '1', listStyleType: 'disc' })">
                 <li><code>aria-invalid="true"</code> - フィールドにエラーがあることを示す</li>
                 <li><code>aria-describedby</code> - エラーメッセージとフィールドを関連付け</li>
                 <li><code>role="alert"</code> - エラーメッセージをスクリーンリーダーに即座に通知</li>
               </ul>
-            </div>
+            </DesignSystemInfoBox>
 
-            <div :class="css({ bg: 'yellow.50', p: '4', rounded: 'md', borderLeft: '4px solid', borderColor: 'yellow.500' })">
-              <p :class="css({ fontWeight: 'semibold', color: 'yellow.900', mb: '2' })">
+            <DesignSystemInfoBox variant="warning" icon="🎯" left-border>
+              <p :class="css({ fontWeight: 'semibold', mb: '2' })">
                 3. 色だけに依存しない（WCAG 1.4.1 - Level A）
               </p>
-              <p :class="css({ color: 'yellow.800' })">
+              <p>
                 色覚異常のユーザーのため、色だけでなくアイコンやテキストでもエラーを伝える。
               </p>
-            </div>
+            </DesignSystemInfoBox>
           </div>
 
           <h3 :class="css({ fontSize: 'lg', fontWeight: 'semibold', mb: '3', color: 'gray.900' })">
@@ -300,8 +300,8 @@ const handleFormSubmit = async (values: Record&lt;string, unknown&gt;) => {
 &lt;/script&gt;</code></pre>
           </div>
 
-          <div :class="css({ bg: 'gray.50', p: '4', rounded: 'md' })">
-            <p :class="css({ fontWeight: 'semibold', color: 'gray.900', mb: '2' })">
+          <DesignSystemInfoBox variant="info" icon="🧩" left-border>
+            <p :class="css({ fontWeight: 'semibold', mb: '2' })">
               Formコンポーネントが提供するもの
             </p>
             <ul :class="css({ pl: '6', spaceY: '1', listStyleType: 'disc' })">
@@ -311,80 +311,64 @@ const handleFormSubmit = async (values: Record&lt;string, unknown&gt;) => {
               <li><code>novalidate</code> - ブラウザのデフォルトバリデーションを無効化（自動）</li>
               <li>送信処理のハンドリング（自動）</li>
             </ul>
-          </div>
+          </DesignSystemInfoBox>
         </DesignSystemCard>
 
         <!-- ベストプラクティスまとめ -->
         <DesignSystemCard title="✅ ベストプラクティスまとめ" color-scheme="blue">
           <div :class="css({ spaceY: '3' })">
-            <div :class="css({ bg: 'blue.50', p: '4', rounded: 'md' })">
-              <p :class="css({ fontWeight: 'semibold', color: 'blue.900', mb: '2' })">
-                1. 常に novalidate を使用
+            <DesignSystemInfoBox variant="info" icon="1️⃣" left-border>
+              <p :class="css({ fontWeight: 'semibold', mb: '2' })">
+                常に novalidate を使用
               </p>
-              <p :class="css({ color: 'blue.800' })">
+              <p>
                 ブラウザの標準バリデーションを無効化し、カスタムバリデーションで統一されたUXを提供する。
               </p>
-            </div>
+            </DesignSystemInfoBox>
 
-            <div :class="css({ bg: 'blue.50', p: '4', rounded: 'md' })">
-              <p :class="css({ fontWeight: 'semibold', color: 'blue.900', mb: '2' })">
-                2. VeeValidate + Zod で型安全に
+            <DesignSystemInfoBox variant="info" icon="2️⃣" left-border>
+              <p :class="css({ fontWeight: 'semibold', mb: '2' })">
+                VeeValidate + Zod で型安全に
               </p>
-              <p :class="css({ color: 'blue.800' })">
+              <p>
                 スキーマベースのバリデーションで、型安全性と保守性を確保する。
               </p>
-            </div>
+            </DesignSystemInfoBox>
 
-            <div :class="css({ bg: 'blue.50', p: '4', rounded: 'md' })">
-              <p :class="css({ fontWeight: 'semibold', color: 'blue.900', mb: '2' })">
-                3. アクセシビリティを考慮
+            <DesignSystemInfoBox variant="info" icon="3️⃣" left-border>
+              <p :class="css({ fontWeight: 'semibold', mb: '2' })">
+                アクセシビリティを考慮
               </p>
-              <p :class="css({ color: 'blue.800' })">
+              <p>
                 aria属性を使用し、すべてのユーザーがエラーを認識できるようにする。色だけに依存しない。
               </p>
-            </div>
+            </DesignSystemInfoBox>
 
-            <div :class="css({ bg: 'blue.50', p: '4', rounded: 'md' })">
-              <p :class="css({ fontWeight: 'semibold', color: 'blue.900', mb: '2' })">
-                4. デザインシステムコンポーネントを活用
+            <DesignSystemInfoBox variant="info" icon="4️⃣" left-border>
+              <p :class="css({ fontWeight: 'semibold', mb: '2' })">
+                デザインシステムコンポーネントを活用
               </p>
-              <p :class="css({ color: 'blue.800' })">
+              <p>
                 DesignSystemFormやDesignSystemInputなど、既存のコンポーネントを使って一貫性のあるUIを構築する。
               </p>
-            </div>
+            </DesignSystemInfoBox>
 
-            <div :class="css({ bg: 'blue.50', p: '4', rounded: 'md' })">
-              <p :class="css({ fontWeight: 'semibold', color: 'blue.900', mb: '2' })">
-                5. エラーメッセージは具体的に
+            <DesignSystemInfoBox variant="info" icon="5️⃣" left-border>
+              <p :class="css({ fontWeight: 'semibold', mb: '2' })">
+                エラーメッセージは具体的に
               </p>
-              <p :class="css({ color: 'blue.800' })">
+              <p>
                 「入力してください」だけでなく、「メールアドレスを入力してください」のように、何を入力すべきか明確にする。
               </p>
-            </div>
+            </DesignSystemInfoBox>
           </div>
         </DesignSystemCard>
 
         <!-- 戻るボタン -->
-        <NuxtLink
-          to="/"
-          :class="css({
-            display: 'inline-block',
-            mt: '8',
-            px: '6',
-            py: '3',
-            color: 'green.600',
-            fontWeight: 'medium',
-            border: '2px solid',
-            borderColor: 'green.600',
-            rounded: 'md',
-            transition: 'all 0.2s',
-            _hover: {
-              bg: 'green.600',
-              color: 'white'
-            }
-          })"
-        >
-          ← ホームに戻る
+        <NuxtLink to="/" :class="css({ display: 'inline-block', mt: '8' })">
+          <DesignSystemButton variant="secondary">
+            ← ホームに戻る
+          </DesignSystemButton>
         </NuxtLink>
       </div>
     </div>

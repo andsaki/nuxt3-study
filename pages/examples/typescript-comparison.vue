@@ -1,268 +1,97 @@
 <script setup lang="ts">
 import { css } from '~/styled-system/css'
+import {
+  DesignSystemTable,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableHeaderCell,
+  TableRow,
+} from '~/components/design-system'
 
-// Vue 3の型推論デモ（実際には使用していないがサンプルコード用）
-const _count = ref(0)  // Ref<number> と自動推論
-const _name = ref('hello')  // Ref<string> と自動推論
+type CardScheme = 'blue' | 'green' | 'yellow' | 'red' | 'gray' | 'purple'
 
-const _props = defineProps<{
+interface CodeCard {
   title: string
-  count?: number
-}>()
+  colorScheme: CardScheme
+  code: string
+}
 
-const _emit = defineEmits<{
-  update: [id: number, value: string]
-  delete: [id: number]
-}>()
+interface CompilerCard extends CodeCard {
+  note: string
+}
 
 const styles = {
-  container: css({
+  page: css({
     maxW: '1200px',
     mx: 'auto',
-    p: '8',
+    py: '12',
+    px: { base: '4', md: '6' },
     display: 'flex',
     flexDirection: 'column',
-    gap: '8',
-    '& h1': { color: '#00dc82', mb: '8', fontSize: '2rem' },
-    '& h2': { color: '#333333', mb: '4', fontSize: '1.3rem' },
-    '& h3': { color: '#555555', mb: '3', fontSize: '1.1rem' },
-    '& pre': {
-      bg: '#1f2937',
-      color: '#f9fafb',
-      p: '4',
-      borderRadius: '6px',
-      overflowX: 'auto',
-      fontSize: '0.875rem',
-      lineHeight: '1.6',
-      m: 0,
-    },
-    '& code': { fontFamily: "'Courier New', monospace" },
+    gap: '6',
   }),
-  intro: css({
-    bg: '#f0f9ff',
-    borderLeftWidth: '4px',
-    borderLeftColor: '#0ea5e9',
-    p: '6',
-    mb: '8',
-    borderRadius: '8px',
-  }),
-  section: css({
-    bg: 'white',
-    borderWidth: '1px',
-    borderColor: '#e5e7eb',
-    borderRadius: '8px',
-    p: '8',
-    mb: '8',
-  }),
-  sectionHighlight: css({
-    bg: '#fef3c7',
-    borderColor: '#f59e0b',
-    borderWidth: '2px',
-  }),
-  sectionConclusion: css({
-    bg: '#d1fae5',
-    borderColor: '#10b981',
-    borderWidth: '2px',
-  }),
-  sectionWarning: css({
-    bg: '#fee2e2',
-    borderColor: '#ef4444',
-    borderWidth: '2px',
-  }),
-  infoBox: css({
-    bg: 'white',
-    borderRadius: '6px',
-    p: '6',
-    mt: '4',
-    '& ul': { mt: '2', ml: '6' },
-    '& li': { mt: '2' },
-  }),
-  comparisonGridThree: css({
+  gridThree: css({
     display: 'grid',
+    gap: '4',
     gridTemplateColumns: { base: '1fr', lg: 'repeat(3, 1fr)' },
-    gap: '6',
-    mt: '6',
   }),
-  compareCard: css({
-    borderWidth: '2px',
-    borderColor: '#d1d5db',
-    borderRadius: '8px',
-    p: '6',
-  }),
-  compareCardVue3: css({ bg: '#d1fae5', borderColor: '#10b981' }),
-  compareCardVue2: css({ bg: '#fee2e2', borderColor: '#ef4444' }),
-  compareCardReact: css({ bg: '#dbeafe', borderColor: '#3b82f6' }),
-  reasonBox: css({
-    bg: 'white',
-    p: '6',
-    borderRadius: '8px',
-    mb: '6',
-    borderWidth: '2px',
-    borderColor: '#f59e0b',
-    '& h3': { color: '#92400e', mb: '3' },
-    '& p': { color: '#78350f', fontSize: '1.1rem' },
-  }),
-  explanationGrid: css({
+  gridTwo: css({
     display: 'grid',
-    gap: '6',
-    mt: '6',
-  }),
-  explanationCard: css({
-    bg: 'white',
-    p: '6',
-    borderRadius: '8px',
-    borderWidth: '1px',
-    borderColor: '#d97706',
-    '& h3': { color: '#92400e', mb: '4' },
-  }),
-  compilerGrid: css({
-    display: 'grid',
+    gap: '4',
     gridTemplateColumns: { base: '1fr', md: 'repeat(2, 1fr)' },
-    gap: '6',
-    mt: '6',
   }),
-  compilerCard: css({
-    bg: '#f9fafb',
-    p: '6',
-    borderRadius: '8px',
-    borderWidth: '2px',
-    borderColor: '#e5e7eb',
-    '& h3': { color: '#1f2937', mb: '4' },
-  }),
-  note: css({
-    mt: '4',
-    p: '3',
-    bg: '#fef3c7',
-    borderLeftWidth: '3px',
-    borderLeftColor: '#f59e0b',
-    borderRadius: '4px',
-    fontSize: '0.9rem',
-    color: '#78350f',
-  }),
-  comparisonTable: css({
-    width: '100%',
-    borderCollapse: 'collapse',
-    mt: '4',
-    bg: 'white',
-    borderRadius: '8px',
-    overflow: 'hidden',
-    '& th, & td': {
-      p: '4',
-      textAlign: 'left',
-      borderBottom: '1px solid #e5e7eb',
-    },
-    '& th': {
-      bg: '#f9fafb',
-      fontWeight: '600',
-      color: '#374151',
-    },
-    '& tbody tr:hover': {
-      bg: '#f9fafb',
-    },
-  }),
-  warningBox: css({
-    bg: 'white',
-    p: '6',
-    borderRadius: '8px',
-    '& h3': { color: '#991b1b', mb: '4' },
-    '& ul': { mt: '4', ml: '6' },
-    '& li': { mt: '2', color: '#7f1d1d' },
-  }),
-  conclusionBox: css({
-    bg: 'white',
-    p: '6',
-    borderRadius: '8px',
-    '& h3': { color: '#065f46', mb: '4' },
-    '& ul': { mt: '4', mb: '6', ml: '6' },
-    '& li': { mt: '2', lineHeight: '1.6' },
-  }),
-  keyPoint: css({
-    bg: '#ecfdf5',
-    borderWidth: '2px',
-    borderColor: '#10b981',
-    p: '6',
-    borderRadius: '6px',
-    mt: '6',
-    '& p': { mt: '3', lineHeight: '1.6' },
-  }),
-  perfTable: css({
-    width: '100%',
-    borderCollapse: 'collapse',
-    mt: '4',
-    bg: 'white',
-    borderRadius: '8px',
-    overflow: 'hidden',
-    '& th, & td': {
-      p: '4',
-      textAlign: 'left',
-      borderBottom: '1px solid #e5e7eb',
-    },
-    '& th': {
-      bg: '#f9fafb',
-      fontWeight: '600',
-      color: '#374151',
-    },
-  }),
-  perfTableHighlightRow: css({
-    bg: '#ecfdf5',
-    fontWeight: '600',
-  }),
-  perfNote: css({
-    bg: '#dbeafe',
+  codeBlock: css({
+    fontFamily:
+      "'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', 'Courier New', monospace",
+    bg: 'gray.900',
+    color: 'gray.50',
+    fontSize: 'sm',
+    lineHeight: '1.6',
+    borderRadius: 'lg',
     p: '4',
-    borderRadius: '6px',
-    mt: '4',
-    borderLeftWidth: '4px',
-    borderLeftColor: '#3b82f6',
-    '& p': { mt: '2', color: '#1e40af' },
+    overflowX: 'auto',
+    whiteSpace: 'pre-wrap',
+  }),
+  list: css({
+    pl: '5',
+    listStyleType: 'disc',
+    color: 'contents.secondary',
+    lineHeight: '1.6',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '2',
   }),
   backLink: css({
-    display: 'inline-block',
-    color: '#00dc82',
-    textDecoration: 'none',
-    fontWeight: '500',
-    px: '6',
-    py: '3',
+    alignSelf: 'flex-start',
+    mt: '4',
+    color: 'emerald.600',
+    fontWeight: 'medium',
     borderWidth: '2px',
-    borderColor: '#00dc82',
-    borderRadius: '6px',
+    borderColor: 'emerald.600',
+    borderRadius: 'lg',
+    px: '4',
+    py: '2',
+    textDecoration: 'none',
     transition: 'all 0.2s ease',
-    _hover: { bg: '#00dc82', color: 'white' },
+    _hover: {
+      bg: 'emerald.600',
+      color: 'white',
+    },
   }),
 }
-</script>
 
-<template>
-  <div :class="styles.container">
-    <h1>TypeScript: React vs Vue 3</h1>
+const strictModePoints = [
+  'ReactもVueも同じTypeScriptのstrict設定を利用している。',
+  'strictモードはコンパイル時の型チェックのみで、実行時パフォーマンスには影響なし。',
+  'ビルド時に数秒遅くなる程度で、運用コストは非常に小さい。',
+]
 
-    <div :class="styles.intro">
-      <p>
-        strict modeでの型推論の比較。なぜVue 3の方が型を書く量が少ないのか？
-      </p>
-    </div>
-
-    <!-- TypeScript strictモード -->
-    <div :class="styles.section">
-      <h2>📋 TypeScript strict mode とは</h2>
-      <div :class="styles.infoBox">
-        <p><strong>TypeScriptのstrict modeは同じ:</strong></p>
-        <ul>
-          <li>ReactもVueも同じTypeScriptのstrict設定を使用</li>
-          <li>実行速度への影響はゼロ（コンパイル時のみ）</li>
-          <li>ビルド時に数秒遅くなるだけ</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- 型推論の強さ -->
-    <div :class="styles.section">
-      <h2>🔍 型推論の強さ比較</h2>
-
-      <div :class="styles.comparisonGridThree">
-        <div :class="[styles.compareCard, styles.compareCardVue3]">
-          <h3>Vue 3 (script setup)</h3>
-          <pre v-pre><code>&lt;script setup lang="ts"&gt;
+const typeInferenceExamples: CodeCard[] = [
+  {
+    title: 'Vue 3 (script setup)',
+    colorScheme: 'green',
+    code: `&lt;script setup lang="ts"&gt;
 // ✅ 型推論が強力
 const count = ref(0)           // Ref&lt;number&gt;
 const name = ref('hello')      // Ref&lt;string&gt;
@@ -272,12 +101,12 @@ const props = defineProps&lt;{
   count?: number
 }&gt;()
 // props.title は string型として推論
-&lt;/script&gt;</code></pre>
-        </div>
-
-        <div :class="[styles.compareCard, styles.compareCardVue2]">
-          <h3>Vue 2 (Options API)</h3>
-          <pre v-pre><code>&lt;script lang="ts"&gt;
+&lt;/script&gt;`,
+  },
+  {
+    title: 'Vue 2 (Options API)',
+    colorScheme: 'red',
+    code: `&lt;script lang="ts"&gt;
 import Vue from 'vue'
 
 // ❌ 型推論が弱い
@@ -293,12 +122,12 @@ export default Vue.extend({
     }
   }
 })
-&lt;/script&gt;</code></pre>
-        </div>
-
-        <div :class="[styles.compareCard, styles.compareCardReact]">
-          <h3>React</h3>
-          <pre v-pre><code>// ❌ 明示的な型指定が必要
+&lt;/script&gt;`,
+  },
+  {
+    title: 'React',
+    colorScheme: 'blue',
+    code: `// ❌ 明示的な型指定が必要
 const [count, setCount] = useState&lt;number&gt;(0)
 const [name, setName] = useState&lt;string&gt;('hello')
 
@@ -308,93 +137,74 @@ interface Props {
 }
 const Component: React.FC&lt;Props&gt; = ({ title, count }) =&gt; {
   // ...
-}</code></pre>
-        </div>
-      </div>
-    </div>
+}`,
+  },
+]
 
-    <!-- なぜVueの方が型推論が強いか -->
-    <div :class="[styles.section, styles.sectionHighlight]">
-      <h2>💡 なぜVue 3の方が型推論が強いのか？</h2>
-
-      <div :class="styles.reasonBox">
-        <h3>❓「Reactは関数型なのに、なぜ型推論が弱い？」</h3>
-        <p>答え: <strong>Reactは純粋関数型言語ではない</strong>からです。</p>
-      </div>
-
-      <div :class="styles.explanationGrid">
-        <div :class="styles.explanationCard">
-          <h3>純粋関数型言語の型推論</h3>
-          <pre><code>-- Haskell（純粋関数型）
+const explanationCards: CodeCard[] = [
+  {
+    title: '純粋関数型言語の型推論',
+    colorScheme: 'yellow',
+    code: `-- Haskell（純粋関数型）
 add x y = x + y
--- 推論: (Num a) =&gt; a -&gt; a -&gt; a
+-- 推論: (Num a) => a -> a -> a
 
 map f [] = []
 map f (x:xs) = f x : map f xs
--- 推論: (a -&gt; b) -&gt; [a] -&gt; [b]
+-- 推論: (a -> b) -> [a] -> [b]
 
-型を全く書かなくても完全に推論される</code></pre>
-        </div>
-
-        <div :class="styles.explanationCard">
-          <h3>React = JavaScriptベースの関数型スタイル</h3>
-          <pre v-pre><code>// 普通のJavaScript関数
-const useState = &lt;T&gt;(initial: T): [T, (value: T) =&gt; void] =&gt; {
+型を全く書かなくても完全に推論される`,
+  },
+  {
+    title: 'React = 関数型スタイル',
+    colorScheme: 'purple',
+    code: `// 普通のJavaScript関数
+const useState = &lt;T&gt;(initial: T): [T, (value: T) => void] => {
   // ...
 }
 
-// TypeScriptは「ただの関数呼び出し」
+// TypeScriptは「ただの関数」として扱う
 const [count, setCount] = useState(0)
 // Tが何か推論できない場合がある
 
 // 明示的に書く必要
-const [user, setUser] = useState&lt;User | null&gt;(null)</code></pre>
-        </div>
-
-        <div :class="styles.explanationCard">
-          <h3>Vue = コンパイラマクロで型推論を強化</h3>
-          <pre v-pre><code>&lt;script setup lang="ts"&gt;
+const [user, setUser] = useState&lt;User | null&gt;(null)`,
+  },
+  {
+    title: 'Vue = コンパイラマクロ',
+    colorScheme: 'green',
+    code: `&lt;script setup lang="ts"&gt;
 // definePropsは「コンパイラマクロ」
-// 実行時には存在しない
 const props = defineProps&lt;{ name: string }&gt;()
 
 // コンパイラが特別に解析
 const count = ref(0)  // Ref&lt;number&gt;と推論
 
 // Vue SFCコンパイラが型を生成
-&lt;/script&gt;</code></pre>
-        </div>
-      </div>
-    </div>
+&lt;/script&gt;`,
+  },
+]
 
-    <!-- コンパイラマクロの威力 -->
-    <div :class="styles.section">
-      <h2>⚙️ コンパイラマクロの威力</h2>
-
-      <div :class="styles.compilerGrid">
-        <div :class="styles.compilerCard">
-          <h3>Vue（SFCコンパイラが解析）</h3>
-          <pre v-pre><code>&lt;script setup lang="ts"&gt;
+const compilerCards: CompilerCard[] = [
+  {
+    title: 'Vue（SFCコンパイラが解析）',
+    colorScheme: 'green',
+    code: `&lt;script setup lang="ts"&gt;
 // コンパイル前
 const count = ref(0)
 
 // ↓ コンパイラが解析して型を生成
 // Ref&lt;number&gt; と推論
 
-// defineProps, defineEmits, defineExposeは
-// 全て「コンパイラマクロ」
 defineProps&lt;{ name: string }&gt;()
 defineEmits&lt;{ click: [id: number] }&gt;()
-&lt;/script&gt;</code></pre>
-          <p :class="styles.note">コンパイラが「特別扱い」して最適な型を生成</p>
-        </div>
-
-        <div :class="styles.compilerCard">
-          <h3>React（通常のTypeScript）</h3>
-          <pre v-pre><code>// ただの関数なので、
-// TypeScriptの一般的な型推論
-
-function useState&lt;T&gt;(initial: T): [T, ...] {
+&lt;/script&gt;`,
+    note: 'コンパイラが「特別扱い」して最適な型を生成',
+  },
+  {
+    title: 'React（通常のTypeScript）',
+    colorScheme: 'blue',
+    code: `function useState&lt;T&gt;(initial: T): [T, ...] {
   // ...
 }
 
@@ -402,84 +212,23 @@ function useState&lt;T&gt;(initial: T): [T, ...] {
 const [state, setState] = useState(null)
 // 型: null ← 弱い
 
-// 明示的に書く必要
-const [state, setState] = useState&lt;User | null&gt;(null)</code></pre>
-          <p :class="styles.note">Reactはライブラリであってコンパイラではない</p>
-        </div>
-      </div>
-    </div>
+const [state, setState] = useState&lt;User | null&gt;(null)`,
+    note: 'Reactはライブラリであってコンパイラではない',
+  },
+]
 
-    <!-- 総合比較表 -->
-    <div :class="styles.section">
-      <h2>📊 総合比較</h2>
-      <table :class="styles.comparisonTable">
-        <thead>
-          <tr>
-            <th/>
-            <th>Vue 2</th>
-            <th>React</th>
-            <th>Vue 3</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>アプローチ</td>
-            <td>Options API</td>
-            <td>ライブラリ + 標準TS</td>
-            <td>フレームワーク + コンパイラ</td>
-          </tr>
-          <tr>
-            <td>型推論</td>
-            <td>❌ 非常に弱い</td>
-            <td>TypeScriptの一般ルール</td>
-            <td>コンパイラマクロで強化</td>
-          </tr>
-          <tr>
-            <td>関数型スタイル</td>
-            <td>❌ なし</td>
-            <td>✅ あり</td>
-            <td>△ 部分的</td>
-          </tr>
-          <tr>
-            <td>純粋関数型</td>
-            <td>❌ いいえ</td>
-            <td>❌ いいえ</td>
-            <td>❌ いいえ</td>
-          </tr>
-          <tr>
-            <td>型推論の強さ</td>
-            <td>弱い</td>
-            <td>普通</td>
-            <td>強い</td>
-          </tr>
-          <tr>
-            <td>型を書く量</td>
-            <td>多い（効果少ない）</td>
-            <td>多い</td>
-            <td>少ない</td>
-          </tr>
-          <tr>
-            <td>学習コスト</td>
-            <td>低い</td>
-            <td>やや高い</td>
-            <td>低い</td>
-          </tr>
-          <tr>
-            <td>TypeScript推奨度</td>
-            <td>❌ 非推奨</td>
-            <td>✅ 推奨</td>
-            <td>✅ 強く推奨</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+const comparisonRows = [
+  { label: 'アプローチ', vue2: 'Options API', react: 'ライブラリ + 標準TS', vue3: 'フレームワーク + コンパイラ' },
+  { label: '型推論', vue2: '❌ 非常に弱い', react: 'TypeScriptの一般ルール', vue3: 'コンパイラマクロで強化' },
+  { label: '関数型スタイル', vue2: '❌ なし', react: '✅ あり', vue3: '△ 部分的' },
+  { label: '純粋関数型', vue2: '❌', react: '❌', vue3: '❌' },
+  { label: '型推論の強さ', vue2: '弱い', react: '普通', vue3: '強い' },
+  { label: '型を書く量', vue2: '多い（効果少ない）', react: '多い', vue3: '少ない' },
+  { label: '学習コスト', vue2: '低い', react: 'やや高い', vue3: '低い' },
+  { label: 'TypeScript推奨度', vue2: '❌ 非推奨', react: '✅ 推奨', vue3: '✅ 強く推奨' },
+]
 
-    <!-- Vue 2の問題 -->
-    <div :class="[styles.section, styles.sectionWarning]">
-      <h2>⚠️ Vue 2の型推論の問題</h2>
-      <div :class="styles.warningBox">
-        <h3>Vue 2 + TypeScriptは非推奨</h3>
-        <pre v-pre><code>&lt;script lang="ts"&gt;
+const warningCode = `&lt;script lang="ts"&gt;
 import Vue from 'vue'
 
 export default Vue.extend({
@@ -490,92 +239,175 @@ export default Vue.extend({
   },
   computed: {
     doubled() {
-      return this.count * 2  // ❌ 型エラーが出ない
+      return this.count * 2  // ❌ 型エラーなし
     }
   },
   methods: {
     increment() {
-      this.countt++  // ❌ タイポしても気づかない
+      this.countt++  // ❌ タイポでも気づかない
     }
   }
 })
-&lt;/script&gt;</code></pre>
-        <ul>
-          <li>Options APIは型推論が非常に弱い</li>
-          <li>`this`の型が正しく推論されない</li>
-          <li>タイポやエラーに気づきにくい</li>
-          <li>Vue 3のComposition APIで大幅改善</li>
-        </ul>
+&lt;/script&gt;`
+
+const conclusionItems = [
+  'Haskell / OCaml: 純粋関数型 → 型推論が超強力',
+  'Vue 2: Options API → 型推論が弱くTypeScript非推奨',
+  'React: JavaScriptベースの関数型スタイル → 通常の型推論',
+  'Vue 3: コンパイラマクロで型推論を強化 → 書く型が少ない',
+]
+
+const keyPointParagraphs = [
+ 'ReactもVueもJavaScriptベースなので、本当の関数型ではありません。',
+ 'Vue 3はコンパイラという特殊な仕組みで型推論を強化しているため、書く型が少なくて済みます。',
+ 'Vue 2はTypeScriptとの相性が悪いため、新規プロジェクトではVue 3を推奨します。',
+]
+
+const perfRows = [
+  { stage: '開発中（npm run dev）', strictFalse: '普通', strictTrue: '普通', impact: 'ほぼなし' },
+  { stage: 'ビルド（npm run build）', strictFalse: '5秒', strictTrue: '6秒', impact: '+1秒程度' },
+  { stage: '本番実行', strictFalse: '速い', strictTrue: '速い', impact: '影響ゼロ', highlight: true },
+]
+</script>
+
+<template>
+  <div :class="styles.page">
+    <DesignSystemInfoBox variant="info" icon="📘" title="TypeScript: React vs Vue 3">
+      <p>strict modeでの型推論を比較します。Vue 3はSFCコンパイラの力で型情報を増強できるため、Reactより少ない記述で型安全を確保できます。</p>
+    </DesignSystemInfoBox>
+
+    <DesignSystemCard title="📋 TypeScript strict mode とは" color-scheme="blue">
+      <ul :class="styles.list">
+        <li v-for="point in strictModePoints" :key="point">
+          {{ point }}
+        </li>
+      </ul>
+    </DesignSystemCard>
+
+    <DesignSystemCard title="🔍 型推論の強さ比較">
+      <div :class="styles.gridThree">
+        <DesignSystemCard
+          v-for="example in typeInferenceExamples"
+          :key="example.title"
+          variant="bordered"
+          :title="example.title"
+          :color-scheme="example.colorScheme"
+        >
+          <pre :class="styles.codeBlock"><code>{{ example.code }}</code></pre>
+        </DesignSystemCard>
       </div>
-    </div>
+    </DesignSystemCard>
 
-    <!-- 結論 -->
-    <div :class="[styles.section, styles.sectionConclusion]">
-      <h2>✅ 結論</h2>
-      <div :class="styles.conclusionBox">
-        <h3>「関数型 = 型推論が強い」は純粋関数型言語の話</h3>
-        <ul>
-          <li><strong>Haskell/OCaml:</strong> 純粋関数型 → 型推論が超強力</li>
-          <li><strong>Vue 2:</strong> Options API → 型推論が弱い（TypeScript非推奨）</li>
-          <li><strong>React:</strong> JavaScriptベースの関数型スタイル → 通常の型推論</li>
-          <li><strong>Vue 3:</strong> コンパイラマクロで型推論を強化 → 書く型が少ない</li>
-        </ul>
-
-        <div :class="styles.keyPoint">
-          <p>
-            <strong>ReactもVueもJavaScriptベースなので、本当の関数型ではありません。</strong>
-          </p>
-          <p>
-            Vue 3は<strong>コンパイラという特殊な仕組み</strong>で型推論を強化しているため、
-            書く型が少なくて済みます。
-          </p>
-          <p>
-            <strong>Vue 2はTypeScriptとの相性が悪いため、新規プロジェクトではVue 3を推奨。</strong>
-          </p>
-        </div>
+    <DesignSystemCard title="💡 なぜVue 3の方が型推論が強いのか？" color-scheme="yellow">
+      <p>ReactはライブラリとしてTypeScriptの一般的なルールに従いますが、Vue 3はSFCコンパイラでコードを解析し、型を増強できます。</p>
+      <div :class="styles.gridThree">
+        <DesignSystemCard
+          v-for="card in explanationCards"
+          :key="card.title"
+          variant="bordered"
+          :title="card.title"
+          :color-scheme="card.colorScheme"
+        >
+          <pre :class="styles.codeBlock"><code>{{ card.code }}</code></pre>
+        </DesignSystemCard>
       </div>
-    </div>
+    </DesignSystemCard>
 
-    <!-- strict modeの影響 -->
-    <div :class="styles.section">
-      <h2>🚀 strict mode のパフォーマンス影響</h2>
-      <table :class="styles.perfTable">
-        <thead>
-          <tr>
-            <th>タイミング</th>
-            <th>strict: false</th>
-            <th>strict: true</th>
-            <th>影響</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>開発中（npm run dev）</td>
-            <td>普通</td>
-            <td>普通</td>
-            <td>ほぼなし</td>
-          </tr>
-          <tr>
-            <td>ビルド（npm run build）</td>
-            <td>5秒</td>
-            <td>6秒</td>
-            <td>+1秒程度</td>
-          </tr>
-          <tr :class="styles.perfTableHighlightRow">
-            <td>本番実行</td>
-            <td>速い</td>
-            <td>速い</td>
-            <td><strong>影響ゼロ</strong></td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div :class="styles.perfNote">
-        <p><strong>重要:</strong> strict modeは実行速度に影響しません。</p>
-        <p>型情報はコンパイル時に消えるため、本番コードは全く同じです。</p>
+    <DesignSystemCard title="⚙️ コンパイラマクロの威力" color-scheme="purple">
+      <div :class="styles.gridTwo">
+        <DesignSystemCard
+          v-for="card in compilerCards"
+          :key="card.title"
+          variant="bordered"
+          :title="card.title"
+          :color-scheme="card.colorScheme"
+        >
+          <pre :class="styles.codeBlock"><code>{{ card.code }}</code></pre>
+          <DesignSystemInfoBox variant="tip" left-border>
+            <p>{{ card.note }}</p>
+          </DesignSystemInfoBox>
+        </DesignSystemCard>
       </div>
-    </div>
+    </DesignSystemCard>
 
-    <NuxtLink to="/" :class="styles.backLink">← トップページに戻る</NuxtLink>
+    <DesignSystemCard title="📊 総合比較" color-scheme="green">
+      <DesignSystemTable variant="striped" size="md">
+        <TableHeader>
+          <TableRow>
+            <TableHeaderCell scope="col">項目</TableHeaderCell>
+            <TableHeaderCell scope="col">Vue 2</TableHeaderCell>
+            <TableHeaderCell scope="col">React</TableHeaderCell>
+            <TableHeaderCell scope="col">Vue 3</TableHeaderCell>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow v-for="row in comparisonRows" :key="row.label">
+            <TableHeaderCell scope="row">
+              {{ row.label }}
+            </TableHeaderCell>
+            <TableCell>{{ row.vue2 }}</TableCell>
+            <TableCell>{{ row.react }}</TableCell>
+            <TableCell>{{ row.vue3 }}</TableCell>
+          </TableRow>
+        </TableBody>
+      </DesignSystemTable>
+    </DesignSystemCard>
+
+    <DesignSystemInfoBox variant="warning" icon="⚠️" title="Vue 2の型推論の問題" left-border>
+      <p>Options APIではthisの型がany扱いになるため、TypeScriptとの相性が悪いままです。</p>
+      <pre :class="styles.codeBlock"><code>{{ warningCode }}</code></pre>
+      <ul :class="styles.list">
+        <li>Options APIは型推論が非常に弱い</li>
+        <li><code>this</code>の型が正しく推論されない</li>
+        <li>タイポやエラーに気づきにくい</li>
+        <li>Vue 3のComposition APIで大幅改善</li>
+      </ul>
+    </DesignSystemInfoBox>
+
+    <DesignSystemCard title="✅ 結論" color-scheme="green">
+      <ul :class="styles.list">
+        <li v-for="item in conclusionItems" :key="item">
+          {{ item }}
+        </li>
+      </ul>
+      <DesignSystemInfoBox variant="success" icon="🔑" left-border>
+        <p v-for="paragraph in keyPointParagraphs" :key="paragraph">
+          {{ paragraph }}
+        </p>
+      </DesignSystemInfoBox>
+    </DesignSystemCard>
+
+    <DesignSystemCard title="🚀 strict mode のパフォーマンス影響" color-scheme="blue">
+      <DesignSystemTable variant="simple" size="sm">
+        <TableHeader>
+          <TableRow>
+            <TableHeaderCell scope="col">タイミング</TableHeaderCell>
+            <TableHeaderCell scope="col">strict: false</TableHeaderCell>
+            <TableHeaderCell scope="col">strict: true</TableHeaderCell>
+            <TableHeaderCell scope="col">影響</TableHeaderCell>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow v-for="row in perfRows" :key="row.stage" :class="row.highlight ? css({ fontWeight: 'semibold', bg: 'emerald.50' }) : undefined">
+            <TableHeaderCell scope="row">
+              {{ row.stage }}
+            </TableHeaderCell>
+            <TableCell>{{ row.strictFalse }}</TableCell>
+            <TableCell>{{ row.strictTrue }}</TableCell>
+            <TableCell>
+              <strong v-if="row.highlight">{{ row.impact }}</strong>
+              <template v-else>{{ row.impact }}</template>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </DesignSystemTable>
+      <DesignSystemInfoBox variant="tip" icon="ℹ️" left-border>
+        <p>strict modeは実行速度に影響せず、型情報はコンパイル時に消えます。</p>
+      </DesignSystemInfoBox>
+    </DesignSystemCard>
+
+    <NuxtLink to="/" :class="styles.backLink">
+      ← トップページに戻る
+    </NuxtLink>
   </div>
 </template>
