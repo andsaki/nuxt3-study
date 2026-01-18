@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { css } from '~/styled-system/css'
+
 // Vue 3の型推論デモ（実際には使用していないがサンプルコード用）
 const _count = ref(0)  // Ref<number> と自動推論
 const _name = ref('hello')  // Ref<string> と自動推論
@@ -12,22 +14,238 @@ const _emit = defineEmits<{
   update: [id: number, value: string]
   delete: [id: number]
 }>()
+
+const styles = {
+  container: css({
+    maxW: '1200px',
+    mx: 'auto',
+    p: '8',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8',
+    '& h1': { color: '#00dc82', mb: '8', fontSize: '2rem' },
+    '& h2': { color: '#333333', mb: '4', fontSize: '1.3rem' },
+    '& h3': { color: '#555555', mb: '3', fontSize: '1.1rem' },
+    '& pre': {
+      bg: '#1f2937',
+      color: '#f9fafb',
+      p: '4',
+      borderRadius: '6px',
+      overflowX: 'auto',
+      fontSize: '0.875rem',
+      lineHeight: '1.6',
+      m: 0,
+    },
+    '& code': { fontFamily: "'Courier New', monospace" },
+  }),
+  intro: css({
+    bg: '#f0f9ff',
+    borderLeftWidth: '4px',
+    borderLeftColor: '#0ea5e9',
+    p: '6',
+    mb: '8',
+    borderRadius: '8px',
+  }),
+  section: css({
+    bg: 'white',
+    borderWidth: '1px',
+    borderColor: '#e5e7eb',
+    borderRadius: '8px',
+    p: '8',
+    mb: '8',
+  }),
+  sectionHighlight: css({
+    bg: '#fef3c7',
+    borderColor: '#f59e0b',
+    borderWidth: '2px',
+  }),
+  sectionConclusion: css({
+    bg: '#d1fae5',
+    borderColor: '#10b981',
+    borderWidth: '2px',
+  }),
+  sectionWarning: css({
+    bg: '#fee2e2',
+    borderColor: '#ef4444',
+    borderWidth: '2px',
+  }),
+  infoBox: css({
+    bg: 'white',
+    borderRadius: '6px',
+    p: '6',
+    mt: '4',
+    '& ul': { mt: '2', ml: '6' },
+    '& li': { mt: '2' },
+  }),
+  comparisonGridThree: css({
+    display: 'grid',
+    gridTemplateColumns: { base: '1fr', lg: 'repeat(3, 1fr)' },
+    gap: '6',
+    mt: '6',
+  }),
+  compareCard: css({
+    borderWidth: '2px',
+    borderColor: '#d1d5db',
+    borderRadius: '8px',
+    p: '6',
+  }),
+  compareCardVue3: css({ bg: '#d1fae5', borderColor: '#10b981' }),
+  compareCardVue2: css({ bg: '#fee2e2', borderColor: '#ef4444' }),
+  compareCardReact: css({ bg: '#dbeafe', borderColor: '#3b82f6' }),
+  reasonBox: css({
+    bg: 'white',
+    p: '6',
+    borderRadius: '8px',
+    mb: '6',
+    borderWidth: '2px',
+    borderColor: '#f59e0b',
+    '& h3': { color: '#92400e', mb: '3' },
+    '& p': { color: '#78350f', fontSize: '1.1rem' },
+  }),
+  explanationGrid: css({
+    display: 'grid',
+    gap: '6',
+    mt: '6',
+  }),
+  explanationCard: css({
+    bg: 'white',
+    p: '6',
+    borderRadius: '8px',
+    borderWidth: '1px',
+    borderColor: '#d97706',
+    '& h3': { color: '#92400e', mb: '4' },
+  }),
+  compilerGrid: css({
+    display: 'grid',
+    gridTemplateColumns: { base: '1fr', md: 'repeat(2, 1fr)' },
+    gap: '6',
+    mt: '6',
+  }),
+  compilerCard: css({
+    bg: '#f9fafb',
+    p: '6',
+    borderRadius: '8px',
+    borderWidth: '2px',
+    borderColor: '#e5e7eb',
+    '& h3': { color: '#1f2937', mb: '4' },
+  }),
+  note: css({
+    mt: '4',
+    p: '3',
+    bg: '#fef3c7',
+    borderLeftWidth: '3px',
+    borderLeftColor: '#f59e0b',
+    borderRadius: '4px',
+    fontSize: '0.9rem',
+    color: '#78350f',
+  }),
+  comparisonTable: css({
+    width: '100%',
+    borderCollapse: 'collapse',
+    mt: '4',
+    bg: 'white',
+    borderRadius: '8px',
+    overflow: 'hidden',
+    '& th, & td': {
+      p: '4',
+      textAlign: 'left',
+      borderBottom: '1px solid #e5e7eb',
+    },
+    '& th': {
+      bg: '#f9fafb',
+      fontWeight: '600',
+      color: '#374151',
+    },
+    '& tbody tr:hover': {
+      bg: '#f9fafb',
+    },
+  }),
+  warningBox: css({
+    bg: 'white',
+    p: '6',
+    borderRadius: '8px',
+    '& h3': { color: '#991b1b', mb: '4' },
+    '& ul': { mt: '4', ml: '6' },
+    '& li': { mt: '2', color: '#7f1d1d' },
+  }),
+  conclusionBox: css({
+    bg: 'white',
+    p: '6',
+    borderRadius: '8px',
+    '& h3': { color: '#065f46', mb: '4' },
+    '& ul': { mt: '4', mb: '6', ml: '6' },
+    '& li': { mt: '2', lineHeight: '1.6' },
+  }),
+  keyPoint: css({
+    bg: '#ecfdf5',
+    borderWidth: '2px',
+    borderColor: '#10b981',
+    p: '6',
+    borderRadius: '6px',
+    mt: '6',
+    '& p': { mt: '3', lineHeight: '1.6' },
+  }),
+  perfTable: css({
+    width: '100%',
+    borderCollapse: 'collapse',
+    mt: '4',
+    bg: 'white',
+    borderRadius: '8px',
+    overflow: 'hidden',
+    '& th, & td': {
+      p: '4',
+      textAlign: 'left',
+      borderBottom: '1px solid #e5e7eb',
+    },
+    '& th': {
+      bg: '#f9fafb',
+      fontWeight: '600',
+      color: '#374151',
+    },
+  }),
+  perfTableHighlightRow: css({
+    bg: '#ecfdf5',
+    fontWeight: '600',
+  }),
+  perfNote: css({
+    bg: '#dbeafe',
+    p: '4',
+    borderRadius: '6px',
+    mt: '4',
+    borderLeftWidth: '4px',
+    borderLeftColor: '#3b82f6',
+    '& p': { mt: '2', color: '#1e40af' },
+  }),
+  backLink: css({
+    display: 'inline-block',
+    color: '#00dc82',
+    textDecoration: 'none',
+    fontWeight: '500',
+    px: '6',
+    py: '3',
+    borderWidth: '2px',
+    borderColor: '#00dc82',
+    borderRadius: '6px',
+    transition: 'all 0.2s ease',
+    _hover: { bg: '#00dc82', color: 'white' },
+  }),
+}
 </script>
 
 <template>
-  <div class="container">
+  <div :class="styles.container">
     <h1>TypeScript: React vs Vue 3</h1>
 
-    <div class="intro">
+    <div :class="styles.intro">
       <p>
         strict modeでの型推論の比較。なぜVue 3の方が型を書く量が少ないのか？
       </p>
     </div>
 
     <!-- TypeScript strictモード -->
-    <div class="section">
+    <div :class="styles.section">
       <h2>📋 TypeScript strict mode とは</h2>
-      <div class="info-box">
+      <div :class="styles.infoBox">
         <p><strong>TypeScriptのstrict modeは同じ:</strong></p>
         <ul>
           <li>ReactもVueも同じTypeScriptのstrict設定を使用</li>
@@ -38,11 +256,11 @@ const _emit = defineEmits<{
     </div>
 
     <!-- 型推論の強さ -->
-    <div class="section">
+    <div :class="styles.section">
       <h2>🔍 型推論の強さ比較</h2>
 
-      <div class="comparison-grid-three">
-        <div class="compare-card vue3">
+      <div :class="styles.comparisonGridThree">
+        <div :class="[styles.compareCard, styles.compareCardVue3]">
           <h3>Vue 3 (script setup)</h3>
           <pre v-pre><code>&lt;script setup lang="ts"&gt;
 // ✅ 型推論が強力
@@ -57,7 +275,7 @@ const props = defineProps&lt;{
 &lt;/script&gt;</code></pre>
         </div>
 
-        <div class="compare-card vue2">
+        <div :class="[styles.compareCard, styles.compareCardVue2]">
           <h3>Vue 2 (Options API)</h3>
           <pre v-pre><code>&lt;script lang="ts"&gt;
 import Vue from 'vue'
@@ -78,7 +296,7 @@ export default Vue.extend({
 &lt;/script&gt;</code></pre>
         </div>
 
-        <div class="compare-card react">
+        <div :class="[styles.compareCard, styles.compareCardReact]">
           <h3>React</h3>
           <pre v-pre><code>// ❌ 明示的な型指定が必要
 const [count, setCount] = useState&lt;number&gt;(0)
@@ -96,16 +314,16 @@ const Component: React.FC&lt;Props&gt; = ({ title, count }) =&gt; {
     </div>
 
     <!-- なぜVueの方が型推論が強いか -->
-    <div class="section highlight">
+    <div :class="[styles.section, styles.sectionHighlight]">
       <h2>💡 なぜVue 3の方が型推論が強いのか？</h2>
 
-      <div class="reason-box">
+      <div :class="styles.reasonBox">
         <h3>❓「Reactは関数型なのに、なぜ型推論が弱い？」</h3>
         <p>答え: <strong>Reactは純粋関数型言語ではない</strong>からです。</p>
       </div>
 
-      <div class="explanation-grid">
-        <div class="explanation-card">
+      <div :class="styles.explanationGrid">
+        <div :class="styles.explanationCard">
           <h3>純粋関数型言語の型推論</h3>
           <pre><code>-- Haskell（純粋関数型）
 add x y = x + y
@@ -118,7 +336,7 @@ map f (x:xs) = f x : map f xs
 型を全く書かなくても完全に推論される</code></pre>
         </div>
 
-        <div class="explanation-card">
+        <div :class="styles.explanationCard">
           <h3>React = JavaScriptベースの関数型スタイル</h3>
           <pre v-pre><code>// 普通のJavaScript関数
 const useState = &lt;T&gt;(initial: T): [T, (value: T) =&gt; void] =&gt; {
@@ -133,7 +351,7 @@ const [count, setCount] = useState(0)
 const [user, setUser] = useState&lt;User | null&gt;(null)</code></pre>
         </div>
 
-        <div class="explanation-card">
+        <div :class="styles.explanationCard">
           <h3>Vue = コンパイラマクロで型推論を強化</h3>
           <pre v-pre><code>&lt;script setup lang="ts"&gt;
 // definePropsは「コンパイラマクロ」
@@ -150,11 +368,11 @@ const count = ref(0)  // Ref&lt;number&gt;と推論
     </div>
 
     <!-- コンパイラマクロの威力 -->
-    <div class="section">
+    <div :class="styles.section">
       <h2>⚙️ コンパイラマクロの威力</h2>
 
-      <div class="compiler-grid">
-        <div class="compiler-card">
+      <div :class="styles.compilerGrid">
+        <div :class="styles.compilerCard">
           <h3>Vue（SFCコンパイラが解析）</h3>
           <pre v-pre><code>&lt;script setup lang="ts"&gt;
 // コンパイル前
@@ -168,10 +386,10 @@ const count = ref(0)
 defineProps&lt;{ name: string }&gt;()
 defineEmits&lt;{ click: [id: number] }&gt;()
 &lt;/script&gt;</code></pre>
-          <p class="note">コンパイラが「特別扱い」して最適な型を生成</p>
+          <p :class="styles.note">コンパイラが「特別扱い」して最適な型を生成</p>
         </div>
 
-        <div class="compiler-card">
+        <div :class="styles.compilerCard">
           <h3>React（通常のTypeScript）</h3>
           <pre v-pre><code>// ただの関数なので、
 // TypeScriptの一般的な型推論
@@ -186,15 +404,15 @@ const [state, setState] = useState(null)
 
 // 明示的に書く必要
 const [state, setState] = useState&lt;User | null&gt;(null)</code></pre>
-          <p class="note">Reactはライブラリであってコンパイラではない</p>
+          <p :class="styles.note">Reactはライブラリであってコンパイラではない</p>
         </div>
       </div>
     </div>
 
     <!-- 総合比較表 -->
-    <div class="section">
+    <div :class="styles.section">
       <h2>📊 総合比較</h2>
-      <table class="comparison-table">
+      <table :class="styles.comparisonTable">
         <thead>
           <tr>
             <th/>
@@ -257,9 +475,9 @@ const [state, setState] = useState&lt;User | null&gt;(null)</code></pre>
     </div>
 
     <!-- Vue 2の問題 -->
-    <div class="section warning">
+    <div :class="[styles.section, styles.sectionWarning]">
       <h2>⚠️ Vue 2の型推論の問題</h2>
-      <div class="warning-box">
+      <div :class="styles.warningBox">
         <h3>Vue 2 + TypeScriptは非推奨</h3>
         <pre v-pre><code>&lt;script lang="ts"&gt;
 import Vue from 'vue'
@@ -292,9 +510,9 @@ export default Vue.extend({
     </div>
 
     <!-- 結論 -->
-    <div class="section conclusion">
+    <div :class="[styles.section, styles.sectionConclusion]">
       <h2>✅ 結論</h2>
-      <div class="conclusion-box">
+      <div :class="styles.conclusionBox">
         <h3>「関数型 = 型推論が強い」は純粋関数型言語の話</h3>
         <ul>
           <li><strong>Haskell/OCaml:</strong> 純粋関数型 → 型推論が超強力</li>
@@ -303,7 +521,7 @@ export default Vue.extend({
           <li><strong>Vue 3:</strong> コンパイラマクロで型推論を強化 → 書く型が少ない</li>
         </ul>
 
-        <div class="key-point">
+        <div :class="styles.keyPoint">
           <p>
             <strong>ReactもVueもJavaScriptベースなので、本当の関数型ではありません。</strong>
           </p>
@@ -319,9 +537,9 @@ export default Vue.extend({
     </div>
 
     <!-- strict modeの影響 -->
-    <div class="section">
+    <div :class="styles.section">
       <h2>🚀 strict mode のパフォーマンス影響</h2>
-      <table class="perf-table">
+      <table :class="styles.perfTable">
         <thead>
           <tr>
             <th>タイミング</th>
@@ -343,7 +561,7 @@ export default Vue.extend({
             <td>6秒</td>
             <td>+1秒程度</td>
           </tr>
-          <tr class="highlight-row">
+          <tr :class="styles.perfTableHighlightRow">
             <td>本番実行</td>
             <td>速い</td>
             <td>速い</td>
@@ -352,356 +570,12 @@ export default Vue.extend({
         </tbody>
       </table>
 
-      <div class="perf-note">
+      <div :class="styles.perfNote">
         <p><strong>重要:</strong> strict modeは実行速度に影響しません。</p>
         <p>型情報はコンパイル時に消えるため、本番コードは全く同じです。</p>
       </div>
     </div>
 
-    <NuxtLink to="/" class="back-link">← トップページに戻る</NuxtLink>
+    <NuxtLink to="/" :class="styles.backLink">← トップページに戻る</NuxtLink>
   </div>
 </template>
-
-<style scoped>
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-h1 {
-  color: #00dc82;
-  margin-bottom: 2rem;
-  font-size: 2rem;
-}
-
-h2 {
-  color: #333;
-  margin-bottom: 1rem;
-  font-size: 1.3rem;
-}
-
-h3 {
-  color: #555;
-  margin-bottom: 0.75rem;
-  font-size: 1.1rem;
-}
-
-.intro {
-  background: #f0f9ff;
-  border-left: 4px solid #0ea5e9;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  border-radius: 8px;
-}
-
-.section {
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-}
-
-.section.highlight {
-  background: #fef3c7;
-  border: 2px solid #f59e0b;
-}
-
-.section.conclusion {
-  background: #d1fae5;
-  border: 2px solid #10b981;
-}
-
-.section.warning {
-  background: #fee2e2;
-  border: 2px solid #ef4444;
-}
-
-.warning-box {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 8px;
-}
-
-.warning-box h3 {
-  color: #991b1b;
-  margin-bottom: 1rem;
-}
-
-.warning-box ul {
-  margin: 1rem 0 0 1.5rem;
-}
-
-.warning-box li {
-  margin: 0.5rem 0;
-  color: #7f1d1d;
-}
-
-.info-box {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 6px;
-  margin-top: 1rem;
-}
-
-.info-box ul {
-  margin: 0.5rem 0 0 1.5rem;
-}
-
-.info-box li {
-  margin: 0.5rem 0;
-}
-
-.comparison-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-}
-
-.comparison-grid-three {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-}
-
-@media (max-width: 1024px) {
-  .comparison-grid-three {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 768px) {
-  .comparison-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.compare-card {
-  border: 2px solid;
-  border-radius: 8px;
-  padding: 1.5rem;
-}
-
-.compare-card.vue3 {
-  background: #d1fae5;
-  border-color: #10b981;
-}
-
-.compare-card.vue2 {
-  background: #fee2e2;
-  border-color: #ef4444;
-}
-
-.compare-card.react {
-  background: #dbeafe;
-  border-color: #3b82f6;
-}
-
-.compare-card h3 {
-  margin-bottom: 1rem;
-  color: #1f2937;
-}
-
-pre {
-  background: #1f2937;
-  color: #f9fafb;
-  padding: 1rem;
-  border-radius: 6px;
-  overflow-x: auto;
-  font-size: 0.875rem;
-  line-height: 1.6;
-  margin: 0;
-}
-
-code {
-  font-family: 'Courier New', monospace;
-}
-
-.reason-box {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
-  border: 2px solid #f59e0b;
-}
-
-.reason-box h3 {
-  color: #92400e;
-  margin-bottom: 0.75rem;
-}
-
-.reason-box p {
-  color: #78350f;
-  font-size: 1.1rem;
-}
-
-.explanation-grid {
-  display: grid;
-  gap: 1.5rem;
-}
-
-.explanation-card {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 8px;
-  border: 1px solid #d97706;
-}
-
-.explanation-card h3 {
-  color: #92400e;
-  margin-bottom: 1rem;
-}
-
-.compiler-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-}
-
-@media (max-width: 768px) {
-  .compiler-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.compiler-card {
-  background: #f9fafb;
-  padding: 1.5rem;
-  border-radius: 8px;
-  border: 2px solid #e5e7eb;
-}
-
-.compiler-card h3 {
-  color: #1f2937;
-  margin-bottom: 1rem;
-}
-
-.note {
-  margin-top: 1rem;
-  padding: 0.75rem;
-  background: #fef3c7;
-  border-left: 3px solid #f59e0b;
-  border-radius: 4px;
-  font-size: 0.9rem;
-  color: #78350f;
-}
-
-.comparison-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-  background: white;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.comparison-table th,
-.comparison-table td {
-  padding: 1rem;
-  text-align: left;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.comparison-table th {
-  background: #f9fafb;
-  font-weight: 600;
-  color: #374151;
-}
-
-.comparison-table tbody tr:hover {
-  background: #f9fafb;
-}
-
-.conclusion-box {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 8px;
-}
-
-.conclusion-box h3 {
-  color: #065f46;
-  margin-bottom: 1rem;
-}
-
-.conclusion-box ul {
-  margin: 1rem 0 1.5rem 1.5rem;
-}
-
-.conclusion-box li {
-  margin: 0.5rem 0;
-  line-height: 1.6;
-}
-
-.key-point {
-  background: #ecfdf5;
-  border: 2px solid #10b981;
-  padding: 1.5rem;
-  border-radius: 6px;
-  margin-top: 1.5rem;
-}
-
-.key-point p {
-  margin: 0.75rem 0;
-  line-height: 1.6;
-}
-
-.perf-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-  background: white;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.perf-table th,
-.perf-table td {
-  padding: 1rem;
-  text-align: left;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.perf-table th {
-  background: #f9fafb;
-  font-weight: 600;
-  color: #374151;
-}
-
-.perf-table .highlight-row {
-  background: #ecfdf5;
-  font-weight: 600;
-}
-
-.perf-note {
-  background: #dbeafe;
-  padding: 1rem;
-  border-radius: 6px;
-  margin-top: 1rem;
-  border-left: 4px solid #3b82f6;
-}
-
-.perf-note p {
-  margin: 0.5rem 0;
-  color: #1e40af;
-}
-
-.back-link {
-  display: inline-block;
-  color: #00dc82;
-  text-decoration: none;
-  font-weight: 500;
-  padding: 0.75rem 1.5rem;
-  border: 2px solid #00dc82;
-  border-radius: 6px;
-  transition: all 0.2s;
-}
-
-.back-link:hover {
-  background: #00dc82;
-  color: white;
-}
-</style>

@@ -169,7 +169,7 @@ export default defineConfig({
           },
           input: {
             bg: {
-              value: { base: "white", _dark: "{colors.gray.800}" },
+              value: { base: "{colors.gray.50}", _dark: "{colors.gray.800}" },
             },
             text: {
               value: { base: "{colors.gray.900}", _dark: "{colors.gray.50}" },

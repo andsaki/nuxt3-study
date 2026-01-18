@@ -116,6 +116,30 @@
         </nav>
       </DesignSystemCard>
 
+      <!-- 検索UI比較 -->
+      <DesignSystemCard title="検索UI比較 (.vue / h / TSX)" icon="🔍" color-scheme="purple">
+        <nav :class="css({ spaceY: '2' })">
+          <NuxtLink
+            to="/examples/search-sfc"
+            :class="css({ display: 'block', p: '3', bg: 'purple.50', rounded: 'md', transition: 'all 0.2s', _hover: { bg: 'purple.100' } })"
+          >
+            📄 .vue テンプレート版
+          </NuxtLink>
+          <NuxtLink
+            to="/examples/search-hyperscript"
+            :class="css({ display: 'block', p: '3', bg: 'indigo.50', rounded: 'md', transition: 'all 0.2s', _hover: { bg: 'indigo.100' } })"
+          >
+            🧱 Hyperscript (h) 版
+          </NuxtLink>
+          <NuxtLink
+            to="/examples/search-tsx"
+            :class="css({ display: 'block', p: '3', bg: 'pink.50', rounded: 'md', transition: 'all 0.2s', _hover: { bg: 'pink.100' } })"
+          >
+            ⚡ TSX 版
+          </NuxtLink>
+        </nav>
+      </DesignSystemCard>
+
       <!-- データ取得 -->
       <DesignSystemCard title="データ取得" icon="🔄" color-scheme="green">
         <nav :class="css({ spaceY: '2' })">

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { css } from '~/styled-system/css'
+
 // レンダリングモードはrouteRulesで設定
 // useAsyncDataはデータ取得のみを担当
 
@@ -14,21 +16,108 @@ const { data: _data } = await useAsyncData<Data>('demo-data', async () => {
     mode: 'データ取得メソッド',
   }
 })
+
+const styles = {
+  container: css({
+    maxW: '1200px',
+    mx: 'auto',
+    py: '8',
+    px: { base: '4', md: '8' },
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8',
+  }),
+  title: css({ color: '#00dc82', fontSize: '2rem', fontWeight: 'bold' }),
+  sectionTitle: css({ color: '#333333', fontSize: '1.3rem', fontWeight: '600', mb: '4' }),
+  subTitle: css({ color: '#555555', fontSize: '1.1rem', fontWeight: '600', mb: '3' }),
+  alert: css({
+    bg: '#fee2e2',
+    borderWidth: '2px',
+    borderColor: '#ef4444',
+    borderRadius: '8px',
+    p: '6',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '2',
+    '& h2': { color: '#991b1b', fontWeight: 'bold', fontSize: '1.2rem' },
+    '& p': { color: '#7f1d1d', fontWeight: '600', fontSize: '1.1rem' },
+  }),
+  comparison: css({
+    display: 'grid',
+    gridTemplateColumns: { base: '1fr', md: 'repeat(2, 1fr)' },
+    gap: '6',
+  }),
+  card: css({
+    borderRadius: '8px',
+    borderWidth: '2px',
+    p: '6',
+    '& pre': { mt: '4' },
+  }),
+  cardWrong: css({ bg: '#fee2e2', borderColor: '#ef4444' }),
+  cardCorrect: css({ bg: '#d1fae5', borderColor: '#10b981' }),
+  modes: css({
+    display: 'grid',
+    gap: '4',
+  }),
+  modeCard: css({
+    bg: 'white',
+    borderWidth: '1px',
+    borderColor: '#e5e7eb',
+    borderRadius: '8px',
+    p: '6',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '3',
+    '& ul': { pl: '6', listStyleType: 'disc', color: '#6b7280' },
+    '& li': { my: '1' },
+  }),
+  useAsyncDataOptions: css({
+    bg: '#f0f9ff',
+    borderLeftWidth: '4px',
+    borderLeftColor: '#3b82f6',
+    borderRadius: '8px',
+    p: '6',
+    '& p': { color: '#1e40af', mb: '4' },
+  }),
+  codeBlock: css({
+    bg: '#1f2937',
+    color: '#f9fafb',
+    p: '4',
+    borderRadius: '6px',
+    overflowX: 'auto',
+    fontSize: '0.875rem',
+    lineHeight: '1.6',
+    fontFamily: "'Courier New', monospace",
+  }),
+  backLink: css({
+    alignSelf: 'flex-start',
+    color: '#00dc82',
+    textDecoration: 'none',
+    fontWeight: '500',
+    px: '4',
+    py: '2',
+    borderWidth: '2px',
+    borderColor: '#00dc82',
+    borderRadius: '6px',
+    transition: 'all 0.2s ease',
+    _hover: { bg: '#00dc82', color: 'white' },
+  }),
+}
 </script>
 
 <template>
-  <div class="container">
-    <h1>レンダリングモードの設定</h1>
+  <div :class="styles.container">
+    <h1 :class="styles.title">レンダリングモードの設定</h1>
 
-    <div class="alert">
+    <div :class="styles.alert">
       <h2>⚠️ 重要</h2>
       <p>useAsyncDataではSSG/ISRの設定はできません！</p>
     </div>
 
-    <div class="comparison">
-      <div class="card wrong">
-        <h3>❌ できないこと</h3>
-        <pre><code>// useAsyncDataでSSG/ISRは設定できない
+    <div :class="styles.comparison">
+      <div :class="[styles.card, styles.cardWrong]">
+        <h3 :class="styles.subTitle">❌ できないこと</h3>
+        <pre :class="styles.codeBlock"><code>// useAsyncDataでSSG/ISRは設定できない
 const { data } = await useAsyncData('key',
   async () => { ... },
   {
@@ -40,9 +129,9 @@ const { data } = await useAsyncData('key',
 )</code></pre>
       </div>
 
-      <div class="card correct">
-        <h3>✅ 正しい方法</h3>
-        <pre><code>// nuxt.config.ts で設定
+      <div :class="[styles.card, styles.cardCorrect]">
+        <h3 :class="styles.subTitle">✅ 正しい方法</h3>
+        <pre :class="styles.codeBlock"><code>// nuxt.config.ts で設定
 export default defineNuxtConfig({
   routeRules: {
     '/page': { prerender: true },  // SSG
@@ -58,12 +147,12 @@ const { data } = await useAsyncData('key',
       </div>
     </div>
 
-    <div class="modes">
-      <h2>レンダリングモード一覧</h2>
+    <div :class="styles.modes">
+      <h2 :class="styles.sectionTitle">レンダリングモード一覧</h2>
 
-      <div class="mode-card">
-        <h3>SSR (Server-Side Rendering)</h3>
-        <pre><code>// デフォルト（設定不要）
+      <div :class="styles.modeCard">
+        <h3 :class="styles.subTitle">SSR (Server-Side Rendering)</h3>
+        <pre :class="styles.codeBlock"><code>// デフォルト（設定不要）
 routeRules: {
   '/page': { ssr: true }
 }</code></pre>
@@ -73,9 +162,9 @@ routeRules: {
         </ul>
       </div>
 
-      <div class="mode-card">
-        <h3>SSG (Static Site Generation)</h3>
-        <pre><code>routeRules: {
+      <div :class="styles.modeCard">
+        <h3 :class="styles.subTitle">SSG (Static Site Generation)</h3>
+        <pre :class="styles.codeBlock"><code>routeRules: {
   '/page': { prerender: true }
 }</code></pre>
         <ul>
@@ -84,9 +173,9 @@ routeRules: {
         </ul>
       </div>
 
-      <div class="mode-card">
-        <h3>ISR (Incremental Static Regeneration)</h3>
-        <pre><code>routeRules: {
+      <div :class="styles.modeCard">
+        <h3 :class="styles.subTitle">ISR (Incremental Static Regeneration)</h3>
+        <pre :class="styles.codeBlock"><code>routeRules: {
   '/page': { swr: 60 } // 60秒
 }</code></pre>
         <ul>
@@ -95,9 +184,9 @@ routeRules: {
         </ul>
       </div>
 
-      <div class="mode-card">
-        <h3>CSR (Client-Side Rendering)</h3>
-        <pre><code>routeRules: {
+      <div :class="styles.modeCard">
+        <h3 :class="styles.subTitle">CSR (Client-Side Rendering)</h3>
+        <pre :class="styles.codeBlock"><code>routeRules: {
   '/page': { ssr: false }
 }</code></pre>
         <ul>
@@ -107,11 +196,11 @@ routeRules: {
       </div>
     </div>
 
-    <div class="useasyncdata-options">
-      <h2>useAsyncDataのオプション</h2>
+    <div :class="styles.useAsyncDataOptions">
+      <h2 :class="styles.sectionTitle">useAsyncDataのオプション</h2>
       <p>レンダリングモードは設定できないが、以下は設定可能:</p>
 
-      <pre><code>const { data } = await useAsyncData('key', async () => {...}, {
+      <pre :class="styles.codeBlock"><code>const { data } = await useAsyncData('key', async () => {...}, {
   // データ取得制御
   server: true,        // サーバーで実行するか
   lazy: false,         // 遅延読み込み
@@ -132,144 +221,6 @@ routeRules: {
 })</code></pre>
     </div>
 
-    <NuxtLink to="/" class="back-link">← トップページに戻る</NuxtLink>
+    <NuxtLink to="/" :class="styles.backLink">← トップページに戻る</NuxtLink>
   </div>
 </template>
-
-<style scoped>
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-h1 {
-  color: #00dc82;
-  margin-bottom: 2rem;
-}
-
-h2 {
-  color: #333;
-  margin-bottom: 1rem;
-  font-size: 1.3rem;
-}
-
-h3 {
-  color: #555;
-  margin-bottom: 0.75rem;
-  font-size: 1.1rem;
-}
-
-.alert {
-  background: #fee2e2;
-  border: 2px solid #ef4444;
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.alert h2 {
-  color: #991b1b;
-  margin-bottom: 0.5rem;
-}
-
-.alert p {
-  color: #7f1d1d;
-  font-weight: 600;
-  font-size: 1.1rem;
-}
-
-.comparison {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-@media (max-width: 768px) {
-  .comparison {
-    grid-template-columns: 1fr;
-  }
-}
-
-.card {
-  border-radius: 8px;
-  padding: 1.5rem;
-  border: 2px solid;
-}
-
-.card.wrong {
-  background: #fee2e2;
-  border-color: #ef4444;
-}
-
-.card.correct {
-  background: #d1fae5;
-  border-color: #10b981;
-}
-
-.card h3 {
-  margin-bottom: 1rem;
-}
-
-.modes {
-  margin-bottom: 2rem;
-}
-
-.mode-card {
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-.mode-card ul {
-  margin-top: 0.5rem;
-  padding-left: 1.5rem;
-}
-
-.mode-card li {
-  margin: 0.3rem 0;
-  color: #6b7280;
-}
-
-.useasyncdata-options {
-  background: #f0f9ff;
-  border-left: 4px solid #3b82f6;
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.useasyncdata-options p {
-  color: #1e40af;
-  margin-bottom: 1rem;
-}
-
-pre {
-  background: #1f2937;
-  color: #f9fafb;
-  padding: 1rem;
-  border-radius: 6px;
-  overflow-x: auto;
-  font-size: 0.875rem;
-  line-height: 1.6;
-}
-
-.back-link {
-  display: inline-block;
-  color: #00dc82;
-  text-decoration: none;
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-  border: 2px solid #00dc82;
-  border-radius: 4px;
-  transition: all 0.2s;
-}
-
-.back-link:hover {
-  background: #00dc82;
-  color: white;
-}
-</style>
