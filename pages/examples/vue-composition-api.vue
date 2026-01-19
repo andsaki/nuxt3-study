@@ -13,7 +13,7 @@ const keepAliveEnabled = ref(true)
 const docUrl = '/docs/vue-composition-api-reference.md'
 
 const openDoc = () => {
-  if (process.client) {
+  if (import.meta.client) {
     window.open(docUrl, '_blank', 'noreferrer')
   }
 }

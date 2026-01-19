@@ -2,7 +2,7 @@
 import { css } from '~/styled-system/css'
 import { useForm, type Path } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
-import { z } from 'zod'
+import type { z } from 'zod'
 import type { CSSProperties, InputHTMLAttributes, Ref } from 'vue'
 import DesignSystemInput from './Input.vue'
 import DesignSystemButton from './Button.vue'
