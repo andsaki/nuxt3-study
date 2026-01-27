@@ -18,7 +18,7 @@ export const cardRecipe: SlotRecipeConfig = {
     title: {
       fontWeight: 'semibold',
       fontSize: 'xl',
-      mb: 2,
+      mb: 4,
       display: 'flex',
       alignItems: 'center',
       gap: 2,
@@ -31,6 +31,9 @@ export const cardRecipe: SlotRecipeConfig = {
     content: {
       lineHeight: '1.6',
       color: 'gray.700',
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 4,
     },
   },
   variants: {
