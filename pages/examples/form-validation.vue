@@ -141,7 +141,7 @@ import { css } from '~/styled-system/css'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
-import { DesignSystemFormWithHook } from '~/components/design-system'
+import DesignSystemFormWithHook from '~/components/design-system/FormWithHook'
 
 // Zodスキーマ定義
 const validationSchema = toTypedSchema(

@@ -161,7 +161,7 @@ import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 import { css } from '~/styled-system/css'
-import { DesignSystemFormWithHook } from '~/components/design-system'
+import DesignSystemFormWithHook from '~/components/design-system/FormWithHook'
 
 // ユーザー名の重複チェックをシミュレート（非同期）
 const checkUsernameAvailability = async (username: string): Promise<boolean> => {

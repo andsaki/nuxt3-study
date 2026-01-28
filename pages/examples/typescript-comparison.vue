@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { css } from '~/styled-system/css'
 import {
-  DesignSystemTable,
   TableBody,
   TableCell,
   TableHeader,
   TableHeaderCell,
   TableRow,
-} from '~/components/design-system'
+} from '~/components/design-system/table-helpers'
 
 type CardScheme = 'blue' | 'green' | 'yellow' | 'red' | 'gray' | 'purple'
 
