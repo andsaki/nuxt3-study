@@ -31,7 +31,7 @@ const handleFastButtonClick = () => {
   fastButtonClicked.value = true
   setTimeout(() => {
     fastButtonClicked.value = false
-  }, 150)
+  }, 600)
 }
 
 // ボタンクリック: 遅延フィードバック
@@ -40,7 +40,7 @@ const handleSlowButtonClick = () => {
     slowButtonClicked.value = true
     setTimeout(() => {
       slowButtonClicked.value = false
-    }, 150)
+    }, 600)
   }, 500)
 }
 
@@ -249,10 +249,39 @@ const activeButtonOverlay = css({
     content: '""',
     position: 'absolute',
     inset: 0,
-    backgroundColor: 'rgba(0,0,0,0.1)',
+    backgroundColor: 'rgba(59, 130, 246, 0.3)',
     borderRadius: 'md',
+    opacity: 0,
+    transform: 'scale(0.8)',
+    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+    animation: 'fadeInOut 0.6s ease-out forwards',
   },
 })
+
+// グローバルCSSとしてkeyframesを追加
+if (typeof document !== 'undefined') {
+  const style = document.createElement('style')
+  style.textContent = `
+    @keyframes fadeInOut {
+      0% {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(1);
+      }
+    }
+  `
+  if (!document.querySelector('#button-animation-styles')) {
+    style.id = 'button-animation-styles'
+    document.head.appendChild(style)
+  }
+}
 </script>
 
 <template>
@@ -291,14 +320,22 @@ const activeButtonOverlay = css({
                 応答時間: &lt;50ms
               </p>
             </div>
-            <div :class="fastButtonClicked ? activeButtonOverlay : ''">
-              <DesignSystemButton
-                variant="primary"
-                size="lg"
-                @click="handleFastButtonClick"
-              >
-                クリックしてみて
-              </DesignSystemButton>
+            <div :class="css({ position: 'relative' })">
+              <div :class="fastButtonClicked ? activeButtonOverlay : ''">
+                <DesignSystemButton
+                  variant="primary"
+                  size="lg"
+                  :class="css({
+                    transition: 'transform 0.1s ease-in-out',
+                    _active: {
+                      transform: 'scale(0.95)',
+                    },
+                  })"
+                  @click="handleFastButtonClick"
+                >
+                  クリックしてみて
+                </DesignSystemButton>
+              </div>
             </div>
           </div>
 
@@ -313,14 +350,22 @@ const activeButtonOverlay = css({
                 応答時間: 500ms（待たされる感覚）
               </p>
             </div>
-            <div :class="slowButtonClicked ? activeButtonOverlay : ''">
-              <DesignSystemButton
-                variant="secondary"
-                size="lg"
-                @click="handleSlowButtonClick"
-              >
-                クリックしてみて
-              </DesignSystemButton>
+            <div :class="css({ position: 'relative' })">
+              <div :class="slowButtonClicked ? activeButtonOverlay : ''">
+                <DesignSystemButton
+                  variant="secondary"
+                  size="lg"
+                  :class="css({
+                    transition: 'transform 0.1s ease-in-out',
+                    _active: {
+                      transform: 'scale(0.95)',
+                    },
+                  })"
+                  @click="handleSlowButtonClick"
+                >
+                  クリックしてみて
+                </DesignSystemButton>
+              </div>
             </div>
           </div>
         </div>
