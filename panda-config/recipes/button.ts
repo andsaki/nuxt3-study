@@ -64,9 +64,19 @@ export const button: RecipeConfig = {
     outlineStyle: "solid",
     position: "relative",
     gap: "0.5rem",
+    boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)",
+    _hover: {
+      boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+      transform: "translateY(-1px)",
+    },
+    _active: {
+      boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+      transform: "translateY(0)",
+    },
     _disabled: {
       cursor: "not-allowed",
       opacity: 0.6,
+      boxShadow: "none",
     },
   },
   variants: {
