@@ -9,6 +9,13 @@ import { radio } from "./panda-config/recipes/radio";
 import { loading } from "./panda-config/recipes/loading";
 import { modal } from "./panda-config/recipes/modal";
 import { tooltip } from "./panda-config/recipes/tooltip";
+import { infoBox } from "./panda-config/recipes/infobox";
+import { dropdown } from "./panda-config/recipes/dropdown";
+import { table } from "./panda-config/recipes/table";
+import { text } from "./panda-config/recipes/text";
+import { accordion } from "./panda-config/recipes/accordion";
+import { breadcrumbs } from "./panda-config/recipes/breadcrumbs";
+import { colorpicker } from "./panda-config/recipes/colorpicker";
 
 export default defineConfig({
   // Whether to use css reset
@@ -39,6 +46,8 @@ export default defineConfig({
         textarea,
         loading,
         tooltip,
+        text,
+        colorpicker,
       },
       slotRecipes: {
         card: cardRecipe,
@@ -46,6 +55,11 @@ export default defineConfig({
         checkbox,
         radio,
         modal,
+        infoBox,
+        dropdown,
+        table,
+        accordion,
+        breadcrumbs,
       },
       tokens: {
         colors: {

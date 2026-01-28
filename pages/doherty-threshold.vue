@@ -465,36 +465,18 @@ const activeButtonOverlay = css({
     </section>
 
     <!-- 閾値情報 -->
-    <div
-      :class="css({
-        marginTop: '3rem',
-        padding: '2rem',
-        backgroundColor: 'blue.50',
-        borderLeft: '4px solid',
-        borderColor: 'blue.500',
-        borderRadius: 'md',
-      })"
+    <DesignSystemInfoBox
+      variant="info"
+      title="ドハティの閾値とは？"
+      icon="💡"
+      left-border
+      :class="css({ marginTop: '3rem' })"
     >
-      <h3
-        :class="css({
-          fontSize: '1.25rem',
-          fontWeight: 'bold',
-          marginBottom: '1rem',
-          color: 'blue.900',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.5rem',
-        })"
-      >
-        <span>💡</span>
-        ドハティの閾値とは？
-      </h3>
       <ul
         :class="css({
           listStyle: 'disc',
           paddingLeft: '1.5rem',
           lineHeight: '1.8',
-          color: 'blue.800',
         })"
       >
         <li><strong>400ms</strong> がユーザー体験の分岐点</li>
@@ -504,6 +486,6 @@ const activeButtonOverlay = css({
         <li>アニメーション: <strong>300ms以下</strong>、60fps推奨</li>
         <li>楽観的UIで体感速度を向上させる</li>
       </ul>
-    </div>
+    </DesignSystemInfoBox>
   </div>
 </template>
