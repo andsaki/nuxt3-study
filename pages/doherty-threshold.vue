@@ -245,6 +245,8 @@ const metricValueClass = css({
 
 const activeButtonOverlay = css({
   position: 'relative',
+  overflow: 'hidden',
+  borderRadius: 'md',
   _after: {
     content: '""',
     position: 'absolute',
