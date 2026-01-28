@@ -30,6 +30,9 @@ Next.js版で実装された機能をNuxt 3で再現し、ReactとVueのエコ�
 # 依存関係のインストール
 npm install
 
+# Panda CSSのスタイル生成
+npx panda codegen
+
 # 開発サーバーの起動
 npm run dev
 
@@ -43,19 +46,45 @@ npm run test
 npm run e2e
 ```
 
+### 開発ワークフロー
+
+1. **コンポーネント開発**:
+   ```bash
+   # 開発サーバー起動
+   npm run dev
+
+   # Panda CSSレシピを追加したら
+   npx panda codegen
+   ```
+
+2. **UI確認** (design-specialistスキルが自動実行):
+   ```bash
+   # Playwrightスクリプトが自動生成・実行される
+   # スクリーンショット取得 → デザイン確認 → ファイル削除
+   ```
+
 ## 📁 プロジェクト構造
 
 ```
 nuxt3-study/
-├── pages/           # ページコンポーネント
-├── components/      # 再利用可能なコンポーネント
-├── stores/          # Piniaストア
-├── composables/     # コンポーザブル関数
-├── server/          # サーバーAPI
+├── pages/                    # ページコンポーネント
+├── components/               # 再利用可能なコンポーネント
+│   └── design-system/        # デザインシステムコンポーネント
+│       ├── Button.vue
+│       ├── Card.vue
+│       ├── Input.vue
+│       └── ...
+├── stores/                   # Piniaストア
+├── composables/              # コンポーザブル関数
+├── server/                   # サーバーAPI
 │   └── api/
-├── prisma/          # Prismaスキーマとマイグレーション
-├── tests/           # テストファイル
-└── assets/          # スタイルシートなど
+├── prisma/                   # Prismaスキーマとマイグレーション
+├── tests/                    # テストファイル
+├── panda-config/             # Panda CSS設定
+│   ├── recipes/              # スタイルレシピ（button, card等）
+│   └── tokens/               # デザイントークン
+├── styled-system/            # Panda CSS生成ファイル
+└── CLAUDE.md                 # Claude Code プロジェクト設定
 ```
 
 ## 📖 学習内容
