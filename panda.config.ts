@@ -211,4 +211,59 @@ export default defineConfig({
 
   // The output directory for your css system
   outdir: "styled-system",
+
+  // Static CSS generation for all recipe variants
+  staticCss: {
+    recipes: {
+      button: [
+        // All size variants
+        { size: ["sm", "md", "lg"] },
+        // All variant + wcagLevel combinations
+        { variant: ["outline"], wcagLevel: ["A", "AA", "AAA"] },
+        { variant: ["primary"], wcagLevel: ["A", "AA", "AAA"] },
+        { variant: ["secondary"], wcagLevel: ["A", "AA", "AAA"] },
+        { variant: ["danger"], wcagLevel: ["A", "AA", "AAA"] },
+      ],
+      input: [
+        {
+          size: ["sm", "md", "lg"],
+          state: ["default", "error"],
+          wcagLevel: ["A", "AA", "AAA"],
+        },
+      ],
+      text: [
+        {
+          variant: [
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5",
+            "h6",
+            "body-large",
+            "body",
+            "body-small",
+            "caption",
+            "overline",
+          ],
+          align: ["left", "center", "right", "justify"],
+        },
+      ],
+      textarea: [
+        { state: ["default", "error"], wcagLevel: ["A", "AA", "AAA"] },
+      ],
+      loading: [
+        {
+          size: ["sm", "md", "lg", "xl", "inline-sm", "inline-md"],
+          color: ["primary", "secondary", "white"],
+        },
+      ],
+      tooltip: [
+        { position: ["top", "bottom", "left", "right"], size: ["sm", "md", "lg"] },
+      ],
+      colorpicker: [
+        { size: ["sm", "md", "lg"], wcagLevel: ["A", "AA", "AAA"] },
+      ],
+    },
+  },
 });
