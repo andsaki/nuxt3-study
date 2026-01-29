@@ -29,5 +29,8 @@ export default defineNuxtConfig({
         baseURL: '/docs'
       }
     ]
+  },
+  vite: {
+    assetsInclude: ['**/*.md']
   }
 })

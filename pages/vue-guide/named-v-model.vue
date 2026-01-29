@@ -1,9 +1,9 @@
 <template>
-  <MarkdownViewer :content="content" />
+  <MarkdownViewer v-if="content" :content="content" />
 </template>
 
 <script setup lang="ts">
-import namedVModelMd from '~/docs/named-v-model.md?raw'
-
-const content = namedVModelMd
+const { data: content } = await useFetch('/docs/named-v-model.md', {
+  transform: (data) => data as string
+})
 </script>

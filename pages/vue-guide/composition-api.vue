@@ -1,9 +1,9 @@
 <template>
-  <MarkdownViewer :content="content" />
+  <MarkdownViewer v-if="content" :content="content" />
 </template>
 
 <script setup lang="ts">
-import compositionApiMd from '~/docs/vue-composition-api-reference.md?raw'
-
-const content = compositionApiMd
+const { data: content } = await useFetch('/docs/vue-composition-api-reference.md', {
+  transform: (data) => data as string
+})
 </script>

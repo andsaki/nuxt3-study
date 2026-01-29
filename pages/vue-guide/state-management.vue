@@ -1,9 +1,9 @@
 <template>
-  <MarkdownViewer :content="content" />
+  <MarkdownViewer v-if="content" :content="content" />
 </template>
 
 <script setup lang="ts">
-import stateManagementMd from '~/docs/state-management-comparison.md?raw'
-
-const content = stateManagementMd
+const { data: content } = await useFetch('/docs/state-management-comparison.md', {
+  transform: (data) => data as string
+})
 </script>

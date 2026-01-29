@@ -1,9 +1,9 @@
 <template>
-  <MarkdownViewer :content="content" />
+  <MarkdownViewer v-if="content" :content="content" />
 </template>
 
 <script setup lang="ts">
-import vueGuideMd from '~/docs/vue-guide.md?raw'
-
-const content = vueGuideMd
+const { data: content } = await useFetch('/docs/vue-guide.md', {
+  transform: (data) => data as string
+})
 </script>

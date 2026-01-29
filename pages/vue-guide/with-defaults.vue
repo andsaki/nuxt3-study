@@ -1,9 +1,9 @@
 <template>
-  <MarkdownViewer :content="content" />
+  <MarkdownViewer v-if="content" :content="content" />
 </template>
 
 <script setup lang="ts">
-import withDefaultsMd from '~/docs/withDefaults-guide.md?raw'
-
-const content = withDefaultsMd
+const { data: content } = await useFetch('/docs/withDefaults-guide.md', {
+  transform: (data) => data as string
+})
 </script>

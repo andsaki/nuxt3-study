@@ -1,9 +1,9 @@
 <template>
-  <MarkdownViewer :content="content" />
+  <MarkdownViewer v-if="content" :content="content" />
 </template>
 
 <script setup lang="ts">
-import bestPracticesMd from '~/docs/vue-best-practices.md?raw'
-
-const content = bestPracticesMd
+const { data: content } = await useFetch('/docs/vue-best-practices.md', {
+  transform: (data) => data as string
+})
 </script>
