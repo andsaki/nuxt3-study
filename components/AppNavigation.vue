@@ -42,6 +42,11 @@
           デザインシステム
         </NuxtLink>
 
+        <!-- Vue Guide -->
+        <NuxtLink to="/vue-guide" :class="menuItemClass">
+          学習ガイド
+        </NuxtLink>
+
         <!-- Examples -->
         <div :class="dropdownClass" @mouseenter="openDropdown('examples')" @mouseleave="closeDropdown">
           <button :class="menuItemClass">
@@ -115,6 +120,12 @@
       <div>
         <NuxtLink to="/design-system" :class="mobileMenuItemClass" @click="closeMobileMenu">
           デザインシステム
+        </NuxtLink>
+      </div>
+
+      <div>
+        <NuxtLink to="/vue-guide" :class="mobileMenuItemClass" @click="closeMobileMenu">
+          学習ガイド
         </NuxtLink>
       </div>
 
