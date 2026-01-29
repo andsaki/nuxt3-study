@@ -44,6 +44,30 @@
         </div>
       </DesignSystemCard>
 
+      <!-- 主要デモ -->
+      <DesignSystemCard title="主要デモ" icon="✨" color-scheme="purple">
+        <nav :class="css({ spaceY: '2', mt: '4' })">
+          <NuxtLink
+            to="/design-system"
+            :class="css({ display: 'block', p: '3', bg: 'purple.50', rounded: 'md', transition: 'all 0.2s', _hover: { bg: 'purple.100' } })"
+          >
+            🎨 デザインシステム
+          </NuxtLink>
+          <NuxtLink
+            to="/doherty-threshold"
+            :class="css({ display: 'block', p: '3', bg: 'blue.50', rounded: 'md', transition: 'all 0.2s', _hover: { bg: 'blue.100' } })"
+          >
+            ⚡ Doherty Threshold (400ms以内)
+          </NuxtLink>
+          <NuxtLink
+            to="/portfolio"
+            :class="css({ display: 'block', p: '3', bg: 'purple.50', rounded: 'md', transition: 'all 0.2s', _hover: { bg: 'purple.100' } })"
+          >
+            💼 Portfolio
+          </NuxtLink>
+        </nav>
+      </DesignSystemCard>
+
       <!-- レンダリングモード -->
       <DesignSystemCard title="レンダリングモード" icon="🎨">
         <nav :class="css({ spaceY: '2', mt: '4' })">
