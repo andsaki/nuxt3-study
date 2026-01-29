@@ -5,7 +5,7 @@
     aria-labelledby="modal-title"
     aria-modal="true"
     @click="handleBackdropClick"
-    @close="emit('close')"
+    @close="closeModal"
   >
     <div :class="slots.header">
       <h2
@@ -20,7 +20,7 @@
         type="button"
         :class="slots.closeButton"
         aria-label="モーダルを閉じる"
-        @click="emit('close')"
+        @click="closeModal"
       >
         ✕
       </button>
@@ -52,10 +52,17 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
   close: []
+  'update:isOpen': [value: boolean]
 }>()
 
 const dialogRef = ref<HTMLDialogElement>()
 let previousActiveElement: HTMLElement | null = null
+
+// モーダルを閉じる処理
+const closeModal = () => {
+  emit('update:isOpen', false)
+  emit('close')
+}
 
 const slots = computed(() => modalRecipe({
   size: props.size,
@@ -93,7 +100,7 @@ const handleBackdropClick = (e: MouseEvent) => {
     e.clientX <= rect.left + rect.width
 
   if (!isInDialog) {
-    emit('close')
+    closeModal()
   }
 }
 
