@@ -7,35 +7,66 @@ useSeoMeta({
   description: '選択肢が増えるほど、意思決定にかかる時間が長くなる。選択肢の数と決定時間の関係を体験できるインタラクティブデモ',
 })
 
-// タイマー管理
-const startTime = ref<number | null>(null)
-const endTime = ref<number | null>(null)
-const isTimerRunning = ref(false)
+// タイマー管理（3択用）
+const startTimeSimple = ref<number | null>(null)
+const endTimeSimple = ref<number | null>(null)
+const isTimerRunningSimple = ref(false)
 
-const elapsedTime = computed(() => {
-  if (startTime.value && endTime.value) {
-    return ((endTime.value - startTime.value) / 1000).toFixed(3)
+const elapsedTimeSimple = computed(() => {
+  if (startTimeSimple.value && endTimeSimple.value) {
+    return ((endTimeSimple.value - startTimeSimple.value) / 1000).toFixed(3)
   }
   return null
 })
 
-const startTimer = () => {
-  startTime.value = Date.now()
-  endTime.value = null
-  isTimerRunning.value = true
+const startTimerSimple = () => {
+  startTimeSimple.value = Date.now()
+  endTimeSimple.value = null
+  isTimerRunningSimple.value = true
 }
 
-const stopTimer = () => {
-  if (isTimerRunning.value) {
-    endTime.value = Date.now()
-    isTimerRunning.value = false
+const stopTimerSimple = () => {
+  if (isTimerRunningSimple.value) {
+    endTimeSimple.value = Date.now()
+    isTimerRunningSimple.value = false
   }
 }
 
-const resetTimer = () => {
-  startTime.value = null
-  endTime.value = null
-  isTimerRunning.value = false
+const resetTimerSimple = () => {
+  startTimeSimple.value = null
+  endTimeSimple.value = null
+  isTimerRunningSimple.value = false
+}
+
+// タイマー管理（12択用）
+const startTimeComplex = ref<number | null>(null)
+const endTimeComplex = ref<number | null>(null)
+const isTimerRunningComplex = ref(false)
+
+const elapsedTimeComplex = computed(() => {
+  if (startTimeComplex.value && endTimeComplex.value) {
+    return ((endTimeComplex.value - startTimeComplex.value) / 1000).toFixed(3)
+  }
+  return null
+})
+
+const startTimerComplex = () => {
+  startTimeComplex.value = Date.now()
+  endTimeComplex.value = null
+  isTimerRunningComplex.value = true
+}
+
+const stopTimerComplex = () => {
+  if (isTimerRunningComplex.value) {
+    endTimeComplex.value = Date.now()
+    isTimerRunningComplex.value = false
+  }
+}
+
+const resetTimerComplex = () => {
+  startTimeComplex.value = null
+  endTimeComplex.value = null
+  isTimerRunningComplex.value = false
 }
 
 // スタイル（レイアウトのみ）
@@ -609,7 +640,7 @@ const resetButtonClass = css({
                   fontWeight: 'semibold',
                   _hover: { backgroundColor: 'green.600' },
                 })"
-                @click="startTimer"
+                @click="startTimerSimple"
               >
                 開始
               </button>
@@ -624,7 +655,7 @@ const resetButtonClass = css({
                     cursor: 'pointer',
                     fontWeight: 'semibold',
                   })"
-                  @click="stopTimer"
+                  @click="stopTimerSimple"
                 >
                   赤
                 </button>
@@ -638,7 +669,7 @@ const resetButtonClass = css({
                     cursor: 'pointer',
                     fontWeight: 'semibold',
                   })"
-                  @click="stopTimer"
+                  @click="stopTimerSimple"
                 >
                   青（これ！）
                 </button>
@@ -652,19 +683,19 @@ const resetButtonClass = css({
                     cursor: 'pointer',
                     fontWeight: 'semibold',
                   })"
-                  @click="stopTimer"
+                  @click="stopTimerSimple"
                 >
                   黄
                 </button>
               </div>
-              <div v-if="elapsedTime" :class="timerBoxClass">
+              <div v-if="elapsedTimeSimple" :class="timerBoxClass">
                 <p :class="timerTextClass">
                   反応時間
                 </p>
                 <p :class="timerValueClass">
-                  {{ elapsedTime }}秒
+                  {{ elapsedTimeSimple }}秒
                 </p>
-                <button :class="resetButtonClass" @click="resetTimer">
+                <button :class="resetButtonClass" @click="resetTimerSimple">
                   リセット
                 </button>
               </div>
@@ -696,92 +727,92 @@ const resetButtonClass = css({
                   fontWeight: 'semibold',
                   _hover: { backgroundColor: 'green.600' },
                 })"
-                @click="startTimer"
+                @click="startTimerComplex"
               >
                 開始
               </button>
               <div :class="css({ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem' })">
                 <button
                   :class="css({ padding: '0.75rem', backgroundColor: 'red.500', color: 'white', border: 'none', borderRadius: 'md', cursor: 'pointer', fontSize: '0.875rem' })"
-                  @click="stopTimer"
+                  @click="stopTimerComplex"
                 >
                   赤
                 </button>
                 <button
                   :class="css({ padding: '0.75rem', backgroundColor: 'orange.500', color: 'white', border: 'none', borderRadius: 'md', cursor: 'pointer', fontSize: '0.875rem' })"
-                  @click="stopTimer"
+                  @click="stopTimerComplex"
                 >
                   橙
                 </button>
                 <button
                   :class="css({ padding: '0.75rem', backgroundColor: 'yellow.500', color: 'gray.800', border: 'none', borderRadius: 'md', cursor: 'pointer', fontSize: '0.875rem' })"
-                  @click="stopTimer"
+                  @click="stopTimerComplex"
                 >
                   黄
                 </button>
                 <button
                   :class="css({ padding: '0.75rem', backgroundColor: 'green.500', color: 'white', border: 'none', borderRadius: 'md', cursor: 'pointer', fontSize: '0.875rem' })"
-                  @click="stopTimer"
+                  @click="stopTimerComplex"
                 >
                   緑
                 </button>
                 <button
                   :class="css({ padding: '0.75rem', backgroundColor: 'blue.500', color: 'white', border: 'none', borderRadius: 'md', cursor: 'pointer', fontSize: '0.875rem' })"
-                  @click="stopTimer"
+                  @click="stopTimerComplex"
                 >
                   青
                 </button>
                 <button
                   :class="css({ padding: '0.75rem', backgroundColor: 'purple.500', color: 'white', border: 'none', borderRadius: 'md', cursor: 'pointer', fontSize: '0.875rem' })"
-                  @click="stopTimer"
+                  @click="stopTimerComplex"
                 >
                   紫
                 </button>
                 <button
                   :class="css({ padding: '0.75rem', backgroundColor: 'pink.500', color: 'white', border: 'none', borderRadius: 'md', cursor: 'pointer', fontSize: '0.875rem' })"
-                  @click="stopTimer"
+                  @click="stopTimerComplex"
                 >
                   桃
                 </button>
                 <button
                   :class="css({ padding: '0.75rem', backgroundColor: 'gray.500', color: 'white', border: 'none', borderRadius: 'md', cursor: 'pointer', fontSize: '0.875rem' })"
-                  @click="stopTimer"
+                  @click="stopTimerComplex"
                 >
                   灰
                 </button>
                 <button
                   :class="css({ padding: '0.75rem', backgroundColor: 'brown.500', color: 'white', border: 'none', borderRadius: 'md', cursor: 'pointer', fontSize: '0.875rem' })"
-                  @click="stopTimer"
+                  @click="stopTimerComplex"
                 >
                   茶
                 </button>
                 <button
                   :class="css({ padding: '0.75rem', backgroundColor: 'cyan.500', color: 'white', border: 'none', borderRadius: 'md', cursor: 'pointer', fontSize: '0.875rem' })"
-                  @click="stopTimer"
+                  @click="stopTimerComplex"
                 >
                   水
                 </button>
                 <button
                   :class="css({ padding: '0.75rem', backgroundColor: 'teal.500', color: 'white', border: 'none', borderRadius: 'md', cursor: 'pointer', fontSize: '0.875rem' })"
-                  @click="stopTimer"
+                  @click="stopTimerComplex"
                 >
                   青緑
                 </button>
                 <button
                   :class="css({ padding: '0.75rem', backgroundColor: 'indigo.500', color: 'white', border: 'none', borderRadius: 'md', cursor: 'pointer', fontSize: '0.875rem' })"
-                  @click="stopTimer"
+                  @click="stopTimerComplex"
                 >
                   藍
                 </button>
               </div>
-              <div v-if="elapsedTime" :class="timerBoxClass">
+              <div v-if="elapsedTimeComplex" :class="timerBoxClass">
                 <p :class="timerTextClass">
                   反応時間
                 </p>
                 <p :class="timerValueClass">
-                  {{ elapsedTime }}秒
+                  {{ elapsedTimeComplex }}秒
                 </p>
-                <button :class="resetButtonClass" @click="resetTimer">
+                <button :class="resetButtonClass" @click="resetTimerComplex">
                   リセット
                 </button>
               </div>
