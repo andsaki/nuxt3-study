@@ -105,6 +105,17 @@
             詳細を見る
           </DesignSystemButton>
         </DesignSystemCard>
+
+        <DesignSystemCard
+          title="Hick's Law"
+          icon="⏱️"
+          color-scheme="purple"
+        >
+          <p :class="descClass">選択肢が増えるほど、意思決定に時間がかかる</p>
+          <DesignSystemButton variant="primary" size="sm" @click="navigateTo('/hicks-law')">
+            詳細を見る
+          </DesignSystemButton>
+        </DesignSystemCard>
       </div>
     </section>
   </div>
