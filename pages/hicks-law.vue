@@ -781,7 +781,7 @@ const resetButtonClass = css({
                   灰
                 </button>
                 <button
-                  :class="css({ padding: '0.75rem', backgroundColor: 'brown.500', color: 'white', border: 'none', borderRadius: 'md', cursor: 'pointer', fontSize: '0.875rem' })"
+                  :class="css({ padding: '0.75rem', backgroundColor: 'amber.800', color: 'white', border: 'none', borderRadius: 'md', cursor: 'pointer', fontSize: '0.875rem' })"
                   @click="stopTimerComplex"
                 >
                   茶
