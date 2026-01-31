@@ -3,7 +3,5 @@
 </template>
 
 <script setup lang="ts">
-const { data: content } = await useFetch('/docs/state-management-comparison.md', {
-  transform: (data) => data as string
-})
+const { data: content } = await useFetch('/api/docs/state-management-comparison')
 </script>

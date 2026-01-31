@@ -3,7 +3,5 @@
 </template>
 
 <script setup lang="ts">
-const { data: content } = await useFetch('/docs/named-v-model.md', {
-  transform: (data) => data as string
-})
+const { data: content } = await useFetch('/api/docs/named-v-model')
 </script>

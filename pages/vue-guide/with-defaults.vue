@@ -3,7 +3,5 @@
 </template>
 
 <script setup lang="ts">
-const { data: content } = await useFetch('/docs/withDefaults-guide.md', {
-  transform: (data) => data as string
-})
+const { data: content } = await useFetch('/api/docs/withDefaults-guide')
 </script>
