@@ -202,7 +202,7 @@ const styles = {
             <LifecyclePlayground v-if="showLifecycle" />
           </KeepAlive>
           <LifecyclePlayground v-else-if="showLifecycle" />
-          <DesignSystemInfoBox v-else status="neutral">
+          <DesignSystemInfoBox v-else variant="info">
             コンポーネントはアンマウントされています。mount ボタンで戻せます。
           </DesignSystemInfoBox>
         </DesignSystemCard>

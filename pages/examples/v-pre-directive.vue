@@ -208,8 +208,8 @@
                   ✅ v-preあり
                 </p>
                 <div :class="css({ bg: 'green.50', p: '4', rounded: 'md', border: '2px solid', borderColor: 'green.200', minH: '20' })">
-                  <p v-pre :class="css({ fontFamily: 'mono', fontSize: 'sm' })">
-                    入力値: {{ demoMessage }}
+                  <p :class="css({ fontFamily: 'mono', fontSize: 'sm' })">
+                    <span v-pre>入力値: {{ demoMessage }}</span>
                   </p>
                 </div>
                 <p :class="css({ mt: '2', fontSize: 'xs', color: 'gray.600' })">

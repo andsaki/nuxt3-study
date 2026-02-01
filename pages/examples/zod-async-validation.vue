@@ -48,10 +48,10 @@
             />
 
             <DesignSystemInput
-              v-model="age"
+              v-model="ageInputValue"
               label="年齢（同期チェック）"
               type="number"
-              inputmode="numeric"
+              input-mode="numeric"
               :error="errors.age"
               helper-text="18〜120 歳の範囲で入力"
               required
@@ -157,6 +157,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
@@ -248,6 +249,13 @@ const [username] = defineField('username')
 const [email] = defineField('email')
 const [age] = defineField('age')
 const [password] = defineField('password')
+
+const ageInputValue = computed({
+  get: () => (Number.isNaN(age.value) ? '' : String(age.value ?? '')),
+  set: (value: string) => {
+    age.value = value === '' ? Number.NaN : Number(value)
+  },
+})
 
 // 送信状態
 const submitStatus = ref<'success' | 'error' | null>(null)

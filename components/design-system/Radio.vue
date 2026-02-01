@@ -4,6 +4,7 @@
       :id="radioId"
       type="radio"
       v-bind="$attrs"
+      :name="name"
       :value="value"
       :checked="modelValue === value"
       :disabled="disabled"
@@ -52,6 +53,7 @@ interface Props {
   helpText?: string
   disabled?: boolean
   wcagLevel?: ComponentWCAGLevel
+  name?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {

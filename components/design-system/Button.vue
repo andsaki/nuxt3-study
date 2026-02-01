@@ -6,6 +6,7 @@
     :aria-disabled="disabled || isLoading"
     :class="buttonClass"
     v-bind="$attrs"
+    @click="handleClick"
   >
     <!-- ローディング状態の表示 -->
     <span v-if="isLoading" role="status" aria-label="読み込み中">
@@ -67,6 +68,8 @@ defineOptions({
   inheritAttrs: false
 })
 
+const emit = defineEmits(['click'])
+
 /**
  * アクセシブルなボタンコンポーネント
  *
@@ -94,4 +97,8 @@ const buttonClass = computed(() => {
 
   return cx(recipeClassName, props.class)
 })
+
+const handleClick = (event: MouseEvent) => {
+  emit('click', event)
+}
 </script>

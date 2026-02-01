@@ -83,7 +83,7 @@ const monoTextClass = css({
       <ThemeConsumer />
 
       <div :class="panelContentClass">
-        <SlotAwareCard data-demo="slot-card">
+        <SlotAwareCard>
           <template #title>
             <DesignSystemText variant="h4">SlotAwareCard</DesignSystemText>
           </template>

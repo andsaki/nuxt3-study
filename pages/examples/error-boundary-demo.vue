@@ -257,7 +257,7 @@ const styles = {
 
       <section :class="styles.codeSection">
         <h2 :class="styles.sectionTitle">💻 使い方</h2>
-        <pre v-pre :class="styles.codeBlock"><code>&lt;ErrorBoundary&gt;
+        <pre :class="styles.codeBlock"><code v-pre>&lt;ErrorBoundary&gt;
   &lt;YourComponent /&gt;
 &lt;/ErrorBoundary&gt;
 

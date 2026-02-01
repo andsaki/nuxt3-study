@@ -27,12 +27,17 @@
       <input
         :id="inputId"
         v-bind="$attrs"
+        :type="type"
         :value="modelValue"
+        :name="name"
         :disabled="disabled"
         :required="required"
+        :placeholder="placeholder"
         :aria-required="required"
         :aria-invalid="!!error"
         :aria-describedby="ariaDescribedBy"
+        :autocomplete="autocomplete"
+        :inputmode="inputMode"
         :class="cx(inputClass, clearable && modelValue ? css({ paddingRight: '40px' }) : undefined)"
         @input="onInput"
       >
@@ -110,6 +115,8 @@ import { css, cx } from '~/styled-system/css'
 import { input as inputRecipe } from '~/styled-system/recipes'
 import type { ComponentWCAGLevel } from './constants/accessibility'
 
+type InputModeValue = 'none' | 'text' | 'tel' | 'url' | 'email' | 'numeric' | 'decimal' | 'search'
+
 /**
  * アクセシブルな入力コンポーネント
  *
@@ -140,6 +147,16 @@ interface Props {
   wcagLevel?: ComponentWCAGLevel
   /** クリアボタンを表示するかどうか */
   clearable?: boolean
+  /** HTML input type */
+  type?: HTMLInputElement['type']
+  /** プレースホルダー */
+  placeholder?: string
+  /** ネーム属性 */
+  name?: string
+  /** ブラウザのオートコンプリートヒント */
+  autocomplete?: string
+  /** 入力モード */
+  inputMode?: InputModeValue
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -149,6 +166,7 @@ const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   wcagLevel: 'AA',
   clearable: false,
+  type: 'text',
 })
 
 const emit = defineEmits<{

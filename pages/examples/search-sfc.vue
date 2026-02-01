@@ -40,6 +40,8 @@
 </template>
 
 <script setup lang="ts">
+import SearchFilters from '~/components/examples/search/SearchFilters.vue'
+import SearchResults from '~/components/examples/search/SearchResults.vue'
 import type { DifficultyFilter } from '~/composables/useSearchProjects'
 import { useSearchProjects } from '~/composables/useSearchProjects'
 import { searchUiStyles as styles } from '~/utils/examples/search-ui-styles'

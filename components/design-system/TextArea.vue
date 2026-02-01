@@ -25,12 +25,15 @@
         :id="textareaId"
         v-bind="$attrs"
         :value="modelValue"
+        :name="name"
         :disabled="disabled"
         :required="required"
         :maxlength="maxLength"
+        :rows="rows"
         :aria-invalid="!!error"
         :aria-required="required"
         :aria-describedby="ariaDescribedBy"
+        :placeholder="placeholder"
         :class="textareaClass"
         :style="{ resize: 'vertical' }"
         @input="handleInput"
@@ -122,6 +125,12 @@ interface Props {
   maxLength?: number
   /** WCAGアクセシビリティレベル (A/AA/AAA) */
   wcagLevel?: ComponentWCAGLevel
+  /** プレースホルダー */
+  placeholder?: string
+  /** 表示行数 */
+  rows?: number
+  /** ネーム属性 */
+  name?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -130,6 +139,7 @@ const props = withDefaults(defineProps<Props>(), {
   disabled: false,
   showCount: false,
   wcagLevel: 'AA',
+  rows: 3,
 })
 
 const emit = defineEmits<{
