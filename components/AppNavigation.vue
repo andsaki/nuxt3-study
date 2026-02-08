@@ -26,7 +26,12 @@
               {{ item.label }}
               <span :class="arrowClass">▼</span>
             </button>
-            <div v-if="activeDropdown === item.id" :class="dropdownMenuClass">
+            <div
+              v-if="activeDropdown === item.id"
+              :class="dropdownMenuClass"
+              @mouseenter="cancelClose"
+              @mouseleave="closeDropdown"
+            >
               <div
                 v-for="(section, sectionIndex) in item.sections"
                 :key="`${item.id}-${sectionIndex}`"
@@ -109,6 +114,7 @@ import { css } from '~/styled-system/css'
 
 const activeDropdown = ref<string | null>(null)
 const isMobileMenuOpen = ref(false)
+const closeTimer = ref<ReturnType<typeof setTimeout> | null>(null)
 
 interface NavLink {
   label: string
@@ -256,11 +262,27 @@ const navItems: NavItem[] = [
 ]
 
 const openDropdown = (name: string) => {
+  // タイマーをクリア（閉じるのをキャンセル）
+  if (closeTimer.value) {
+    clearTimeout(closeTimer.value)
+    closeTimer.value = null
+  }
   activeDropdown.value = name
 }
 
 const closeDropdown = () => {
-  activeDropdown.value = null
+  // 300ms遅延させて、メニューに移動する時間を与える
+  closeTimer.value = setTimeout(() => {
+    activeDropdown.value = null
+  }, 300)
+}
+
+const cancelClose = () => {
+  // タイマーをクリア（閉じるのをキャンセル）
+  if (closeTimer.value) {
+    clearTimeout(closeTimer.value)
+    closeTimer.value = null
+  }
 }
 
 const toggleMobileMenu = () => {
