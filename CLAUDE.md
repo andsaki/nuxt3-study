@@ -213,10 +213,11 @@ Context7は、最新ライブラリのドキュメントやAPIリファレンス
 
 ---
 
-## Playwright MCP ルール
+## Chrome DevTools MCP ルール
 
 ### 基本方針
-Playwright MCPは、ブラウザを操作してUIの確認・テスト・スクリーンショット取得を行うツールです。
+Chrome DevTools MCPは、ブラウザを操作してUIの確認・テスト・スクリーンショット取得を行うツールです。
+必要に応じて `Claude in Chrome integration` も併用します。
 
 ### 使用タイミング
 
@@ -224,7 +225,7 @@ Playwright MCPは、ブラウザを操作してUIの確認・テスト・スク�
 ```markdown
 例: コンポーネントのスタイリングを実装する場合
 → 開発サーバーを起動
-→ Playwright MCPでページにアクセス
+→ Chrome DevTools MCPでページにアクセス
 → スクリーンショットを取得して見た目を確認
 → 必要に応じてCSSを調整
 ```
@@ -232,7 +233,7 @@ Playwright MCPは、ブラウザを操作してUIの確認・テスト・スク�
 2. **レスポンシブデザインの確認**
 ```markdown
 例: モバイル・タブレット・デスクトップでの表示確認
-→ mcp__playwright__playwright_resize でデバイスプリセットを使用
+→ Chrome DevTools MCPでデバイスプリセットを使用
 → 各デバイスでスクリーンショットを取得
 → レイアウト崩れがないか確認
 ```
@@ -240,32 +241,32 @@ Playwright MCPは、ブラウザを操作してUIの確認・テスト・スク�
 3. **UI動作の確認**
 ```markdown
 例: フォーム送信、モーダル表示などのインタラクション確認
-→ mcp__playwright__playwright_click でボタンをクリック
-→ mcp__playwright__playwright_fill でフォームに入力
-→ mcp__playwright__playwright_screenshot で結果を確認
+→ Chrome DevTools MCPでボタンをクリック
+→ Chrome DevTools MCPでフォームに入力
+→ Chrome DevTools MCPで結果を確認
 ```
 
 ### 主要ツール
 
 #### ナビゲーション
-- `mcp__playwright__playwright_navigate` - URLに移動
-- `mcp__playwright__playwright_go_back` - 戻る
-- `mcp__playwright__playwright_go_forward` - 進む
+- Chrome DevTools MCP - URLに移動
+- Chrome DevTools MCP - 戻る
+- Chrome DevTools MCP - 進む
 
 #### スクリーンショット
-- `mcp__playwright__playwright_screenshot` - ページまたは要素のスクリーンショット取得
+- Chrome DevTools MCP - ページまたは要素のスクリーンショット取得
 
 #### 操作
-- `mcp__playwright__playwright_click` - 要素をクリック
-- `mcp__playwright__playwright_fill` - 入力フィールドに値を入力
-- `mcp__playwright__playwright_hover` - 要素にホバー
+- Chrome DevTools MCP - 要素をクリック
+- Chrome DevTools MCP - 入力フィールドに値を入力
+- Chrome DevTools MCP - 要素にホバー
 
 #### デバイス・ビューポート
-- `mcp__playwright__playwright_resize` - デバイスプリセットまたは手動でビューポートをリサイズ
+- Chrome DevTools MCP - デバイスプリセットまたは手動でビューポートをリサイズ
 
 #### HTML/コンテンツ取得
-- `mcp__playwright__playwright_get_visible_html` - ページのHTML取得
-- `mcp__playwright__playwright_get_visible_text` - ページのテキスト取得
+- Chrome DevTools MCP - ページのHTML取得
+- Chrome DevTools MCP - ページのテキスト取得
 
 ### 期待される効果
 - ✅ 実際のブラウザで見た目を確認できる
@@ -355,11 +356,11 @@ const buttonClass = computed(() => button({
 </script>
 ```
 
-4. **PlaywrightでUI確認**
+4. **Chrome DevTools MCPでUI確認**
 ```markdown
 1. npm run dev で開発サーバー起動
-2. mcp__playwright__playwright_navigate でページにアクセス
-3. mcp__playwright__playwright_screenshot でスクリーンショット取得
+2. Chrome DevTools MCPでページにアクセス
+3. Chrome DevTools MCPでスクリーンショット取得
 4. デザインを確認し、必要に応じて調整
 ```
 
@@ -467,10 +468,10 @@ Panda CSSのトークンを使用して一貫性を保ちます：
 1. accessibility-learningプロジェクトでデザインシステムを確認
 2. 必要なコンポーネント・レシピを移植
 3. 開発サーバーを起動（npm run dev等）
-4. mcp__playwright__playwright_navigate でページにアクセス
-5. mcp__playwright__playwright_screenshot でスクリーンショット取得
+4. Chrome DevTools MCPでページにアクセス
+5. Chrome DevTools MCPでスクリーンショット取得
 6. デザインと比較して、Panda CSSで調整
-7. 必要に応じて mcp__playwright__playwright_resize で各デバイス表示を確認
+7. 必要に応じて Chrome DevTools MCPで各デバイス表示を確認
 8. 再度スクリーンショットを取得して完成を確認
 ```
 
@@ -545,7 +546,7 @@ Claude:
 **自動起動条件:**
 - UI/UXのマークアップ実装時
 - デザインレビュー時
-- Playwrightでブラウザ表示確認時
+- Chrome DevTools MCPでブラウザ表示確認時
 
 スキルは、Nuxt 3 + Panda CSS 環境で、**独自性のある、プロダクショングレードのフロントエンドインターフェース**を構築します。ジェネリックな「AI生成っぽい」デザインを避け、明確な美的方向性を持った、記憶に残るUIを実装します。
 
