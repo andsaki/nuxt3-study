@@ -9,6 +9,17 @@ export const useCounterStore = defineStore('counter', {
     count: 0
   }),
 
+  getters: {
+    doubleCount: (state) => state.count * 2,
+    isPositive: (state) => state.count > 0,
+    isNegative: (state) => state.count < 0,
+    countMessage(): string {
+      if (this.count === 0) return 'ゼロです'
+      if (this.isPositive) return `プラス${this.count}です`
+      return `マイナス${Math.abs(this.count)}です`
+    }
+  },
+
   actions: {
     increment() {
       this.count++
